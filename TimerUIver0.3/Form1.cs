@@ -360,17 +360,7 @@ namespace TimerUIver0._3
         private void Form1_Load(object sender, EventArgs e)
         {
             cbCOMport_DropDown(sender, e);
-            cbCOMport.Items.AddRange(SerialPort.GetPortNames());
-            comport = new SerialPort("COM15", 115200, Parity.None, 8, StopBits.One);
-            if (!comport.IsOpen)
-            {
-                comport.Open();
-                receiving = true;
-                t = new Thread(DoReceive);
-                t.IsBackground = true;
-                t.Start();
-            }
-           
+
             /*poltting*/
             GraphPane myPane1 = zedPressure.GraphPane;
             zedPressure.IsZoomOnMouseCenter = true;
@@ -971,9 +961,30 @@ namespace TimerUIver0._3
             cbCOMport.SelectedItem = Properties.Settings.Default.comPortName;
         }
 
-        private void cbCOMport_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnComPort_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Save();
+            Button btn = (Button)sender;
+            if (btn.Text == "連線")
+            {
+                btn.Text = "斷開";
+
+                comport = new SerialPort(cbCOMport.SelectedItem.ToString(), 115200, Parity.None, 8, StopBits.One);
+                if (!comport.IsOpen)
+                {
+                    comport.Open();
+                    receiving = true;
+                    t = new Thread(DoReceive);
+                    t.IsBackground = true;
+                    t.Start();
+                }
+
+            }
+            else
+            {
+                btn.Text = "連線";
+
+
+            }
         }
 
         private void CreateGraph(ZedGraphControl zgc)

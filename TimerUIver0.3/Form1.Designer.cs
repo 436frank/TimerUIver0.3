@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnComPort = new System.Windows.Forms.Button();
             this.cbRacerName = new System.Windows.Forms.ComboBox();
             this.listbData = new System.Windows.Forms.ListBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -48,6 +49,7 @@
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.btnPillarDistance = new System.Windows.Forms.Button();
+            this.cbCOMport = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -74,8 +76,6 @@
             this.btnChartDataClear = new System.Windows.Forms.Button();
             this.btnHistoryData = new System.Windows.Forms.Button();
             this.timerUsingTime = new System.Windows.Forms.Timer(this.components);
-            this.cbCOMport = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -91,7 +91,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.btnComPort);
             this.groupBox1.Controls.Add(this.cbRacerName);
             this.groupBox1.Controls.Add(this.listbData);
             this.groupBox1.Controls.Add(this.dataGridView1);
@@ -126,6 +126,18 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "設定";
+            // 
+            // btnComPort
+            // 
+            this.btnComPort.ForeColor = System.Drawing.Color.Black;
+            this.btnComPort.Location = new System.Drawing.Point(214, 53);
+            this.btnComPort.Margin = new System.Windows.Forms.Padding(2);
+            this.btnComPort.Name = "btnComPort";
+            this.btnComPort.Size = new System.Drawing.Size(64, 32);
+            this.btnComPort.TabIndex = 12;
+            this.btnComPort.Text = "連線";
+            this.btnComPort.UseVisualStyleBackColor = true;
+            this.btnComPort.Click += new System.EventHandler(this.btnComPort_Click);
             // 
             // cbRacerName
             // 
@@ -314,6 +326,19 @@
             this.btnPillarDistance.Text = "確認";
             this.btnPillarDistance.UseVisualStyleBackColor = true;
             this.btnPillarDistance.Click += new System.EventHandler(this.btnPillarDistance_Click);
+            // 
+            // cbCOMport
+            // 
+            this.cbCOMport.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TimerUIver0._3.Properties.Settings.Default, "comPortName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.cbCOMport.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCOMport.FormattingEnabled = true;
+            this.cbCOMport.Location = new System.Drawing.Point(8, 53);
+            this.cbCOMport.Margin = new System.Windows.Forms.Padding(2);
+            this.cbCOMport.Name = "cbCOMport";
+            this.cbCOMport.Size = new System.Drawing.Size(203, 31);
+            this.cbCOMport.TabIndex = 1;
+            this.cbCOMport.Text = global::TimerUIver0._3.Properties.Settings.Default.comPortName;
+            this.cbCOMport.DropDown += new System.EventHandler(this.cbCOMport_DropDown);
             // 
             // label4
             // 
@@ -631,31 +656,6 @@
             this.timerUsingTime.Enabled = true;
             this.timerUsingTime.Tick += new System.EventHandler(this.timerUsingTime_Tick);
             // 
-            // cbCOMport
-            // 
-            this.cbCOMport.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::TimerUIver0._3.Properties.Settings.Default, "comPortName", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.cbCOMport.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCOMport.FormattingEnabled = true;
-            this.cbCOMport.Location = new System.Drawing.Point(8, 53);
-            this.cbCOMport.Margin = new System.Windows.Forms.Padding(2);
-            this.cbCOMport.Name = "cbCOMport";
-            this.cbCOMport.Size = new System.Drawing.Size(203, 31);
-            this.cbCOMport.TabIndex = 1;
-            this.cbCOMport.Text = global::TimerUIver0._3.Properties.Settings.Default.comPortName;
-            this.cbCOMport.DropDown += new System.EventHandler(this.cbCOMport_DropDown);
-            this.cbCOMport.SelectedIndexChanged += new System.EventHandler(this.cbCOMport_SelectedIndexChanged);
-            // 
-            // button1
-            // 
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(214, 53);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(64, 32);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "選擇";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -735,7 +735,7 @@
         private System.Windows.Forms.Button btnDataSave;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnComPort;
     }
 }
 
