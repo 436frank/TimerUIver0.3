@@ -22,10 +22,163 @@ namespace TimerUIver0._3
     {
         DateTime DateT1 = DateTime.Now; //使用時間 {開啟.exe後 只接收一次}
         private FontFamily FFM = new FontFamily("微軟正黑體");     //字型 
-        private string[] ports = System.IO.Ports.SerialPort.GetPortNames();
+        private Boolean receiving;
+        private SerialPort comport = new SerialPort();
+        private Int32 totalLength = 0;
+        private Thread t;
         public Form1()
         {
             InitializeComponent();
+        }
+        //Form1_Load-----------------------------------------------------------------------------------------
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            cbCOMport_DropDown(sender, e);
+
+            /*poltting*/
+            GraphPane myPane1 = zedPressure.GraphPane;
+            zedPressure.IsZoomOnMouseCenter = true;
+            myPane1.Title.Text = "壓力曲線";
+            myPane1.XAxis.Title.Text = "毫秒";
+            myPane1.YAxis.Title.Text = "壓力值";
+
+            /*設置XY軸標籤 與 文字 大小*/
+            myPane1.Title.FontSpec.Size = 30;
+            myPane1.XAxis.Title.FontSpec.Size = 30;
+            myPane1.YAxis.Title.FontSpec.Size = 30;
+            myPane1.XAxis.Scale.FontSpec.Size = 30;
+            myPane1.YAxis.Scale.FontSpec.Size = 30;
+
+            /*繪製XY軸格點*/
+            myPane1.XAxis.MajorGrid.IsVisible = true;
+            myPane1.XAxis.MajorGrid.DashOn = 1000;
+            myPane1.YAxis.MajorGrid.IsVisible = true;
+            myPane1.YAxis.MajorGrid.DashOn = 1000;
+            myPane1.XAxis.MajorGrid.Color = Color.Black;
+            myPane1.YAxis.MajorGrid.Color = Color.Black;
+
+            LineItem Curve1 = myPane1.AddCurve("", list1, Color.Blue, SymbolType.None);
+
+            /*設置XY軸刻度的範圍*/
+            myPane1.XAxis.Scale.Min = -200;
+            myPane1.XAxis.Scale.Max = 600;
+            myPane1.YAxis.Scale.Min = 0;
+            myPane1.YAxis.Scale.Max = 4096;
+
+
+            zedPressure.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            zedChartData.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            //zedPressure.ContextMenuBuilder += MyContextMenuBuilder;
+            //zedPressure.ZoomStepFraction = 0.1;
+            /*更新參數*/
+            zedPressure.AxisChange();
+
+            GraphPane myPane2 = zedChartData.GraphPane;
+            zedChartData.IsZoomOnMouseCenter = true;
+            myPane2.Title.Text = "速度";
+            myPane2.XAxis.Title.Text = "速樁編號";
+            myPane2.YAxis.Title.Text = "秒速m/s";
+
+            /*設置XY軸標籤 與 文字 大小*/
+            myPane2.Title.FontSpec.Size = 17;
+            myPane2.XAxis.Title.FontSpec.Size = 17;
+            myPane2.YAxis.Title.FontSpec.Size = 17;
+            myPane2.XAxis.Scale.FontSpec.Size = 17;
+            myPane2.YAxis.Scale.FontSpec.Size = 17;
+
+            /*繪製XY軸格點*/
+            myPane2.XAxis.MajorGrid.IsVisible = true;
+            myPane2.XAxis.MajorGrid.DashOn = 1000;
+            myPane2.YAxis.MajorGrid.IsVisible = true;
+            myPane2.YAxis.MajorGrid.DashOn = 1000;
+            myPane2.XAxis.MajorGrid.Color = Color.Black;
+            myPane2.YAxis.MajorGrid.Color = Color.Black;
+
+            LineItem Curve2 = myPane2.AddCurve("", list2, Color.Red, SymbolType.Circle);
+
+
+            /*設置XY軸刻度的範圍*/
+            myPane2.XAxis.Scale.Min = 1;
+            myPane2.XAxis.Scale.Max = 12;
+            /*myPane2.YAxis.Scale.Min = 0;
+            myPane2.YAxis.Scale.Max = 5;*/
+            myPane2.XAxis.Scale.MajorStep = 1;
+            //myPane2.YAxis.Scale.MajorStep = 1;
+            zedChartData.AxisChange();
+
+        }
+       
+        private void Open_Comport()
+        {
+            try
+            {
+                if (comport.IsOpen)
+                    comport.Close();
+                comport.PortName = Properties.Settings.Default.comPortName;
+                comport.BaudRate = 115200;
+                comport.Parity = Parity.None;
+                comport.DataBits = 8;
+                comport.StopBits = StopBits.One;
+                comport.ReadBufferSize = 81920;
+
+                if (!comport.IsOpen)
+                    comport.Open();
+
+                receiving = true;
+                t = new Thread(DoReceive);
+                t.Start();
+            }
+            catch (Exception ex)
+            {
+                System.Media.SystemSounds.Beep.Play();
+                MessageBox.Show(ex.Message, "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close_Comport();
+            }
+        }
+
+        private void Close_Comport()
+        {
+            receiving = false;
+
+            if (comport.IsOpen)
+                comport.Close();
+        }
+
+        delegate void Display(Byte[] buffer);
+
+        private void DoReceive()
+        {
+            Byte[] buffer = new Byte[1024];
+            while (receiving)//receiving為真時進入迴圈
+            {
+                if (comport.BytesToRead > 0)//檢查接收緩衝區內是否有資料
+                {
+                    Int32 length = comport.Read(buffer, 0, buffer.Length);
+                    Array.Resize(ref buffer, length);
+                    Display d = new Display(DisplayText);
+                    this.Invoke(d, new Object[] { buffer });
+                    Array.Resize(ref buffer, 1024);
+                }
+                Thread.Sleep(16);
+            }
+        }
+
+        byte[] collection = new byte[100000];
+        int positionCounter = 0;
+        private void DisplayText(Byte[] buffer)
+        {
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                collection[i + positionCounter] = buffer[i];
+            }
+            positionCounter += buffer.Length;
+            totalLength = totalLength + buffer.Length;
+            label9.Text = totalLength.ToString();
+            Thread.Sleep(16);//傳輸過快 導致以下判斷式失靈
+            if (comport.BytesToRead == 0)
+            {
+                this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
+            }
         }
 
         //按鈕 匯入EXCEL人員名單-----------------------------------------------------------------------------
@@ -181,7 +334,6 @@ namespace TimerUIver0._3
         }
 
         //直接生成按鈕物件------------------------------------------------------------------------------------
-        int pillarNumber = 0;
         void btnLight_Click(object sender, EventArgs e)
         {
             
@@ -344,132 +496,12 @@ namespace TimerUIver0._3
 
 
         }
-        //下拉選單 COMport------------------------------------------------------------------------------------
         
-
         RollingPointPairList list1 = new RollingPointPairList(60000); //建立指定容量空的緩衝區
         RollingPointPairList list2 = new RollingPointPairList(60000); //建立指定容量空的緩衝區
         PointPairList points = new PointPairList();
-        private Boolean receiving;
-        private SerialPort comport = new SerialPort();
-        private Int32 totalLength = 0;
-        private Thread t;
-        delegate void Display(Byte[] buffer);
-
-        //Form1_Load-----------------------------------------------------------------------------------------
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            cbCOMport_DropDown(sender, e);
-
-            /*poltting*/
-            GraphPane myPane1 = zedPressure.GraphPane;
-            zedPressure.IsZoomOnMouseCenter = true;
-            myPane1.Title.Text = "壓力曲線";
-            myPane1.XAxis.Title.Text = "毫秒";
-            myPane1.YAxis.Title.Text = "壓力值";
-
-            /*設置XY軸標籤 與 文字 大小*/
-            myPane1.Title.FontSpec.Size = 30;
-            myPane1.XAxis.Title.FontSpec.Size = 30;
-            myPane1.YAxis.Title.FontSpec.Size = 30;
-            myPane1.XAxis.Scale.FontSpec.Size = 30;
-            myPane1.YAxis.Scale.FontSpec.Size = 30;
-
-            /*繪製XY軸格點*/
-            myPane1.XAxis.MajorGrid.IsVisible = true;
-            myPane1.XAxis.MajorGrid.DashOn = 1000;
-            myPane1.YAxis.MajorGrid.IsVisible = true;
-            myPane1.YAxis.MajorGrid.DashOn = 1000;
-            myPane1.XAxis.MajorGrid.Color = Color.Black;
-            myPane1.YAxis.MajorGrid.Color = Color.Black;
-
-            LineItem Curve1 = myPane1.AddCurve("", list1, Color.Blue, SymbolType.None);
-
-            /*設置XY軸刻度的範圍*/
-            myPane1.XAxis.Scale.Min = -200;
-            myPane1.XAxis.Scale.Max = 600;
-            myPane1.YAxis.Scale.Min = 0;
-            myPane1.YAxis.Scale.Max = 4096;
-
-            
-            zedPressure.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
-            zedChartData.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
-            //zedPressure.ContextMenuBuilder += MyContextMenuBuilder;
-            //zedPressure.ZoomStepFraction = 0.1;
-            /*更新參數*/
-            zedPressure.AxisChange();
-
-            GraphPane myPane2 = zedChartData.GraphPane;
-            zedChartData.IsZoomOnMouseCenter = true;
-            myPane2.Title.Text = "速度";
-            myPane2.XAxis.Title.Text = "速樁編號";
-            myPane2.YAxis.Title.Text = "秒速m/s";
-
-            /*設置XY軸標籤 與 文字 大小*/
-            myPane2.Title.FontSpec.Size = 17;
-            myPane2.XAxis.Title.FontSpec.Size = 17;
-            myPane2.YAxis.Title.FontSpec.Size = 17;
-            myPane2.XAxis.Scale.FontSpec.Size = 17;
-            myPane2.YAxis.Scale.FontSpec.Size = 17;
-
-            /*繪製XY軸格點*/
-            myPane2.XAxis.MajorGrid.IsVisible = true;
-            myPane2.XAxis.MajorGrid.DashOn = 1000;
-            myPane2.YAxis.MajorGrid.IsVisible = true;
-            myPane2.YAxis.MajorGrid.DashOn = 1000;
-            myPane2.XAxis.MajorGrid.Color = Color.Black;
-            myPane2.YAxis.MajorGrid.Color = Color.Black;
-
-            LineItem Curve2 = myPane2.AddCurve("", list2, Color.Red, SymbolType.Circle);
-            
-
-            /*設置XY軸刻度的範圍*/
-            myPane2.XAxis.Scale.Min = 1;
-            myPane2.XAxis.Scale.Max = 12;
-            /*myPane2.YAxis.Scale.Min = 0;
-            myPane2.YAxis.Scale.Max = 5;*/
-            myPane2.XAxis.Scale.MajorStep = 1;
-            //myPane2.YAxis.Scale.MajorStep = 1;
-            zedChartData.AxisChange();
-
-        }
-
-        private void DoReceive()
-        {
-            Byte[] buffer = new Byte[1024];
-            while (receiving)//receiving為真時進入迴圈
-            {
-                if (comport.BytesToRead > 0)//檢查接收緩衝區內是否有資料
-                {
-                    Int32 length = comport.Read(buffer, 0, buffer.Length);
-                    Array.Resize(ref buffer, length);
-                    Display d = new Display(DisplayText);
-                    this.Invoke(d, new Object[] { buffer });
-                    Array.Resize(ref buffer, 1024);
-                }
-                Thread.Sleep(16);
-            }
-        }
-
-        byte[] collection = new byte[100000];
-        int positionCounter = 0;
-        private void DisplayText(Byte[] buffer)
-        {
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                collection[i + positionCounter] = buffer[i];
-            }
-            positionCounter += buffer.Length;
-            totalLength = totalLength + buffer.Length;
-            label9.Text = totalLength.ToString();
-            Thread.Sleep(16);//傳輸過快 導致以下判斷式失靈
-            if (comport.BytesToRead == 0)
-            {
-                this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
-            }
-
-
-        }
+        
+        
 
         string[] StrCutting = new string[1000];
         string StrConvert;
@@ -956,36 +988,31 @@ namespace TimerUIver0._3
         private void cbCOMport_DropDown(object sender, EventArgs e)
         {
             cbCOMport.Items.Clear();
-            ports = System.IO.Ports.SerialPort.GetPortNames();
             cbCOMport.Items.AddRange(SerialPort.GetPortNames());
             cbCOMport.SelectedItem = Properties.Settings.Default.comPortName;
         }
+        private void cbCOMport_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
 
         private void btnComPort_Click(object sender, EventArgs e)
-        {
-            Button btn = (Button)sender;
-            if (btn.Text == "連線")
+        {            
+            if (btnComPort.Text == "連線")
             {
-                btn.Text = "斷開";
+                btnComPort.Text = "斷開";
 
-                comport = new SerialPort(cbCOMport.SelectedItem.ToString(), 115200, Parity.None, 8, StopBits.One);
-                if (!comport.IsOpen)
-                {
-                    comport.Open();
-                    receiving = true;
-                    t = new Thread(DoReceive);
-                    t.IsBackground = true;
-                    t.Start();
-                }
-
+                Open_Comport();
             }
             else
             {
-                btn.Text = "連線";
+                btnComPort.Text = "連線";
 
-
+                Close_Comport();
             }
         }
+
+        
 
         private void CreateGraph(ZedGraphControl zgc)
         {

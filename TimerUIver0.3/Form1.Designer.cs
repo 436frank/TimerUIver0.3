@@ -339,6 +339,7 @@
             this.cbCOMport.TabIndex = 1;
             this.cbCOMport.Text = global::TimerUIver0._3.Properties.Settings.Default.comPortName;
             this.cbCOMport.DropDown += new System.EventHandler(this.cbCOMport_DropDown);
+            this.cbCOMport.SelectedIndexChanged += new System.EventHandler(this.cbCOMport_SelectedIndexChanged);
             // 
             // label4
             // 
