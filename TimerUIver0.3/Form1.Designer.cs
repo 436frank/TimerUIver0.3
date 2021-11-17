@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.testWin = new System.Windows.Forms.RichTextBox();
             this.btnComPort = new System.Windows.Forms.Button();
             this.cbRacerName = new System.Windows.Forms.ComboBox();
             this.listbData = new System.Windows.Forms.ListBox();
@@ -91,6 +92,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.testWin);
             this.groupBox1.Controls.Add(this.btnComPort);
             this.groupBox1.Controls.Add(this.cbRacerName);
             this.groupBox1.Controls.Add(this.listbData);
@@ -127,6 +129,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "設定";
             // 
+            // testWin
+            // 
+            this.testWin.Location = new System.Drawing.Point(77, 585);
+            this.testWin.Name = "testWin";
+            this.testWin.ReadOnly = true;
+            this.testWin.Size = new System.Drawing.Size(201, 96);
+            this.testWin.TabIndex = 13;
+            this.testWin.Text = "";
+            this.testWin.TextChanged += new System.EventHandler(this.testWin_TextChanged);
+            // 
             // btnComPort
             // 
             this.btnComPort.ForeColor = System.Drawing.Color.Black;
@@ -157,7 +169,7 @@
             this.listbData.Location = new System.Drawing.Point(9, 585);
             this.listbData.Margin = new System.Windows.Forms.Padding(2);
             this.listbData.Name = "listbData";
-            this.listbData.Size = new System.Drawing.Size(272, 96);
+            this.listbData.Size = new System.Drawing.Size(63, 96);
             this.listbData.TabIndex = 2;
             // 
             // dataGridView1
@@ -737,6 +749,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button btnComPort;
+        private System.Windows.Forms.RichTextBox testWin;
     }
 }
 

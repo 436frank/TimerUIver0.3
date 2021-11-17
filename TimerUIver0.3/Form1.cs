@@ -24,6 +24,9 @@ namespace TimerUIver0._3
         private FontFamily FFM = new FontFamily("微軟正黑體");     //字型 
         private Boolean receiving;
         private SerialPort comport = new SerialPort();
+        private int rxByteCount = 0;
+        private delegate void DisplayStr(string str);
+        private delegate void invokeDelegate();
         private Int32 totalLength = 0;
         private Thread t;
         public Form1()
@@ -34,10 +37,11 @@ namespace TimerUIver0._3
         private void Form1_Load(object sender, EventArgs e)
         {
             cbCOMport_DropDown(sender, e);
-
+            btnComPort_Click(sender, e);
             /*poltting*/
             GraphPane myPane1 = zedPressure.GraphPane;
             zedPressure.IsZoomOnMouseCenter = true;
+            
             myPane1.Title.Text = "壓力曲線";
             myPane1.XAxis.Title.Text = "毫秒";
             myPane1.YAxis.Title.Text = "壓力值";
@@ -112,6 +116,8 @@ namespace TimerUIver0._3
         {
             try
             {
+                btnComPort.Text = "斷開";
+                cbCOMport.Enabled = false;
                 if (comport.IsOpen)
                     comport.Close();
                 comport.PortName = Properties.Settings.Default.comPortName;
@@ -139,7 +145,8 @@ namespace TimerUIver0._3
         private void Close_Comport()
         {
             receiving = false;
-
+            btnComPort.Text = "連線";
+            cbCOMport.Enabled = true;
             if (comport.IsOpen)
                 comport.Close();
         }
@@ -155,8 +162,16 @@ namespace TimerUIver0._3
                 {
                     Int32 length = comport.Read(buffer, 0, buffer.Length);
                     Array.Resize(ref buffer, length);
-                    Display d = new Display(DisplayText);
-                    this.Invoke(d, new Object[] { buffer });
+                    rxByteCount += buffer.Length;
+                    //顯示bytes
+                    this.Invoke(new invokeDelegate(DisplayRx));
+                    //顯示資料
+                    string msg = Encoding.Default.GetString(buffer);
+                    DisplayStr dstr = new DisplayStr(DisplayText);
+                    this.Invoke(dstr, new Object[] { msg });
+                    Console.Write(msg);
+
+                    //this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
                     Array.Resize(ref buffer, 1024);
                 }
                 Thread.Sleep(16);
@@ -165,20 +180,21 @@ namespace TimerUIver0._3
 
         byte[] collection = new byte[100000];
         int positionCounter = 0;
-        private void DisplayText(Byte[] buffer)
+        private void DisplayRx()
         {
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                collection[i + positionCounter] = buffer[i];
-            }
-            positionCounter += buffer.Length;
-            totalLength = totalLength + buffer.Length;
-            label9.Text = totalLength.ToString();
-            Thread.Sleep(16);//傳輸過快 導致以下判斷式失靈
-            if (comport.BytesToRead == 0)
-            {
-                this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
-            }
+            label9.Text = rxByteCount.ToString();
+        }
+        string[] data = new string[108];
+        private void DisplayText(string msg)
+        {
+            testWin.Text += msg;
+            data = testWin.Text.Split('\n');
+            listbData.Items.Add(msg);
+            listbData.TopIndex = listbData.Items.Count - 1;
+            //or (int i = 0; i < buffer.Length; i++)
+            //
+            //  collection[i + positionCounter] = buffer[i];
+            //
         }
 
         //按鈕 匯入EXCEL人員名單-----------------------------------------------------------------------------
@@ -999,20 +1015,19 @@ namespace TimerUIver0._3
         private void btnComPort_Click(object sender, EventArgs e)
         {            
             if (btnComPort.Text == "連線")
-            {
-                btnComPort.Text = "斷開";
-
+            {                
                 Open_Comport();
             }
             else
-            {
-                btnComPort.Text = "連線";
-
-                Close_Comport();
+            {                
+                Close_Comport();                
             }
         }
 
-        
+        private void testWin_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
 
         private void CreateGraph(ZedGraphControl zgc)
         {
