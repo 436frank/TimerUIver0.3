@@ -111,7 +111,7 @@ namespace TimerUIver0._3
             zedChartData.AxisChange();
 
         }
-       
+        //早安阿
         private void Open_Comport()
         {
             try
