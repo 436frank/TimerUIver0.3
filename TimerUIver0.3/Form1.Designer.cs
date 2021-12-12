@@ -77,6 +77,7 @@
             this.btnChartDataClear = new System.Windows.Forms.Button();
             this.btnHistoryData = new System.Windows.Forms.Button();
             this.timerUsingTime = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -179,7 +180,7 @@
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 27;
-            this.dataGridView1.Size = new System.Drawing.Size(49, 8);
+            this.dataGridView1.Size = new System.Drawing.Size(49, 24);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.Visible = false;
             // 
@@ -462,7 +463,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 702);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1131, 33);
+            this.panel1.Size = new System.Drawing.Size(1475, 33);
             this.panel1.TabIndex = 1;
             // 
             // label7
@@ -521,7 +522,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(843, 291);
+            this.groupBox2.Size = new System.Drawing.Size(1187, 291);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "壓力曲線";
@@ -539,7 +540,7 @@
             this.zedPressure.ScrollMinX = 0D;
             this.zedPressure.ScrollMinY = 0D;
             this.zedPressure.ScrollMinY2 = 0D;
-            this.zedPressure.Size = new System.Drawing.Size(717, 262);
+            this.zedPressure.Size = new System.Drawing.Size(1061, 262);
             this.zedPressure.TabIndex = 0;
             // 
             // panel3
@@ -588,11 +589,11 @@
             this.groupBox3.Controls.Add(this.panel2);
             this.groupBox3.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(288, 294);
+            this.groupBox3.Location = new System.Drawing.Point(288, 321);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(841, 399);
+            this.groupBox3.Size = new System.Drawing.Size(1185, 372);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "圖表數據";
@@ -610,7 +611,7 @@
             this.zedChartData.ScrollMinX = 0D;
             this.zedChartData.ScrollMinY = 0D;
             this.zedChartData.ScrollMinY2 = 0D;
-            this.zedChartData.Size = new System.Drawing.Size(715, 370);
+            this.zedChartData.Size = new System.Drawing.Size(1059, 343);
             this.zedChartData.TabIndex = 1;
             // 
             // panel2
@@ -622,14 +623,14 @@
             this.panel2.Location = new System.Drawing.Point(2, 27);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(122, 370);
+            this.panel2.Size = new System.Drawing.Size(122, 343);
             this.panel2.TabIndex = 2;
             // 
             // btnDataSave
             // 
             this.btnDataSave.BackColor = System.Drawing.Color.Black;
             this.btnDataSave.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnDataSave.Location = new System.Drawing.Point(0, 247);
+            this.btnDataSave.Location = new System.Drawing.Point(0, 220);
             this.btnDataSave.Margin = new System.Windows.Forms.Padding(2);
             this.btnDataSave.Name = "btnDataSave";
             this.btnDataSave.Size = new System.Drawing.Size(122, 41);
@@ -642,7 +643,7 @@
             // 
             this.btnChartDataClear.BackColor = System.Drawing.Color.Black;
             this.btnChartDataClear.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnChartDataClear.Location = new System.Drawing.Point(0, 288);
+            this.btnChartDataClear.Location = new System.Drawing.Point(0, 261);
             this.btnChartDataClear.Margin = new System.Windows.Forms.Padding(2);
             this.btnChartDataClear.Name = "btnChartDataClear";
             this.btnChartDataClear.Size = new System.Drawing.Size(122, 41);
@@ -655,7 +656,7 @@
             // 
             this.btnHistoryData.BackColor = System.Drawing.Color.Black;
             this.btnHistoryData.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnHistoryData.Location = new System.Drawing.Point(0, 329);
+            this.btnHistoryData.Location = new System.Drawing.Point(0, 302);
             this.btnHistoryData.Margin = new System.Windows.Forms.Padding(2);
             this.btnHistoryData.Name = "btnHistoryData";
             this.btnHistoryData.Size = new System.Drawing.Size(122, 41);
@@ -666,15 +667,20 @@
             // 
             // timerUsingTime
             // 
-            this.timerUsingTime.Enabled = true;
             this.timerUsingTime.Tick += new System.EventHandler(this.timerUsingTime_Tick);
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 16;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(1131, 735);
+            this.ClientSize = new System.Drawing.Size(1475, 735);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -685,6 +691,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Timer UI";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -750,6 +757,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button btnComPort;
         private System.Windows.Forms.RichTextBox testWin;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
