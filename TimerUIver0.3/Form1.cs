@@ -30,6 +30,8 @@ namespace TimerUIver0._3
         private Thread t;
         PointPairList CheckPointList = new PointPairList();
         double CheckPointListX = 0;
+        PointPairList CheckPointList= new PointPairList();
+        double CheckPointListX = 0;
 
         public Form1()
         {
@@ -110,39 +112,41 @@ namespace TimerUIver0._3
         }
         private void Init_Plot2()
         {
-            //GraphPane myPane2 = zedChartData.GraphPane;
-            //zedChartData.IsZoomOnMouseCenter = true;
-            //myPane2.Title.Text = "速度";
-            //myPane2.XAxis.Title.Text = "速樁編號";
-            //myPane2.YAxis.Title.Text = "秒速m/s";
+            ZedGraphControl zgc = zedChartData;
+            GraphPane myPane = zgc.GraphPane;
+            zgc.IsZoomOnMouseCenter = true;
+            myPane.Title.Text = "平均速度";
+            myPane.XAxis.Title.Text = "速樁";
+            myPane.YAxis.Title.Text = "秒速";
 
-            ///*設置XY軸標籤 與 文字 大小*/
-            //myPane2.Title.FontSpec.Size = 17;
-            //myPane2.XAxis.Title.FontSpec.Size = 17;
-            //myPane2.YAxis.Title.FontSpec.Size = 17;
-            //myPane2.XAxis.Scale.FontSpec.Size = 17;
-            //myPane2.YAxis.Scale.FontSpec.Size = 17;
+            /*設置XY軸標籤 與 文字 大小*/
+            myPane.Title.FontSpec.Size = 17;
+            myPane.XAxis.Title.FontSpec.Size = 17;
+            myPane.YAxis.Title.FontSpec.Size = 17;
+            myPane.XAxis.Scale.FontSpec.Size = 17;
+            myPane.YAxis.Scale.FontSpec.Size = 17;
 
-            ///*繪製XY軸格點*/
-            //myPane2.XAxis.MajorGrid.IsVisible = true;
-            //myPane2.XAxis.MajorGrid.DashOn = 1000;
-            //myPane2.YAxis.MajorGrid.IsVisible = true;
-            //myPane2.YAxis.MajorGrid.DashOn = 1000;
-            //myPane2.XAxis.MajorGrid.Color = Color.Black;
-            //myPane2.YAxis.MajorGrid.Color = Color.Black;
+            /*繪製XY軸格點*/
+            myPane.XAxis.MajorGrid.IsVisible = true;
+            myPane.XAxis.MajorGrid.DashOn = 1000;
+            myPane.YAxis.MajorGrid.IsVisible = true;
+            myPane.YAxis.MajorGrid.DashOn = 1000;
+            myPane.XAxis.MajorGrid.Color = Color.Black;
+            myPane.YAxis.MajorGrid.Color = Color.Black;
 
-            //LineItem Curve2 = myPane2.AddCurve("", list2, Color.Red, SymbolType.Circle);
+            myPane.AddCurve("", list2, Color.Red, SymbolType.Circle);
 
-            ///*設置XY軸刻度的範圍*/
-            //myPane2.XAxis.Scale.Min = 1;
-            //myPane2.XAxis.Scale.Max = 12;
-            ///*myPane2.YAxis.Scale.Min = 0;
-            //myPane2.YAxis.Scale.Max = 5;*/
-            //myPane2.XAxis.Scale.MajorStep = 1;
-            ////myPane2.YAxis.Scale.MajorStep = 1;
-            //zedChartData.AxisChange();
+            /*設置XY軸刻度的範圍*/
+            myPane.XAxis.Scale.Min = 1;
+            myPane.XAxis.Scale.Max = 12;
+            myPane.YAxis.Scale.Min = 0;
+            myPane.YAxis.Scale.Max = 2;
+            myPane.XAxis.Scale.MajorStep = 1;
+            //myPane.YAxis.Scale.MajorStep = 1;
 
-            //zedChartData.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            zgc.AxisChange();
+            zgc.Refresh();
         }
 
         private void Open_Comport()
@@ -973,6 +977,7 @@ namespace TimerUIver0._3
         //按鈕 速樁清除---------------------------------------------------------------------------------------
         private void btnChartDataClear_Click(object sender, EventArgs e)
         {
+            Init_Plot2();
             for (int i = 0; i < PillarArray.Length; i++)
             {
                 Array.Clear(PillarArray, 0, i);
@@ -1009,7 +1014,7 @@ namespace TimerUIver0._3
             myPane2.XAxis.MajorGrid.Color = Color.Black;
             myPane2.YAxis.MajorGrid.Color = Color.Black;
 
-            LineItem Curve2 = myPane2.AddCurve("", list2, Color.Red, SymbolType.Circle);
+            LineItem Curve2 = myPane2.AddCurve("11", list2, Color.Red, SymbolType.Circle);
 
 
 
@@ -1017,7 +1022,7 @@ namespace TimerUIver0._3
             myPane2.XAxis.Scale.Min = 1;
             myPane2.XAxis.Scale.Max = 12;
             myPane2.YAxis.Scale.Min = 0;
-            myPane2.YAxis.Scale.Max = 5;
+            myPane2.YAxis.Scale.Max = 2;
             myPane2.XAxis.Scale.MajorStep = 1;
             //myPane2.YAxis.Scale.MajorStep = 1;*/
 
