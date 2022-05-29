@@ -187,10 +187,11 @@ namespace TimerUIver0._3
         {
             int all_point = 1200;
             int now_point=0;
-            int max_data_point = 0;
             int max_data_val = 0;
+            int min_data_val = 0;
             Byte[] buffer = new Byte[1024];
             string[] adc_data = {};
+
             string temp_msg = "";
             string hintMark = "$";
             char charHintMark ='$';
@@ -251,10 +252,30 @@ namespace TimerUIver0._3
                                 Array.Resize(ref adc_data, adc_data.Length + 1);
                                 adc_data[adc_data.Length - 1] = datas[i];
                                // Console.WriteLine(string.Join("\n",adc_data));
-                                Console.WriteLine(now_point);
+                               //Console.WriteLine(now_point);//確認1200筆數
                                 if (now_point == all_point)
                                 {
-                                    
+                                    int[] intadc_data = Array.ConvertAll(adc_data, s => int.Parse(s));
+                                    max_data_val = intadc_data.Max();
+                                    min_data_val = intadc_data.Min();
+                                    for (int data_cnt=1199;data_cnt>=0;data_cnt--)
+                                    {
+                                        int now_intadc_data= intadc_data[data_cnt];
+                                        if (now_intadc_data == max_data_val)
+                                        {
+                                            Console.WriteLine("離開踏板前最高的時間點 ={0}",data_cnt);
+                                            Console.WriteLine("離開踏板前最高的數值 ={0}",max_data_val);
+                                        }
+                                    }
+                                    for (int data_cnt =0; data_cnt <=1199 ; data_cnt++)
+                                    {
+                                        int now_intadc_data = intadc_data[data_cnt];
+                                        if (now_intadc_data == min_data_val)
+                                        {
+                                            Console.WriteLine("離開踏板後最低的時間點 ={0}", data_cnt);
+                                            Console.WriteLine("離開踏板後最低的數值 ={0}", min_data_val);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1067,10 +1088,8 @@ namespace TimerUIver0._3
         int file_cnt = 0;
         private void to_txt_Click(object sender, EventArgs e)
         {
-
             try
             {
-                
                 //Pass the filepath and filename to the StreamWriter Constructor
                 StreamWriter sw = new StreamWriter(file_start+file_name_nb+file_end);
                 //Write a line of text
