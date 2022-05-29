@@ -46,6 +46,7 @@
             this.btnsetDone = new System.Windows.Forms.Button();
             this.btnStartTiming = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.to_txt = new System.Windows.Forms.Button();
             this.listbHint = new System.Windows.Forms.ListBox();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -80,6 +81,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -132,10 +134,10 @@
             // 
             // testWin
             // 
-            this.testWin.Location = new System.Drawing.Point(77, 585);
+            this.testWin.Location = new System.Drawing.Point(144, 585);
             this.testWin.Name = "testWin";
             this.testWin.ReadOnly = true;
-            this.testWin.Size = new System.Drawing.Size(201, 96);
+            this.testWin.Size = new System.Drawing.Size(134, 96);
             this.testWin.TabIndex = 13;
             this.testWin.Text = "";
             this.testWin.TextChanged += new System.EventHandler(this.testWin_TextChanged);
@@ -170,7 +172,7 @@
             this.listbData.Location = new System.Drawing.Point(9, 585);
             this.listbData.Margin = new System.Windows.Forms.Padding(2);
             this.listbData.Name = "listbData";
-            this.listbData.Size = new System.Drawing.Size(63, 96);
+            this.listbData.Size = new System.Drawing.Size(118, 96);
             this.listbData.TabIndex = 2;
             // 
             // dataGridView1
@@ -291,11 +293,23 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.to_txt);
             this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 394);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(269, 93);
             this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // to_txt
+            // 
+            this.to_txt.ForeColor = System.Drawing.Color.Black;
+            this.to_txt.Location = new System.Drawing.Point(3, 3);
+            this.to_txt.Name = "to_txt";
+            this.to_txt.Size = new System.Drawing.Size(106, 35);
+            this.to_txt.TabIndex = 0;
+            this.to_txt.Text = "放入txt";
+            this.to_txt.UseVisualStyleBackColor = true;
+            this.to_txt.Click += new System.EventHandler(this.to_txt_Click);
             // 
             // listbHint
             // 
@@ -542,6 +556,7 @@
             this.zedPressure.ScrollMinY2 = 0D;
             this.zedPressure.Size = new System.Drawing.Size(1061, 262);
             this.zedPressure.TabIndex = 0;
+            this.zedPressure.Load += new System.EventHandler(this.zedPressure_Load);
             // 
             // panel3
             // 
@@ -613,6 +628,7 @@
             this.zedChartData.ScrollMinY2 = 0D;
             this.zedChartData.Size = new System.Drawing.Size(1059, 343);
             this.zedChartData.TabIndex = 1;
+            this.zedChartData.Load += new System.EventHandler(this.zedChartData_Load);
             // 
             // panel2
             // 
@@ -696,6 +712,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -758,6 +775,7 @@
         private System.Windows.Forms.Button btnComPort;
         private System.Windows.Forms.RichTextBox testWin;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button to_txt;
     }
 }
 

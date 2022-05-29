@@ -30,27 +30,23 @@ namespace TimerUIver0._3
         private Thread t;
         PointPairList CheckPointList = new PointPairList();
         double CheckPointListX = 0;
-        PointPairList CheckPointList= new PointPairList();
-        double CheckPointListX = 0;
-
-        public Form1()
+        PointPairList PillarPointList = new PointPairList();
+        double PillarPointListX = 0;
+        public Form1()//初始化物件
         {
-            InitializeComponent();
-        }
-        //Form1_Load-----------------------------------------------------------------------------------------
+            InitializeComponent();  
+        }  
         private void Form1_Load(object sender, EventArgs e)
         {
             cbCOMport_DropDown(sender, e);
             btnComPort_Click(sender, e);
-
-            Init_Plot1();
-            Init_Plot2();
-        }
+            Init_Plot1();//踏板壓力曲線圖表初始化
+            Init_Plot2();//速樁時間圖表初始化
+        }//應用程式開啟時//Form1_Load
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Close_Comport();
-        }
-        
+        } //應用程式關閉時
         private void Init_Plot1()
         {
             var poly1 = new PolyObj
@@ -58,8 +54,8 @@ namespace TimerUIver0._3
                 Points = new[]
                 {
                     new PointD(0, 0),
-                    new PointD(100, 0),
-                    new PointD(100, 4095),
+                    new PointD(200, 0),
+                    new PointD(200, 4095),
                     new PointD(0, 4095)
                 },
                 Fill = new Fill(Color.FromArgb(127, Color.Red)),
@@ -70,10 +66,10 @@ namespace TimerUIver0._3
             GraphPane myPane = zgc.GraphPane;
             zgc.IsShowPointValues = true;  //滑鼠經過圖表上的點時是否氣泡顯示該點所對應的值
             //zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
-            CheckPointListX = -200;
-
+            CheckPointListX = -200; //-200;   //初始X座標
+            //zgc.IsEnableZoom = false;
             myPane.Title.Text = "壓力曲線";
-            myPane.XAxis.Title.Text = "毫秒";
+            myPane.XAxis.Title.Text = "2毫秒";
             myPane.YAxis.Title.Text = "壓力值";
 
             /*設置XY軸標籤 與 文字 大小*/
@@ -99,7 +95,7 @@ namespace TimerUIver0._3
 
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = -200;
-            myPane.XAxis.Scale.Max = 1000;
+            myPane.XAxis.Scale.Max = 1800;
             myPane.YAxis.Scale.Min = 0;
             myPane.YAxis.Scale.Max = 4095;
 
@@ -109,23 +105,24 @@ namespace TimerUIver0._3
             /*更新參數*/
             zgc.AxisChange();   
             zgc.Refresh();
-        }
+        }     //踏板壓力曲線圖表初始化
         private void Init_Plot2()
         {
             ZedGraphControl zgc = zedChartData;
             GraphPane myPane = zgc.GraphPane;
-            zgc.IsZoomOnMouseCenter = true;
+            
             myPane.Title.Text = "平均速度";
             myPane.XAxis.Title.Text = "速樁";
             myPane.YAxis.Title.Text = "秒速";
-
+            zgc.IsEnableZoom = true; //true  false
+            zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
             /*設置XY軸標籤 與 文字 大小*/
             myPane.Title.FontSpec.Size = 17;
             myPane.XAxis.Title.FontSpec.Size = 17;
             myPane.YAxis.Title.FontSpec.Size = 17;
             myPane.XAxis.Scale.FontSpec.Size = 17;
             myPane.YAxis.Scale.FontSpec.Size = 17;
-
+            PillarPointListX = 0;   //初始X座標
             /*繪製XY軸格點*/
             myPane.XAxis.MajorGrid.IsVisible = true;
             myPane.XAxis.MajorGrid.DashOn = 1000;
@@ -133,22 +130,22 @@ namespace TimerUIver0._3
             myPane.YAxis.MajorGrid.DashOn = 1000;
             myPane.XAxis.MajorGrid.Color = Color.Black;
             myPane.YAxis.MajorGrid.Color = Color.Black;
-
-            myPane.AddCurve("", list2, Color.Red, SymbolType.Circle);
+            myPane.CurveList.Clear();
+            PillarPointList.Clear();
+            myPane.AddCurve("test", PillarPointList, Color.Red, SymbolType.Circle);
 
             /*設置XY軸刻度的範圍*/
-            myPane.XAxis.Scale.Min = 1;
+            myPane.XAxis.Scale.Min = 0;
             myPane.XAxis.Scale.Max = 12;
             myPane.YAxis.Scale.Min = 0;
-            myPane.YAxis.Scale.Max = 2;
+            myPane.YAxis.Scale.Max = 50;
             myPane.XAxis.Scale.MajorStep = 1;
             //myPane.YAxis.Scale.MajorStep = 1;
 
             zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
             zgc.AxisChange();
             zgc.Refresh();
-        }
-
+        }     //速樁時間圖表初始化
         private void Open_Comport()
         {
             try
@@ -177,8 +174,7 @@ namespace TimerUIver0._3
                 MessageBox.Show(ex.Message, "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Close_Comport();
             }
-        }
-
+        }   //開啟COMPORT
         private void Close_Comport()
         {
             receiving = false;
@@ -186,19 +182,24 @@ namespace TimerUIver0._3
             cbCOMport.Enabled = true;
             if (comport.IsOpen)
                 comport.Close();
-        }
-
-        private void DoReceive()
+        }  //關閉COMPORT
+        private void DoReceive()         //COMPORT接收資料
         {
+            int all_point = 10;//總速樁數
+            int now_point = 0;
             Byte[] buffer = new Byte[1024];
             string temp_msg = "";
+            string hintMark = "$";
+            char charHintMark ='$';
+            float NEWDATA;
+            bool judg;//判斷結果
             while (receiving)//receiving為真時進入迴圈
             {
                 try
                 {
                     if (comport.BytesToRead > 0)//檢查接收緩衝區內是否有資料
                     {
-                        Int32 length = comport.Read(buffer, 0, buffer.Length);
+                        Int32 length = comport.Read(buffer, 0, buffer.Length);   //把資料存在Int32的length
                         int cnt = 0;
                         Array.Resize(ref buffer, length);
                         rxByteCount += buffer.Length;
@@ -211,20 +212,47 @@ namespace TimerUIver0._3
                         //
                         msg = temp_msg + msg;
                         string[] datas= msg.Trim().Split('\n');
-                        if (msg.Substring(msg.Length - 1, 1) != "\n") { 
+                        
+                        if (msg.Substring(msg.Length - 1, 1) != "\n")
+                        {
                             temp_msg = datas[datas.Length - 1];
                             cnt = datas.Length - 1;
                         }
-                        else { 
+                        else
+                        {
                             temp_msg = "";
                             cnt = datas.Length;
-                        }                        
+                        }
+
+                        //cnt = datas.Length;
                         for (int i = 0; i < cnt; i++)
                         {
-                            CheckPointList.Add(CheckPointListX, Convert.ToDouble(datas[i]));
-                            CheckPointListX += 2;//
+                            judg = datas[i].Contains(hintMark);
+                            //Console.Write($"judg= {judg}  ");//預覽輸出
+                            if (judg)
+                            {
+                                NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
+                                NEWDATA = NEWDATA / 1000;
+                                PillarPointList.Add(PillarPointListX, Convert.ToDouble(NEWDATA));
+                                PillarPointListX++;//
+
+                                //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
+                                // Console.Write($"PillarPointListY/1000= {NEWDATA}  ");//預覽輸出
+
+                            }
+                            else
+                            {
+                                CheckPointList.Add(CheckPointListX, Convert.ToDouble(datas[i]));
+                                CheckPointListX += 2;//
+                                now_point = all_point - 1;
+                                if (now_point == 0)
+                                {
+                                    
+                                }
+                            }
                         }
-                        Console.Write($"msg = {msg}");
+                           
+                            Console.Write($"msg = {msg}");
                         //this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
                         Array.Resize(ref buffer, 1024);
                     }
@@ -241,7 +269,6 @@ namespace TimerUIver0._3
                 }
             }
         }
-
         private void DisplayRx()
         {
             label9.Text = rxByteCount.ToString();
@@ -250,9 +277,7 @@ namespace TimerUIver0._3
         {
             testWin.Text += msg;
         }
-
-        //按鈕 匯入EXCEL人員名單-----------------------------------------------------------------------------
-        private void btnImportFile_Click(object sender, EventArgs e)
+        private void btnImportFile_Click(object sender, EventArgs e) //按鈕 匯入EXCEL人員名單
         {
             try
             {
@@ -304,9 +329,7 @@ namespace TimerUIver0._3
                 MessageBox.Show(ex.Message);
             }
         }
-
-        //按鈕 選擇EXCEL人員名單-----------------------------------------------------------------------------
-        private void btnChooseSheet_Click(object sender, EventArgs e)
+        private void btnChooseSheet_Click(object sender, EventArgs e)//按鈕 選擇EXCEL人員名單
         {
             OleDbConnection ole = null;
             OleDbDataAdapter da = null;
@@ -355,18 +378,14 @@ namespace TimerUIver0._3
             cbRacerName.DataSource = dt2;
             cbRacerName.DisplayMember = dt2.Columns[0].ColumnName;
         }
-
-        //標籤 使用時間--------------------------------------------------------------------------------------
-        private void timerUsingTime_Tick(object sender, EventArgs e)
+        private void timerUsingTime_Tick(object sender, EventArgs e) //標籤 使用時間
         {
             //DateTime DateT2 = DateTime.Now;
             //TimeSpan ts = DateT2 - DateT1;
             //lbUsingTime.Text = ts.ToString(@"hh\:mm\:ss");
         }
-
         int varChoosePillar = 0, btnLightName = 0;
-        //按鈕 確認速樁數量-----------------------------------------------------------------------------------
-        private void btnPillarNum_Click(object sender, EventArgs e)
+        private void btnPillarNum_Click(object sender, EventArgs e)  //按鈕 確認速樁數量
         {
             while (flowLayoutPanel1.Controls.Count > 0)
                 foreach (Control item in flowLayoutPanel1.Controls.OfType<Button>())
@@ -402,9 +421,7 @@ namespace TimerUIver0._3
                 flowLayoutPanel1.Controls.Add(btnLight);
             }
         }
-
-        //直接生成按鈕物件------------------------------------------------------------------------------------
-        void btnLight_Click(object sender, EventArgs e)
+        void btnLight_Click(object sender, EventArgs e)              //直接生成按鈕物件
         {
 
             CheckPillar();
@@ -491,10 +508,8 @@ namespace TimerUIver0._3
             }
 
         }
-
         string past;
-        //按鈕 移除姓名---------------------------------------------------------------------------------------
-        private void btnRemoveName_Click(object sender, EventArgs e)
+        private void btnRemoveName_Click(object sender, EventArgs e)     //按鈕 移除姓名
         {
             foreach (string name in cbRacerName.Items)
             {
@@ -506,10 +521,8 @@ namespace TimerUIver0._3
             }
             cbRacerName.Items.Remove(past);
         }
-
         int iHint = 1, varContrastValue = 1, varChooseDistanceMax = 0, varPillarNum = 0;
-        //按鈕 確認速樁距離-----------------------------------------------------------------------------------
-        private void btnPillarDistance_Click(object sender, EventArgs e)
+        private void btnPillarDistance_Click(object sender, EventArgs e) //按鈕 確認速樁距離
         {
             listbHint.SelectedIndex = listbHint.Items.Count - 1;
             listbHint.SelectedIndex = -1;
@@ -543,7 +556,6 @@ namespace TimerUIver0._3
                 }
             }
         }
-        //按鈕 準備計時---------------------------------------------------------------------------------------
         private void btnStartTiming_Click(object sender, EventArgs e)
         {
             if (btnsetDone.Enabled == false)
@@ -565,13 +577,9 @@ namespace TimerUIver0._3
 
 
 
-        }
-
-        RollingPointPairList list2 = new RollingPointPairList(60000); //建立指定容量空的緩衝區
+        } //按鈕 準備計時
+        RollingPointPairList list2 = new RollingPointPairList(60000);    //建立指定容量空的緩衝區
         PointPairList points = new PointPairList();
-
-
-
         string[] StrCutting = new string[1000];
         string StrConvert;
         string[] StressArray = new string[1000];
@@ -619,7 +627,6 @@ namespace TimerUIver0._3
             //this.Invoke(new EventHandler(DrawStressCurve));
             //this.Invoke(new EventHandler(DrawPillarCurve));
         }
-
         int DebugCounter = 0;
         int milliSecCounter = -200;
         private void DrawStressCurve(object sender, EventArgs e)
@@ -675,7 +682,6 @@ namespace TimerUIver0._3
 
             //}
         }
-
         int indexOfPillar = 0;
         byte[] duplicate = new byte[100000];
         int pillar = 1;
@@ -748,7 +754,6 @@ namespace TimerUIver0._3
                 zedChartData.Invalidate();
             }
         }
-
         private void ClearStressCurve(object sender, EventArgs e)
         {
             for (int i = 0; i < StrCutting.Length; i++)
@@ -758,7 +763,6 @@ namespace TimerUIver0._3
             zedPressure.GraphPane.CurveList[0].Clear(); //清除曲線資料
             zedPressure.GraphPane.GraphObjList.Clear(); //清除背景填滿
         }
-
         private void GunTrigger(object sender, EventArgs e)
         {
             const double width = 200.0;
@@ -780,9 +784,7 @@ namespace TimerUIver0._3
 
             zedPressure.Invalidate();
         }
-
-        //按鈕 壓力曲線 儲存------------------------------------------------------------------------------------
-        private void btnPressureSave_Click(object sender, EventArgs e)
+        private void btnPressureSave_Click(object sender, EventArgs e)  //按鈕 壓力曲線 儲存
         {
             //zedPressure.SaveAs(); //儲存圖片 .emf
             if (File.Exists(@"D:\" + "PressureCurveExcel" + ".xlsx"))
@@ -868,11 +870,9 @@ namespace TimerUIver0._3
                 MessageBox.Show("另存新檔", "notice", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
-
         string[] testcut = new string[1000];
         string[] testcut2 = new string[1000];
-        //按鈕 速樁 數據儲存------------------------------------------------------------------------------------
-        private void btnDataSave_Click(object sender, EventArgs e)
+        private void btnDataSave_Click(object sender, EventArgs e)      //按鈕 速樁 數據儲存
         {
             if (File.Exists(@"D:\" + "PillarScoreExcel" + ".xlsx"))
             {
@@ -973,65 +973,10 @@ namespace TimerUIver0._3
                 MessageBox.Show("另存新檔", "notice", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
-
-        //按鈕 速樁清除---------------------------------------------------------------------------------------
-        private void btnChartDataClear_Click(object sender, EventArgs e)
+        private void btnChartDataClear_Click(object sender, EventArgs e)//按鈕 速樁清除
         {
             Init_Plot2();
-            for (int i = 0; i < PillarArray.Length; i++)
-            {
-                Array.Clear(PillarArray, 0, i);
-            }
-            //positionCounter = 0;
-            zedChartData.GraphPane.CurveList[0].Clear(); //清除曲線資料
-            //zedChartData.GraphPane.GraphObjList.Clear(); //清除背景填滿
-            indexOfPillar = 0;
-            pillar = 1;
-            PitchPast = 0.0;
-            PitchMS = 0.0;
-
-
-            //zedPressure.RestoreScale(zedPressure.GraphPane);
-            /*poltting*/
-            GraphPane myPane2 = zedChartData.GraphPane;
-            zedChartData.IsZoomOnMouseCenter = true;
-            myPane2.Title.Text = "平均速度";
-            myPane2.XAxis.Title.Text = "速樁";
-            myPane2.YAxis.Title.Text = "秒速";
-
-            /*設置XY軸標籤 與 文字 大小*/
-            myPane2.Title.FontSpec.Size = 17;
-            myPane2.XAxis.Title.FontSpec.Size = 17;
-            myPane2.YAxis.Title.FontSpec.Size = 17;
-            myPane2.XAxis.Scale.FontSpec.Size = 17;
-            myPane2.YAxis.Scale.FontSpec.Size = 17;
-
-            /*繪製XY軸格點*/
-            myPane2.XAxis.MajorGrid.IsVisible = true;
-            myPane2.XAxis.MajorGrid.DashOn = 1000;
-            myPane2.YAxis.MajorGrid.IsVisible = true;
-            myPane2.YAxis.MajorGrid.DashOn = 1000;
-            myPane2.XAxis.MajorGrid.Color = Color.Black;
-            myPane2.YAxis.MajorGrid.Color = Color.Black;
-
-            LineItem Curve2 = myPane2.AddCurve("11", list2, Color.Red, SymbolType.Circle);
-
-
-
-            /*設置XY軸刻度的範圍*/
-            myPane2.XAxis.Scale.Min = 1;
-            myPane2.XAxis.Scale.Max = 12;
-            myPane2.YAxis.Scale.Min = 0;
-            myPane2.YAxis.Scale.Max = 2;
-            myPane2.XAxis.Scale.MajorStep = 1;
-            //myPane2.YAxis.Scale.MajorStep = 1;*/
-
-
-
-            zedChartData.AxisChange();
-            zedChartData.Invalidate();
         }
-
         private string strValue;
         public string StrValue
         {
@@ -1040,8 +985,7 @@ namespace TimerUIver0._3
                 strValue = value;
             }
         }
-        //按鈕 歷史資料匯入---------------------------------------------------------------------------------------
-        private void btnHistoryData_Click(object sender, EventArgs e)
+        private void btnHistoryData_Click(object sender, EventArgs e)   //按鈕 歷史資料匯入
         {
             HistoryData HistoryDataForm = new HistoryData();//產生Form2的物件，才可以使用它所提供的Method
             HistoryDataForm.Owner = this;//重要的一步，主要是使Form2的Owner指針指向Form1  
@@ -1050,9 +994,7 @@ namespace TimerUIver0._3
             //MessageBox.Show(strValue);//顯示返回的值  
 
         }
-
         string[] ArrayReScore = new string[1000];
-        string[] ArrayRePillar = new string[1000];
         private void cw()
         {
             //if(==null) //防呆，避免使用者直接按叉叉關閉
@@ -1071,9 +1013,6 @@ namespace TimerUIver0._3
             }*/
             CreateGraph(zedChartData);
         }
-
-        int Repillar = 1;
-
         private void cbCOMport_DropDown(object sender, EventArgs e)
         {
             cbCOMport.Items.Clear();
@@ -1084,7 +1023,6 @@ namespace TimerUIver0._3
         {
             Properties.Settings.Default.Save();
         }
-
         private void btnComPort_Click(object sender, EventArgs e)
         {
             if (btnComPort.Text == "連線")
@@ -1096,15 +1034,55 @@ namespace TimerUIver0._3
                 Close_Comport();
             }
         }
-
         private void testWin_TextChanged(object sender, EventArgs e)
         {
 
         }
-
         private void timer1_Tick(object sender, EventArgs e)
         {
             zedPressure.Refresh();
+            zedChartData.Refresh();
+
+        }
+        private void zedChartData_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void zedPressure_Load(object sender, EventArgs e)
+        {
+        }
+        int Repillar = 1;
+        string file_start = "C:\\dd\\Text";
+        string file_name_nb;
+        string file_end = ".txt";
+
+        int file_cnt = 0;
+        private void to_txt_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter sw = new StreamWriter(file_start+file_name_nb+file_end);
+                //Write a line of text
+                sw.WriteLine(testWin.Text);
+                //Write a second line of text
+                file_cnt++;
+                file_name_nb = file_cnt.ToString();
+                //Console.WriteLine("ddd{0}123", a.ToString());
+                //Close the file
+                sw.Close();
+            }
+            catch (Exception )
+            {
+                Console.WriteLine("Exception: ");
+                MessageBox.Show("找不到路徑", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
         }
 
         private void CreateGraph(ZedGraphControl zgc)
@@ -1183,20 +1161,16 @@ namespace TimerUIver0._3
             // axes since the data have changed
             zgc.AxisChange();
         }
-
-        //按鈕 壓力曲線清除---------------------------------------------------------------------------------------
-        private void btnPressureCurveClear_Click(object sender, EventArgs e)
+        private void btnPressureCurveClear_Click(object sender, EventArgs e)//按鈕 壓力曲線清除
         {
             Init_Plot1();
         }
-
         private void btnAddName_Click(object sender, EventArgs e)
         {
             cbRacerName.Items.Add(cbRacerName.Text);
             /*cbChooseSheetName.Text = tbInputName.Text;
             cbChooseSheetName.Items.Add(tbInputName.Text);*/
         }
-
         private void btnsetDone_Click(object sender, EventArgs e)
         {
             btnPillarNum.Enabled = false;
@@ -1207,7 +1181,6 @@ namespace TimerUIver0._3
             btnRemoveName.Enabled = false;
             btnsetDone.Enabled = false;
         }
-
         private void btnReset_Click(object sender, EventArgs e)
         {
             cbRacerName.Items.Clear();
@@ -1235,8 +1208,5 @@ namespace TimerUIver0._3
                 }
             btnLightName = 0;
         }
-
-
     }
 }
-
