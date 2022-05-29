@@ -95,7 +95,7 @@ namespace TimerUIver0._3
 
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = -200;
-            myPane.XAxis.Scale.Max = 1800;
+            myPane.XAxis.Scale.Max = 2200;
             myPane.YAxis.Scale.Min = 0;
             myPane.YAxis.Scale.Max = 4095;
 
@@ -185,9 +185,12 @@ namespace TimerUIver0._3
         }  //關閉COMPORT
         private void DoReceive()         //COMPORT接收資料
         {
-            int all_point = 10;//總速樁數
-            int now_point = 0;
+            int all_point = 1200;
+            int now_point=0;
+            int max_data_point = 0;
+            int max_data_val = 0;
             Byte[] buffer = new Byte[1024];
+            string[] adc_data = {};
             string temp_msg = "";
             string hintMark = "$";
             char charHintMark ='$';
@@ -244,15 +247,19 @@ namespace TimerUIver0._3
                             {
                                 CheckPointList.Add(CheckPointListX, Convert.ToDouble(datas[i]));
                                 CheckPointListX += 2;//
-                                now_point = all_point - 1;
-                                if (now_point == 0)
+                                now_point++;
+                                Array.Resize(ref adc_data, adc_data.Length + 1);
+                                adc_data[adc_data.Length - 1] = datas[i];
+                               // Console.WriteLine(string.Join("\n",adc_data));
+                                Console.WriteLine(now_point);
+                                if (now_point == all_point)
                                 {
                                     
                                 }
                             }
                         }
                            
-                            Console.Write($"msg = {msg}");
+                            //Console.Write($"msg = {msg}");
                         //this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
                         Array.Resize(ref buffer, 1024);
                     }
@@ -1052,10 +1059,11 @@ namespace TimerUIver0._3
         {
         }
         int Repillar = 1;
+
+
         string file_start = "C:\\dd\\Text";
         string file_name_nb;
         string file_end = ".txt";
-
         int file_cnt = 0;
         private void to_txt_Click(object sender, EventArgs e)
         {
