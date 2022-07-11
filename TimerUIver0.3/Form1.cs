@@ -32,6 +32,11 @@ namespace TimerUIver0._3
         double CheckPointListX = 0;
         PointPairList PillarPointList = new PointPairList();
         double PillarPointListX = 0;
+        PointPairList speedPointList = new PointPairList();
+        double speedPointListX = 0;
+        PointPairList accelerationList = new PointPairList();
+        double accelerationListX = 0;
+
         public Form1()//初始化物件
         {
             InitializeComponent();  
@@ -42,6 +47,8 @@ namespace TimerUIver0._3
             btnComPort_Click(sender, e);
             Init_Plot1();//踏板壓力曲線圖表初始化
             Init_Plot2();//速樁時間圖表初始化
+            Init_Plot3();//速樁速度圖表初始化
+            Init_Plot4();//速樁加速度圖表初始化
         }//應用程式開啟時//Form1_Load
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -69,7 +76,7 @@ namespace TimerUIver0._3
             CheckPointListX = -200; //-200;   //初始X座標
             //zgc.IsEnableZoom = false;
             myPane.Title.Text = "壓力曲線";
-            myPane.XAxis.Title.Text = "2毫秒";
+            myPane.XAxis.Title.Text = "毫秒";
             myPane.YAxis.Title.Text = "壓力值";
 
             /*設置XY軸標籤 與 文字 大小*/
@@ -111,7 +118,7 @@ namespace TimerUIver0._3
             ZedGraphControl zgc = zedChartData;
             GraphPane myPane = zgc.GraphPane;
             
-            myPane.Title.Text = "平均速度";
+            myPane.Title.Text = "";
             myPane.XAxis.Title.Text = "速樁";
             myPane.YAxis.Title.Text = "秒速";
             zgc.IsEnableZoom = true; //true  false
@@ -133,6 +140,86 @@ namespace TimerUIver0._3
             myPane.CurveList.Clear();
             PillarPointList.Clear();
             myPane.AddCurve("test", PillarPointList, Color.Red, SymbolType.Circle);
+
+            /*設置XY軸刻度的範圍*/
+            myPane.XAxis.Scale.Min = 0;
+            myPane.XAxis.Scale.Max = 12;
+            myPane.YAxis.Scale.Min = 0;
+            myPane.YAxis.Scale.Max = 50;
+            myPane.XAxis.Scale.MajorStep = 1;
+            //myPane.YAxis.Scale.MajorStep = 1;
+
+            zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            zgc.AxisChange();
+            zgc.Refresh();
+        }     //速樁時間圖表初始化
+        private void Init_Plot3()
+        {
+            ZedGraphControl zgc = zedGraphControl1;//////////
+            GraphPane myPane = zgc.GraphPane;
+
+            myPane.Title.Text = "";
+            myPane.XAxis.Title.Text = "速樁";
+            myPane.YAxis.Title.Text = "m/s";
+            zgc.IsEnableZoom = true; //true  false
+            zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
+            /*設置XY軸標籤 與 文字 大小*/
+            myPane.Title.FontSpec.Size = 17;
+            myPane.XAxis.Title.FontSpec.Size = 17;
+            myPane.YAxis.Title.FontSpec.Size = 17;
+            myPane.XAxis.Scale.FontSpec.Size = 17;
+            myPane.YAxis.Scale.FontSpec.Size = 17;
+            speedPointListX = 0;   //初始X座標
+            /*繪製XY軸格點*/
+            myPane.XAxis.MajorGrid.IsVisible = true;
+            myPane.XAxis.MajorGrid.DashOn = 1000;
+            myPane.YAxis.MajorGrid.IsVisible = true;
+            myPane.YAxis.MajorGrid.DashOn = 1000;
+            myPane.XAxis.MajorGrid.Color = Color.Black;
+            myPane.YAxis.MajorGrid.Color = Color.Black;
+            myPane.CurveList.Clear();
+            speedPointList.Clear();
+            myPane.AddCurve("test",speedPointList, Color.Red, SymbolType.Circle);
+
+            /*設置XY軸刻度的範圍*/
+            myPane.XAxis.Scale.Min = 0;
+            myPane.XAxis.Scale.Max = 12;
+            myPane.YAxis.Scale.Min = 0;
+            myPane.YAxis.Scale.Max = 50;
+            myPane.XAxis.Scale.MajorStep = 1;
+            //myPane.YAxis.Scale.MajorStep = 1;
+
+            zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            zgc.AxisChange();
+            zgc.Refresh();
+        }     //速樁速度圖表初始化
+        private void Init_Plot4()//速樁加速度圖表初始化
+        {
+            ZedGraphControl zgc = zedGraphControl2;//////////
+            GraphPane myPane = zgc.GraphPane;
+
+            myPane.Title.Text = "";
+            myPane.XAxis.Title.Text = "速樁";
+            myPane.YAxis.Title.Text = "m/s^2";
+            zgc.IsEnableZoom = true; //true  false
+            zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
+            /*設置XY軸標籤 與 文字 大小*/
+            myPane.Title.FontSpec.Size = 17;
+            myPane.XAxis.Title.FontSpec.Size = 17;
+            myPane.YAxis.Title.FontSpec.Size = 17;
+            myPane.XAxis.Scale.FontSpec.Size = 17;
+            myPane.YAxis.Scale.FontSpec.Size = 17;
+            speedPointListX = 0;   //初始X座標
+            /*繪製XY軸格點*/
+            myPane.XAxis.MajorGrid.IsVisible = true;
+            myPane.XAxis.MajorGrid.DashOn = 1000;
+            myPane.YAxis.MajorGrid.IsVisible = true;
+            myPane.YAxis.MajorGrid.DashOn = 1000;
+            myPane.XAxis.MajorGrid.Color = Color.Black;
+            myPane.YAxis.MajorGrid.Color = Color.Black;
+            myPane.CurveList.Clear();
+            speedPointList.Clear();
+            myPane.AddCurve("test", speedPointList, Color.Red, SymbolType.Circle);
 
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = 0;
@@ -415,110 +502,12 @@ namespace TimerUIver0._3
         int varChoosePillar = 0, btnLightName = 0;
         private void btnPillarNum_Click(object sender, EventArgs e)  //按鈕 確認速樁數量
         {
-            while (flowLayoutPanel1.Controls.Count > 0)
-                foreach (Control item in flowLayoutPanel1.Controls.OfType<Button>())
-                {
-                    Button btn = (Button)item;
-                    flowLayoutPanel1.Controls.Remove(item);
-                }
-            btnLightName = 0;
-            varChoosePillar = Convert.ToInt32(numericUpDown1.Value);
-            if (varChoosePillar == 0)
-            {
-                MessageBox.Show("請先輸入速樁數量", "警告", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                lbPillarHint.Text = "速樁數量確認完畢共" + varChoosePillar + "根速樁";
-                btnPillarNum.Enabled = false;
-            }
-            for (int i = 0; i < varChoosePillar; i++)
-            {
-                ListPillarCheck.Add("3");
-                Button btnLight = new Button();
-                btnLight.Text = btnLightName.ToString();
-                btnLight.TextAlign = ContentAlignment.MiddleCenter;
-                btnLight.Font = new Font(FFM, 12, FontStyle.Bold);
-                btnLight.Name = "Light " + btnLightName.ToString();
-                btnLight.Size = new Size(35, 35);
-                btnLight.BackColor = Color.Gray;
-                btnLight.FlatStyle = FlatStyle.Flat;
-                btnLight.FlatAppearance.BorderSize = 0;
-                btnLight.Click += new EventHandler(btnLight_Click);
-                btnLightName++;
-                flowLayoutPanel1.Controls.Add(btnLight);
-            }
+           
+           
         }
         void btnLight_Click(object sender, EventArgs e)              //直接生成按鈕物件
         {
 
-            CheckPillar();
-            while (flowLayoutPanel1.Controls.Count > 0)
-                foreach (Control item in flowLayoutPanel1.Controls.OfType<Button>())
-                {
-                    Button btn = (Button)item;
-                    flowLayoutPanel1.Controls.Remove(item);
-                }
-            btnLightName = 0;
-
-            for (int i = 0; i < varChoosePillar; i++)
-            {
-                Button btnLight = new Button();
-                switch (ListPillarCheck[i])
-                {
-                    case "1":
-                        btnLight.Text = btnLightName.ToString();
-                        btnLight.TextAlign = ContentAlignment.MiddleCenter;
-                        btnLight.Font = new Font(FFM, 12, FontStyle.Bold);
-                        btnLight.Name = "Light " + btnLightName.ToString();
-                        btnLight.Size = new Size(35, 35);
-                        btnLight.BackColor = Color.Gray;
-                        btnLight.FlatStyle = FlatStyle.Flat;
-                        btnLight.FlatAppearance.BorderSize = 0;
-                        btnLight.Click += new EventHandler(btnLight_Click);
-                        btnLight.BackColor = Color.Red;
-                        btnLightName++;
-                        flowLayoutPanel1.Controls.Add(btnLight);
-                        break;
-                    case "2":
-                        btnLight.Text = btnLightName.ToString();
-                        btnLight.TextAlign = ContentAlignment.MiddleCenter;
-                        btnLight.Font = new Font(FFM, 12, FontStyle.Bold);
-                        btnLight.Name = "Light " + btnLightName.ToString();
-                        btnLight.Size = new Size(35, 35);
-                        btnLight.BackColor = Color.Gray;
-                        btnLight.FlatStyle = FlatStyle.Flat;
-                        btnLight.FlatAppearance.BorderSize = 0;
-                        btnLight.Click += new EventHandler(btnLight_Click);
-                        btnLight.BackColor = Color.Green;
-                        btnLightName++;
-                        flowLayoutPanel1.Controls.Add(btnLight);
-                        break;
-                    default:
-                        btnLight.Text = btnLightName.ToString();
-                        btnLight.TextAlign = ContentAlignment.MiddleCenter;
-                        btnLight.Font = new Font(FFM, 12, FontStyle.Bold);
-                        btnLight.Name = "Light " + btnLightName.ToString();
-                        btnLight.Size = new Size(35, 35);
-                        btnLight.BackColor = Color.Gray;
-                        btnLight.FlatStyle = FlatStyle.Flat;
-                        btnLight.FlatAppearance.BorderSize = 0;
-                        btnLight.Click += new EventHandler(btnLight_Click);
-                        //btnLight.BackColor = Color.Red;
-                        btnLightName++;
-                        flowLayoutPanel1.Controls.Add(btnLight);
-                        break;
-
-                }
-
-                /*Button btn = sender as Button;
-                btn.BackColor = Color.Green;
-                lbPillarHint.Text = btn.Name + "設定完畢";
-                if(btn.BackColor == Color.Green)
-                {
-                    btn.Enabled = false;
-                }*/
-            }
         }
         string PillarCheck;
         string[] ArrayPillarCut = new string[1000];
@@ -1004,6 +993,8 @@ namespace TimerUIver0._3
         private void btnChartDataClear_Click(object sender, EventArgs e)//按鈕 速樁清除
         {
             Init_Plot2();
+            Init_Plot3();
+            Init_Plot4();
         }
         private string strValue;
         public string StrValue
@@ -1085,21 +1076,28 @@ namespace TimerUIver0._3
         string file_start = "C:\\dd\\Text";
         string file_name_nb;
         string file_end = ".txt";
+        string fileName;
+        SaveFileDialog sfd = new SaveFileDialog(); 
         int file_cnt = 0;
         private void to_txt_Click(object sender, EventArgs e)
         {
             try
             {
-                //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter sw = new StreamWriter(file_start+file_name_nb+file_end);
-                //Write a line of text
-                sw.WriteLine(testWin.Text);
-                //Write a second line of text
+                //方法1
+                StreamWriter sww = new StreamWriter(file_start + file_name_nb + file_end);
                 file_cnt++;
                 file_name_nb = file_cnt.ToString();
-                //Console.WriteLine("ddd{0}123", a.ToString());
-                //Close the file
-                sw.Close();
+                sww.WriteLine(testWin.Text); //Write txt
+                sww.Close();//Close the file
+                //方法二
+                SaveFileDialog sfd = new SaveFileDialog();
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    fileName = sfd.FileName;
+                }
+                StreamWriter sw = new StreamWriter(fileName+".txt");
+                sw.WriteLine(testWin.Text); //Write txt
+                sw.Close();//Close the file
             }
             catch (Exception )
             {
@@ -1110,6 +1108,47 @@ namespace TimerUIver0._3
             {
                 Console.WriteLine("Executing finally block.");
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form2 f2 = new Form2();
+            f2.Show();
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbInputName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbRacerName_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         private void CreateGraph(ZedGraphControl zgc)
@@ -1210,30 +1249,7 @@ namespace TimerUIver0._3
         }
         private void btnReset_Click(object sender, EventArgs e)
         {
-            cbRacerName.Items.Clear();
-            cbRacerName.SelectedIndex = -1;
-            //numericUpDown1.
-            btnStartTiming.Enabled = true;
-            btnsetDone.Enabled = true;
-            btnPillarNum.Enabled = true;
-            btnPillarDistance.Enabled = true;
-            btnChooseSheet.Enabled = true;
-            btnImportFile.Enabled = true;
-            btnAddName.Enabled = true;
-            btnRemoveName.Enabled = true;
-            iHint = 1;
-            varContrastValue = 1;
-            varPillarNum = 0;
-            listBox1.Items.Clear();
-            listbHint.Items.Clear();
-            listbData.Items.Clear();
-            while (flowLayoutPanel1.Controls.Count > 0)
-                foreach (Control item in flowLayoutPanel1.Controls.OfType<Button>())
-                {
-                    Button btn = (Button)item;
-                    flowLayoutPanel1.Controls.Remove(item);
-                }
-            btnLightName = 0;
+        
         }
     }
 }

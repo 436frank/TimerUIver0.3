@@ -72,3 +72,4 @@ C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.CopyComplete
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.exe
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.pdb
+C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0._3.Form2.resources
