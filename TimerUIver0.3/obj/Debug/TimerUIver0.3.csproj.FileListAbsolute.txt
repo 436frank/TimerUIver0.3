@@ -65,7 +65,6 @@ C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.SuggestedBindingRedirects.cache
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.ResolveComReference.cache
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0._3.Form1.resources
-C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0._3.HistoryData.resources
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0._3.Properties.Resources.resources
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.GenerateResource.cache
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.CoreCompileInputs.cache
