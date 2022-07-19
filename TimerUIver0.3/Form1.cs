@@ -36,13 +36,14 @@ namespace TimerUIver0._3
         double speedPointListX = 0;
         PointPairList accelerationList = new PointPairList();
         double accelerationListX = 0;
-
         public Form1()//初始化物件
         {
-            InitializeComponent();  
+            InitializeComponent();
+            
         }  
         private void Form1_Load(object sender, EventArgs e)
         {
+            system_file_generation();
             cbCOMport_DropDown(sender, e);
             btnComPort_Click(sender, e);
             Init_Graph_ADC();//踏板壓力曲線圖表初始化
@@ -71,8 +72,8 @@ namespace TimerUIver0._3
                 Points = new[]
                 {
                     new PointD(0, 0),
-                    new PointD(200, 0),
-                    new PointD(200, 4095),
+                    new PointD(100, 0),
+                    new PointD(100, 4095),
                     new PointD(0, 4095)
                 },
                 Fill = new Fill(Color.FromArgb(127, Color.Red)),
@@ -394,7 +395,6 @@ namespace TimerUIver0._3
         {
 
         }
-  
         private void btnPillarNum_Click(object sender, EventArgs e)  //按鈕 確認速樁數量
         {
            
@@ -423,15 +423,7 @@ namespace TimerUIver0._3
         string past;
         private void btnRemoveName_Click(object sender, EventArgs e)     //按鈕 移除姓名
         {
-            foreach (string name in cbRacerName.Items)
-            {
-                //listBox1.Items.Add(name);
-                if (cbRacerName.Text == name)
-                {
-                    past = name;
-                }
-            }
-            cbRacerName.Items.Remove(past);
+
         }
         
         private void btnPillarDistance_Click(object sender, EventArgs e) //按鈕 確認速樁距離
@@ -503,9 +495,6 @@ namespace TimerUIver0._3
         private void zedPressure_Load(object sender, EventArgs e)
         {
         }
-       
-
-
 
         private void to_txt_Click(object sender, EventArgs e)
         {
@@ -590,23 +579,77 @@ namespace TimerUIver0._3
         }
         private void btnAddName_Click(object sender, EventArgs e)
         {
-            cbRacerName.Items.Add(cbRacerName.Text);
-            /*cbChooseSheetName.Text = tbInputName.Text;
-            cbChooseSheetName.Items.Add(tbInputName.Text);*/
+
         }
         private void btnsetDone_Click(object sender, EventArgs e)
         {
-            btnPillarNum.Enabled = false;
-            btnPillarDistance.Enabled = false;
-            btnChooseSheet.Enabled = false;
-            btnImportFile.Enabled = false;
-            btnAddName.Enabled = false;
-            btnRemoveName.Enabled = false;
-            btnsetDone.Enabled = false;
         }
         private void btnReset_Click(object sender, EventArgs e)
         {
         
         }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private int tab_cnt = 0;
+        private void tabControl2_DoubleClick(object sender, EventArgs e)
+        {            
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_add_UserID_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void system_file_generation()  //產生系統文件
+        {
+
+            var CurrentDirectory = Directory.GetCurrentDirectory();
+            FileStream fs;
+            fs = new FileStream(CurrentDirectory + "\\User_ID.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine("test");
+
+        }
+        private void USER_ID_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+        private void USER_ID_combobox_DropDown(object sender, EventArgs e)
+        {
+            var CurrentDirectory = Directory.GetCurrentDirectory();
+            
+            bool fileExist = File.Exists(CurrentDirectory);
+            if (!fileExist)
+            {
+                
+                Console.WriteLine(CurrentDirectory);
+            }
+            else 
+            {
+                
+            }
+            //Console.WriteLine("File");
+        }
+        
     }
 }
