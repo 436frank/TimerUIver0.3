@@ -145,7 +145,7 @@
             this.to_txt.Name = "to_txt";
             this.to_txt.Size = new System.Drawing.Size(261, 30);
             this.to_txt.TabIndex = 0;
-            this.to_txt.Text = "放入txt";
+            this.to_txt.Text = "另存所有數據";
             this.to_txt.UseVisualStyleBackColor = true;
             this.to_txt.Click += new System.EventHandler(this.to_txt_Click);
             // 
