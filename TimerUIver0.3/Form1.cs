@@ -251,6 +251,9 @@ namespace TimerUIver0._3
             if (comport.IsOpen)
                 comport.Close();
         }  //關閉COMPORT
+
+
+        string[] adc_data = { };
         private void DoReceive()         //COMPORT接收資料
         {
             int all_point = 1200;
@@ -258,12 +261,12 @@ namespace TimerUIver0._3
             int max_data_val = 0;
             int min_data_val = 0;
             Byte[] buffer = new Byte[1024];
-            string[] adc_data = {};
+            
 
             string temp_msg = "";
             string hintMark = "$";
             char charHintMark ='$';
-            float NEWDATA;
+            float time_ms_NEWDATA;
             bool judg;//判斷結果
             while (receiving)//receiving為真時進入迴圈
             {
@@ -312,13 +315,13 @@ namespace TimerUIver0._3
                                     CheckPointList.Clear();
                                     CheckPointListX = -200;
                                 }
-                                NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
-                                NEWDATA = NEWDATA / 1000;
-                                PillarPointList.Add(Convert.ToDouble(NEWDATA), PillarPointListY);
+                                time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
+                                time_ms_NEWDATA = time_ms_NEWDATA / 1000;
+                                PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), PillarPointListY);
                                 PillarPointListY++;//
 
                                 //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
-                                // Console.Write($"PillarPointListY/1000= {NEWDATA}  ");//預覽輸出
+                                // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
 
                             }
                             else
@@ -502,13 +505,22 @@ namespace TimerUIver0._3
             {   
                 SaveFileDialog saveFile = new SaveFileDialog();
                 saveFile.FileName = DateTime.Now.ToString("yyyy-MM-dd HH-mm");
+                
                 saveFile.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
                 if (saveFile.ShowDialog() == DialogResult.OK)
                 {
-                    StreamWriter sw = new StreamWriter(saveFile.FileName, false);
-                    sw.WriteLine(testWin.Text);
-                    sw.Close();
+                    /////////////////////////////////存ADC值////////////////////////
+                    StreamWriter sw_adc = new StreamWriter(saveFile.FileName, false);
+                    for (int i = 0; i < adc_data.Length - 1; i++)
+                    {
+                        sw_adc.WriteLine(adc_data[i]);
+                    }
+                    sw_adc.Close();
+                    /////////////////////////////////存時間////////////////////////
 
+
+
+                    //////////////////////////////////截圖//////////////////////////
                     Bitmap myImage = new Bitmap(this.Width, this.Height);
                     Graphics g = Graphics.FromImage(myImage);
                     g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
