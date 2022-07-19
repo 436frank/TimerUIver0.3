@@ -252,7 +252,7 @@ namespace TimerUIver0._3
                 comport.Close();
         }  //關閉COMPORT
 
-
+        string[] time_data = { };
         string[] adc_data = { };
         private void DoReceive()         //COMPORT接收資料
         {
@@ -315,10 +315,14 @@ namespace TimerUIver0._3
                                     CheckPointList.Clear();
                                     CheckPointListX = -200;
                                 }
+                                
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
                                 PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), PillarPointListY);
                                 PillarPointListY++;//
+
+                                Array.Resize(ref time_data, time_data.Length + 1);
+                                time_data[time_data.Length - 1] = datas[i];
 
                                 //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
                                 // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
@@ -376,6 +380,49 @@ namespace TimerUIver0._3
                 {
                     MessageBox.Show(ex.Message, "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
+            }
+        }
+        private void to_txt_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFile = new SaveFileDialog();
+                saveFile.FileName = DateTime.Now.ToString("yyyy-MM-dd HH-mm");
+
+                saveFile.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
+                if (saveFile.ShowDialog() == DialogResult.OK)
+                {
+                    /////////////////////////////////存ADC值////////////////////////
+                    StreamWriter sw_adc = new StreamWriter(saveFile.FileName.Replace(".txt", "_ADC.txt"), false);
+                    for (int i = 0; i < adc_data.Length - 1; i++)
+                    {
+                        sw_adc.WriteLine(adc_data[i]);
+                    }
+                    sw_adc.Close();
+                    /////////////////////////////////存時間////////////////////////
+                    StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
+                    for (int i = 0; i < time_data.Length - 1; i++)
+                    {
+                        sw_time.WriteLine(time_data[i]);
+                    }
+                    sw_time.Close();
+                    //////////////////////////////////截圖//////////////////////////
+                    Bitmap myImage = new Bitmap(this.Width, this.Height);
+                    Graphics g = Graphics.FromImage(myImage);
+                    g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
+                    IntPtr dc1 = g.GetHdc();
+                    g.ReleaseHdc(dc1);
+                    myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Exception: ");
+                MessageBox.Show("找不到路徑", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
             }
         }
         private void DisplayRx()
@@ -498,48 +545,6 @@ namespace TimerUIver0._3
         private void zedPressure_Load(object sender, EventArgs e)
         {
         }
-
-        private void to_txt_Click(object sender, EventArgs e)
-        {
-            try
-            {   
-                SaveFileDialog saveFile = new SaveFileDialog();
-                saveFile.FileName = DateTime.Now.ToString("yyyy-MM-dd HH-mm");
-                
-                saveFile.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
-                if (saveFile.ShowDialog() == DialogResult.OK)
-                {
-                    /////////////////////////////////存ADC值////////////////////////
-                    StreamWriter sw_adc = new StreamWriter(saveFile.FileName, false);
-                    for (int i = 0; i < adc_data.Length - 1; i++)
-                    {
-                        sw_adc.WriteLine(adc_data[i]);
-                    }
-                    sw_adc.Close();
-                    /////////////////////////////////存時間////////////////////////
-
-
-
-                    //////////////////////////////////截圖//////////////////////////
-                    Bitmap myImage = new Bitmap(this.Width, this.Height);
-                    Graphics g = Graphics.FromImage(myImage);
-                    g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
-                    IntPtr dc1 = g.GetHdc();
-                    g.ReleaseHdc(dc1);
-                    myImage.Save(saveFile.FileName.Replace(".txt",".jpg"));
-                }             
-            }
-            catch (Exception )
-            {
-                Console.WriteLine("Exception: ");
-                MessageBox.Show("找不到路徑", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            finally
-            {
-                Console.WriteLine("Executing finally block.");
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -634,7 +639,6 @@ namespace TimerUIver0._3
 
         private void system_file_generation()  //產生系統文件
         {
-
             var CurrentDirectory = Directory.GetCurrentDirectory();
             FileStream fs;
             fs = new FileStream(CurrentDirectory + "\\User_ID.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
