@@ -120,7 +120,7 @@ namespace TimerUIver0._3
             zgc.IsShowPointValues = true;       //滑鼠經過圖表上的點時是否氣泡顯示該點所對應的值
             zgc.IsEnableZoom = true;            //允許橫向縮放
             /*加入標題*/
-            myPane.Title.Text = "壓力曲線";
+            myPane.Title.Text = "原數據";
             myPane.XAxis.Title.Text = "時間(s)";
             myPane.YAxis.Title.Text = "速樁";
             /*繪製XY虛線*/
@@ -140,7 +140,7 @@ namespace TimerUIver0._3
             zgc = zedGraphControl1;//////////
             myPane = zgc.GraphPane;
 
-            myPane.Title.Text = "";
+            myPane.Title.Text = "數據1";
             myPane.XAxis.Title.Text = "速樁";
             myPane.YAxis.Title.Text = "m/s";
             zgc.IsEnableZoom = true; //true  false
@@ -394,9 +394,9 @@ namespace TimerUIver0._3
                 {
                     /////////////////////////////////存ADC值////////////////////////
                     StreamWriter sw_adc = new StreamWriter(saveFile.FileName.Replace(".txt", "_ADC.txt"), false);
-                    for (int i = 0; i < adc_data.Length - 1; i++)
+                    foreach (string data in adc_data)
                     {
-                        sw_adc.WriteLine(adc_data[i]);
+                        sw_adc.WriteLine(data);
                     }
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
