@@ -424,6 +424,46 @@ namespace TimerUIver0._3
             {
                 Console.WriteLine("Executing finally block.");
             }
+        }//輸出存檔
+        private void system_file_generation()  //產生系統文件
+        {
+            var CurrentDirectory = Directory.GetCurrentDirectory();
+            FileStream fs;
+            fs = new FileStream(CurrentDirectory + "\\User_ID.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine("test");
+
+        }
+        private void USER_ID_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void USER_ID_combobox_DropDown(object sender, EventArgs e)   //受測者下拉選單事件
+        {
+            string CurrentDirectory = Directory.GetCurrentDirectory();
+            string user_ID_file_path= Directory.GetCurrentDirectory()+ "\\User_ID.txt";
+            string ReadLine;
+            string[] array_user_ID;
+            bool fileExist = File.Exists(user_ID_file_path);
+            USER_ID_combobox.Items.Clear();
+            if (!fileExist)
+            {
+                Console.WriteLine("偵測路徑 " + CurrentDirectory);
+                Console.WriteLine("此路徑沒那個檔案");
+                StreamWriter sw = new StreamWriter(user_ID_file_path);
+            }
+            else
+            {
+                Console.WriteLine("偵測路徑 " + CurrentDirectory);
+                Console.WriteLine("此路徑已有那個檔案");
+                StreamReader sr = new StreamReader(user_ID_file_path);
+                while ((ReadLine= sr.ReadLine()) != null)
+                {
+                    USER_ID_combobox.Items.Add(ReadLine);
+                }
+
+            }
+            //Console.WriteLine("File");
         }
         private void DisplayRx()
         {
@@ -636,36 +676,5 @@ namespace TimerUIver0._3
         {
 
         }
-
-        private void system_file_generation()  //產生系統文件
-        {
-            var CurrentDirectory = Directory.GetCurrentDirectory();
-            FileStream fs;
-            fs = new FileStream(CurrentDirectory + "\\User_ID.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine("test");
-
-        }
-        private void USER_ID_combobox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
-        private void USER_ID_combobox_DropDown(object sender, EventArgs e)
-        {
-            var CurrentDirectory = Directory.GetCurrentDirectory();
-            
-            bool fileExist = File.Exists(CurrentDirectory);
-            if (!fileExist)
-            {
-                
-                Console.WriteLine(CurrentDirectory);
-            }
-            else 
-            {
-                
-            }
-            //Console.WriteLine("File");
-        }
-        
     }
 }
