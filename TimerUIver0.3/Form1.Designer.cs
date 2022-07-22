@@ -180,7 +180,7 @@
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(263, 31);
             this.btnReset.TabIndex = 5;
-            this.btnReset.Text = "重新設定";
+            this.btnReset.Text = "清空數據";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 

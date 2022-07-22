@@ -316,6 +316,7 @@ namespace TimerUIver0._3
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
                                     CheckPointListX = -200;
+                                    
                                 }
                                 
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
@@ -617,7 +618,7 @@ namespace TimerUIver0._3
         }
         private void btnReset_Click(object sender, EventArgs e)
         {
-        
+            testWin.Clear();
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
