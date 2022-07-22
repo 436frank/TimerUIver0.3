@@ -14,13 +14,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZedGraph;
+using System.Timers;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TimerUIver0._3
 {
     public partial class Form1 : Form
     {
-        DateTime DateT1 = DateTime.Now; //使用時間 {開啟.exe後 只接收一次}
+
+
+        private  System.Timers.Timer aTimer;
+        
         private FontFamily FFM = new FontFamily("微軟正黑體");     //字型 
         private Boolean receiving;
         private SerialPort comport = new SerialPort();
@@ -41,7 +45,7 @@ namespace TimerUIver0._3
         public Form1()//初始化物件
         {
             InitializeComponent();
-            
+           
         }  
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -50,6 +54,7 @@ namespace TimerUIver0._3
             btnComPort_Click(sender, e);
             Init_Graph_ADC();//踏板壓力曲線圖表初始化
             Init_Graph();//速樁時間、速樁速度、速樁加速度圖表初始化
+            SetTimer();
             //加入壓力數值
             zedPressure.GraphPane.AddCurve("壓力", CheckPointList, Color.Blue, SymbolType.None);
             CheckPointListX = -200; //-200;   //初始X座標
@@ -58,6 +63,21 @@ namespace TimerUIver0._3
             PillarPointListY = 0;               //初始X座標
 
         }//應用程式開啟時//Form1_Load
+        private  void SetTimer()
+        {
+            // Create a timer with a two second interval.
+            aTimer = new System.Timers.Timer(1000);
+            // Hook up the Elapsed event for the timer. 
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+        long connnn = 0;
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+   ////////////////////////////////////////////////////////////
+        }
+
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Close_Comport();
@@ -390,7 +410,7 @@ namespace TimerUIver0._3
             try
             {
                 SaveFileDialog saveFile = new SaveFileDialog();
-                saveFile.FileName = DateTime.Now.ToString("yyyy-MM-dd HH-mm");
+                saveFile.FileName =DateTime.Now.ToString("yyyy-MM-dd HH-mm") + USER_ID_combobox.Text;   
 
                 saveFile.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
                 if (saveFile.ShowDialog() == DialogResult.OK)
@@ -403,7 +423,7 @@ namespace TimerUIver0._3
                     }
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
-                    StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
+                    StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt","_time.txt"), false);
                     for (int i = 0; i < time_data.Length - 1; i++)
                     {
                         sw_time.WriteLine(time_data[i]);
@@ -415,7 +435,7 @@ namespace TimerUIver0._3
                     g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
                     IntPtr dc1 = g.GetHdc();
                     g.ReleaseHdc(dc1);
-                    myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
+                    myImage.Save(saveFile.FileName.Replace(".txt","_picture.jpg"));
                 }
             }
             catch (Exception)
@@ -553,6 +573,14 @@ namespace TimerUIver0._3
             zedChartData.Refresh();
 
         }
+        private void btnPressureCurveClear_Click(object sender, EventArgs e)//按鈕 壓力曲線清除
+        {
+            Init_Graph_ADC();
+        }
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            testWin.Clear();
+        }
         private void zedChartData_Load(object sender, EventArgs e)
         {
 
@@ -605,10 +633,7 @@ namespace TimerUIver0._3
 
         }
                
-        private void btnPressureCurveClear_Click(object sender, EventArgs e)//按鈕 壓力曲線清除
-        {
-            Init_Graph_ADC();
-        }
+
         private void btnAddName_Click(object sender, EventArgs e)
         {
 
@@ -616,10 +641,7 @@ namespace TimerUIver0._3
         private void btnsetDone_Click(object sender, EventArgs e)
         {
         }
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            testWin.Clear();
-        }
+
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -645,6 +667,11 @@ namespace TimerUIver0._3
 
 
         private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NOW_timer_lable_Click(object sender, EventArgs e)
         {
 
         }
