@@ -36,6 +36,8 @@ namespace TimerUIver0._3
         double speedPointListX = 0;
         PointPairList accelerationList = new PointPairList();
         double accelerationListX = 0;
+        string user_ID_file_path = Directory.GetCurrentDirectory() + "\\User_ID.txt"; //使用者id的txt路徑
+
         public Form1()//初始化物件
         {
             InitializeComponent();
@@ -429,41 +431,44 @@ namespace TimerUIver0._3
         {
             var CurrentDirectory = Directory.GetCurrentDirectory();
             FileStream fs;
-            fs = new FileStream(CurrentDirectory + "\\User_ID.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            fs = new FileStream(user_ID_file_path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine("test");
-
         }
-        private void USER_ID_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        private void button_add_UserID_Click(object sender, EventArgs e)
         {
-
+            using (StreamWriter sw = File.AppendText(user_ID_file_path))
+            {
+                sw.WriteLine(USER_ID_combobox.Text);
+            }
         }
         private void USER_ID_combobox_DropDown(object sender, EventArgs e)   //受測者下拉選單事件
         {
-            string CurrentDirectory = Directory.GetCurrentDirectory();
-            string user_ID_file_path= Directory.GetCurrentDirectory()+ "\\User_ID.txt";
             string ReadLine;
-            string[] array_user_ID;
             bool fileExist = File.Exists(user_ID_file_path);
             USER_ID_combobox.Items.Clear();
+
             if (!fileExist)
             {
-                Console.WriteLine("偵測路徑 " + CurrentDirectory);
+                Console.WriteLine("偵測路徑 " + user_ID_file_path);
                 Console.WriteLine("此路徑沒那個檔案");
                 StreamWriter sw = new StreamWriter(user_ID_file_path);
             }
             else
             {
-                Console.WriteLine("偵測路徑 " + CurrentDirectory);
+                Console.WriteLine("偵測路徑 " + user_ID_file_path);
                 Console.WriteLine("此路徑已有那個檔案");
                 StreamReader sr = new StreamReader(user_ID_file_path);
                 while ((ReadLine= sr.ReadLine()) != null)
                 {
                     USER_ID_combobox.Items.Add(ReadLine);
                 }
-
+                sr.Close(); 
             }
             //Console.WriteLine("File");
+        }
+        private void USER_ID_combobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
         private void DisplayRx()
         {
@@ -490,36 +495,8 @@ namespace TimerUIver0._3
            
            
         }
-        void btnLight_Click(object sender, EventArgs e)              //直接生成按鈕物件
-        {
 
-        }
-        string PillarCheck;
-        string[] ArrayPillarCut = new string[1000];
-        List<string> ListPillarCheck = new List<string>();
-        private void CheckPillar()
-        {
-            comport.Write("#");
-            //PillarCheck = comport.ReadExisting();
-            PillarCheck = comport.ReadLine();
-            Console.WriteLine(PillarCheck);
-            ArrayPillarCut = PillarCheck.Split('G');
-            for (int i = 0; i < ArrayPillarCut.Length; i++)
-            {
-                ListPillarCheck[i] = ArrayPillarCut[i];//速樁數量全接收
-            }
 
-        }
-        string past;
-        private void btnRemoveName_Click(object sender, EventArgs e)     //按鈕 移除姓名
-        {
-
-        }
-        
-        private void btnPillarDistance_Click(object sender, EventArgs e) //按鈕 確認速樁距離
-        {
-            
-        }
         private void btnStartTiming_Click(object sender, EventArgs e)
         {
 
@@ -527,10 +504,7 @@ namespace TimerUIver0._3
         private void GetPlottingData(object sender, EventArgs e)
         {
         }
-        private void DrawStressCurve(object sender, EventArgs e)
-        {
 
-        }
 
         
         private void btnPressureSave_Click(object sender, EventArgs e)  //按鈕 壓力曲線 儲存
@@ -667,10 +641,7 @@ namespace TimerUIver0._3
 
         }
 
-        private void button_add_UserID_Click(object sender, EventArgs e)
-        {
-            
-        }
+
 
         private void label2_Click(object sender, EventArgs e)
         {

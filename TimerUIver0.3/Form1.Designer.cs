@@ -498,7 +498,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 32);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1173, 243);
+            this.tabPage2.Size = new System.Drawing.Size(1179, 243);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "速度曲線";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -516,7 +516,7 @@
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(1167, 237);
+            this.zedGraphControl1.Size = new System.Drawing.Size(1173, 237);
             this.zedGraphControl1.TabIndex = 3;
             // 
             // tabPage5
@@ -525,7 +525,7 @@
             this.tabPage5.Location = new System.Drawing.Point(4, 32);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1173, 243);
+            this.tabPage5.Size = new System.Drawing.Size(1179, 243);
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "加速度曲線";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -543,7 +543,7 @@
             this.zedGraphControl2.ScrollMinX = 0D;
             this.zedGraphControl2.ScrollMinY = 0D;
             this.zedGraphControl2.ScrollMinY2 = 0D;
-            this.zedGraphControl2.Size = new System.Drawing.Size(1167, 237);
+            this.zedGraphControl2.Size = new System.Drawing.Size(1173, 237);
             this.zedGraphControl2.TabIndex = 4;
             // 
             // panel2
@@ -666,12 +666,12 @@
             this.button_add_distance.BackColor = System.Drawing.Color.Transparent;
             this.button_add_distance.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.button_add_distance.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button_add_distance.Location = new System.Drawing.Point(209, 36);
+            this.button_add_distance.Location = new System.Drawing.Point(134, 36);
             this.button_add_distance.Margin = new System.Windows.Forms.Padding(2);
             this.button_add_distance.Name = "button_add_distance";
-            this.button_add_distance.Size = new System.Drawing.Size(64, 31);
+            this.button_add_distance.Size = new System.Drawing.Size(121, 31);
             this.button_add_distance.TabIndex = 1;
-            this.button_add_distance.Text = "新增";
+            this.button_add_distance.Text = "新增受測者";
             this.button_add_distance.UseVisualStyleBackColor = false;
             this.button_add_distance.Click += new System.EventHandler(this.button_add_UserID_Click);
             // 
