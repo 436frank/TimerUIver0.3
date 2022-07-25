@@ -30,6 +30,8 @@ namespace TimerUIver0._3
         private SerialPort comport = new SerialPort();
         private int rxByteCount = 0;
         private delegate void DisplayStr(string str);
+        private delegate void renew_user_time(string str);
+
         private delegate void invokeDelegate();
         private Thread t;
         PointPairList CheckPointList = new PointPairList();
@@ -45,7 +47,6 @@ namespace TimerUIver0._3
         public Form1()//初始化物件
         {
             InitializeComponent();
-           
         }  
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -63,7 +64,11 @@ namespace TimerUIver0._3
             PillarPointListY = 0;               //初始X座標
 
         }//應用程式開啟時//Form1_Load
-        private  void SetTimer()
+        private void renew_time_user(string msg)
+        {
+            NOW_user_lable.Text = msg;
+        }
+            private  void SetTimer()
         {
             // Create a timer with a two second interval.
             aTimer = new System.Timers.Timer(1000);
@@ -72,10 +77,10 @@ namespace TimerUIver0._3
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
         }
-        long connnn = 0;
+
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
-   ////////////////////////////////////////////////////////////
+
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -276,6 +281,8 @@ namespace TimerUIver0._3
 
         string[] time_data = { };
         string[] adc_data = { };
+        int max_time_point;
+        int min_time_point;
         private void DoReceive()         //COMPORT接收資料
         {
             int all_point = 1200;
@@ -336,7 +343,9 @@ namespace TimerUIver0._3
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
                                     CheckPointListX = -200;
-                                    
+                                    max_time_point = 0;
+                                    min_time_point = 0;
+
                                 }
                                 
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
@@ -370,6 +379,7 @@ namespace TimerUIver0._3
                                         int now_intadc_data= intadc_data[data_cnt];
                                         if (now_intadc_data == max_data_val)
                                         {
+                                            max_time_point = data_cnt;
                                             Console.WriteLine("離開踏板前最高的時間點 ={0}",data_cnt);
                                             Console.WriteLine("離開踏板前最高的數值 ={0}",max_data_val);
                                         }
@@ -379,6 +389,7 @@ namespace TimerUIver0._3
                                         int now_intadc_data = intadc_data[data_cnt];
                                         if (now_intadc_data == min_data_val)
                                         {
+                                            min_time_point = data_cnt;
                                             Console.WriteLine("離開踏板後最低的時間點 ={0}", data_cnt);
                                             Console.WriteLine("離開踏板後最低的數值 ={0}", min_data_val);
                                         }
@@ -421,6 +432,8 @@ namespace TimerUIver0._3
                     {
                         sw_adc.WriteLine(data);
                     }
+                    sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
+                    sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt","_time.txt"), false);
@@ -491,6 +504,11 @@ namespace TimerUIver0._3
         {
 
         }
+        private void USER_ID_combobox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine("re_text");
+        }
+        
         private void DisplayRx()
         {
             label9.Text = rxByteCount.ToString();
@@ -674,6 +692,11 @@ namespace TimerUIver0._3
         private void NOW_timer_lable_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void USER_ID_combobox_KeyDown(object sender, KeyEventArgs e)
+        {
+            NOW_user_lable.Text = USER_ID_combobox.Text;
         }
     }
 }

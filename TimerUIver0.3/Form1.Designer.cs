@@ -71,7 +71,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.NOW_timer_lable = new System.Windows.Forms.Label();
+            this.NOW_user_lable = new System.Windows.Forms.Label();
             this.USER_ID_combobox = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button_add_distance = new System.Windows.Forms.Button();
@@ -630,7 +630,7 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.NOW_timer_lable);
+            this.tabPage4.Controls.Add(this.NOW_user_lable);
             this.tabPage4.Controls.Add(this.USER_ID_combobox);
             this.tabPage4.Controls.Add(this.label2);
             this.tabPage4.Controls.Add(this.button_add_distance);
@@ -642,16 +642,16 @@
             this.tabPage4.Text = "使用者設定";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // NOW_timer_lable
+            // NOW_user_lable
             // 
-            this.NOW_timer_lable.AutoSize = true;
-            this.NOW_timer_lable.Font = new System.Drawing.Font("微軟正黑體", 10F, System.Drawing.FontStyle.Bold);
-            this.NOW_timer_lable.Location = new System.Drawing.Point(8, 653);
-            this.NOW_timer_lable.Name = "NOW_timer_lable";
-            this.NOW_timer_lable.Size = new System.Drawing.Size(64, 18);
-            this.NOW_timer_lable.TabIndex = 4;
-            this.NOW_timer_lable.Text = "現在時間";
-            this.NOW_timer_lable.Click += new System.EventHandler(this.NOW_timer_lable_Click);
+            this.NOW_user_lable.AutoSize = true;
+            this.NOW_user_lable.Font = new System.Drawing.Font("微軟正黑體", 10F, System.Drawing.FontStyle.Bold);
+            this.NOW_user_lable.Location = new System.Drawing.Point(152, 13);
+            this.NOW_user_lable.Name = "NOW_user_lable";
+            this.NOW_user_lable.Size = new System.Drawing.Size(78, 18);
+            this.NOW_user_lable.TabIndex = 4;
+            this.NOW_user_lable.Text = "現在使用者";
+            this.NOW_user_lable.Click += new System.EventHandler(this.NOW_timer_lable_Click);
             // 
             // USER_ID_combobox
             // 
@@ -662,6 +662,8 @@
             this.USER_ID_combobox.TabIndex = 3;
             this.USER_ID_combobox.DropDown += new System.EventHandler(this.USER_ID_combobox_DropDown);
             this.USER_ID_combobox.SelectedIndexChanged += new System.EventHandler(this.USER_ID_combobox_SelectedIndexChanged);
+            this.USER_ID_combobox.SelectedValueChanged += new System.EventHandler(this.USER_ID_combobox_SelectedValueChanged);
+            this.USER_ID_combobox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.USER_ID_combobox_KeyDown);
             // 
             // label2
             // 
@@ -802,7 +804,7 @@
         private System.Windows.Forms.Button button_add_distance;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox USER_ID_combobox;
-        private System.Windows.Forms.Label NOW_timer_lable;
+        private System.Windows.Forms.Label NOW_user_lable;
     }
 }
 
