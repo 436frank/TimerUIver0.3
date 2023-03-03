@@ -16,15 +16,15 @@ using System.Windows.Forms;
 using ZedGraph;
 using System.Timers;
 using Excel = Microsoft.Office.Interop.Excel;
+using System.Diagnostics;
 
 namespace TimerUIver0._3
 {
+
     public partial class Form1 : Form
     {
+        private System.Timers.Timer aTimer;
 
-
-        private  System.Timers.Timer aTimer;
-        
         private FontFamily FFM = new FontFamily("微軟正黑體");     //字型 
         private Boolean receiving;
         private SerialPort comport = new SerialPort();
@@ -36,18 +36,46 @@ namespace TimerUIver0._3
         private Thread t;
         PointPairList CheckPointList = new PointPairList();
         double CheckPointListX = 0;
+
         PointPairList PillarPointList = new PointPairList();
         double PillarPointListY = 0;
+        PointPairList maxCheckPointList = new PointPairList();
+        double maxCheckPointListX = 0;
+        PointPairList minCheckPointList = new PointPairList();
+        double minCheckPointListX = 0;
+        PointPairList leaveCheckPointList = new PointPairList();
+        double leaveCheckPointListX = 0;
+        /// <summary>
+        /// /////////////////////////////////
+        //        %data_t = [0.5, 1.760, 3.571, 5.314, 6.975, 8.495, 9.604, 10.767 ,11.913, 12.709, 13.707, 14.701];   % 蘇景暉
+        //        %data_t = [0.5, 1.608, 3.145, 4.523, 5.801, 6.950, 7.796, 8.689 ,9.584 ,10.193, 11.004 ,11.620];   % 楊以丞
+        //        %data_t = [0.45, 1.859, 4.116, 6.487, 8.461, 10.139, 11.424 ,12.864 ,14.454, 15.547, 16.909 ,18.293];   % 黃祥璽
+        static double[] data_t = { 0.53f, 1.389f, 3.034f, 4.575f, 6.028f, 7.455f, 8.561f, 9.722f, 10.929f, 11.848f, 12.986f, 14.106f };//林立中
+        static double[] data_s = { 0f, 3.5f, 12.5f, 22f, 31f, 39f, 45f, 51f, 57f, 61f, 66f, 70f };
+        static int n = 12; // DATA_T 數量 12
+        static int m = n -1;
+        static int nn = 4 * m -1;
+        double[,] M_array = new double[nn,nn];
+        double[] S_array = new double[nn];
+        double[][] s=new double[1][];
+
+
+
+
+        /// </summary>
+        
+
         PointPairList speedPointList = new PointPairList();
         double speedPointListX = 0;
         PointPairList accelerationList = new PointPairList();
         double accelerationListX = 0;
         string user_ID_file_path = Directory.GetCurrentDirectory() + "\\User_ID.txt"; //使用者id的txt路徑
-
         public Form1()//初始化物件
         {
-            InitializeComponent();
+            //InitializeComponent();
+            btnsetDone_Click(null, null);
         }  
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             system_file_generation();
@@ -58,7 +86,15 @@ namespace TimerUIver0._3
             SetTimer();
             //加入壓力數值
             zedPressure.GraphPane.AddCurve("壓力", CheckPointList, Color.Blue, SymbolType.None);
+            zedPressure.GraphPane.AddCurve("最高點", maxCheckPointList, Color.Red, SymbolType.Star);
+            zedPressure.GraphPane.AddCurve("最低點", minCheckPointList, Color.Blue, SymbolType.Star);
+            zedPressure.GraphPane.AddCurve("離開點", leaveCheckPointList, Color.Green, SymbolType.Star);
+
+            maxCheckPointListX = -200;
+            minCheckPointListX = -200;
+            leaveCheckPointListX = -200;
             CheckPointListX = -200; //-200;   //初始X座標
+            
 
             zedChartData.GraphPane.AddCurve("test", PillarPointList, Color.Red, SymbolType.Circle);
             PillarPointListY = 0;               //初始X座標
@@ -68,7 +104,7 @@ namespace TimerUIver0._3
         {
             NOW_user_lable.Text = msg;
         }
-            private  void SetTimer()
+        private  void SetTimer()
         {
             // Create a timer with a two second interval.
             aTimer = new System.Timers.Timer(1000);
@@ -101,6 +137,17 @@ namespace TimerUIver0._3
                     new PointD(0, 0),
                     new PointD(100, 0),
                     new PointD(100, 4095),
+                    new PointD(0, 4095)
+                },
+                Fill = new Fill(Color.FromArgb(127, Color.Red)),
+                ZOrder = ZOrder.E_BehindCurves
+            };
+            var line1 = new PolyObj //離開線
+            {
+                Points = new[]
+    {
+                    new PointD(0, 0),
+
                     new PointD(0, 4095)
                 },
                 Fill = new Fill(Color.FromArgb(127, Color.Red)),
@@ -188,7 +235,7 @@ namespace TimerUIver0._3
             myPane.YAxis.MajorGrid.Color = Color.Black;
             myPane.CurveList.Clear();
             speedPointList.Clear();
-            myPane.AddCurve("test", speedPointList, Color.Red, SymbolType.Circle);
+            myPane.AddCurve("速樁觸發", speedPointList, Color.Red, SymbolType.Circle);
 
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = 0;
@@ -283,12 +330,14 @@ namespace TimerUIver0._3
         string[] adc_data = { };
         int max_time_point;
         int min_time_point;
+        int leave_time_point;
         private void DoReceive()         //COMPORT接收資料
         {
             int all_point = 1200;
             int now_point=0;
             int max_data_val = 0;
             int min_data_val = 0;
+            int leave_data_val = 0;
             Byte[] buffer = new Byte[1024];
             
 
@@ -343,8 +392,16 @@ namespace TimerUIver0._3
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
                                     CheckPointListX = -200;
+                                    maxCheckPointList.Clear();
+                                    maxCheckPointListX = -200;
+                                    minCheckPointList.Clear();
+                                    minCheckPointListX = -200;
+                                    leaveCheckPointList.Clear();
+                                    leaveCheckPointListX = -200;
                                     max_time_point = 0;
                                     min_time_point = 0;
+                                    leave_time_point = 0;
+
 
                                 }
                                 
@@ -379,9 +436,11 @@ namespace TimerUIver0._3
                                         int now_intadc_data= intadc_data[data_cnt];
                                         if (now_intadc_data == max_data_val)
                                         {
+                                            Console.WriteLine("離開踏板前最高的時間點 ={0}", data_cnt*2-200);
+                                            Console.WriteLine("離開踏板前最高的數值 ={0}", max_data_val);
                                             max_time_point = data_cnt;
-                                            Console.WriteLine("離開踏板前最高的時間點 ={0}",data_cnt);
-                                            Console.WriteLine("離開踏板前最高的數值 ={0}",max_data_val);
+                                            maxCheckPointList.Add(data_cnt*2-200, max_data_val);
+                                            break;
                                         }
                                     }
                                     for (int data_cnt =0; data_cnt <=1199 ; data_cnt++)
@@ -390,10 +449,17 @@ namespace TimerUIver0._3
                                         if (now_intadc_data == min_data_val)
                                         {
                                             min_time_point = data_cnt;
-                                            Console.WriteLine("離開踏板後最低的時間點 ={0}", data_cnt);
+                                            Console.WriteLine("離開踏板後最低的時間點 ={0}", data_cnt*2-200);
                                             Console.WriteLine("離開踏板後最低的數值 ={0}", min_data_val);
+                                            min_time_point = data_cnt;
+                                            minCheckPointList.Add(data_cnt * 2-200, min_data_val);
+                                            break;
                                         }
                                     }
+                                    leave_time_point = (min_time_point - max_time_point)/2;
+                                    leaveCheckPointList.Add((leave_time_point+max_time_point)*2-200, 2042);
+                                    Console.WriteLine("離開踏板時間點 ={0}", (leave_time_point + max_time_point) * 2 - 200);
+
                                 }
                             }
 
@@ -434,6 +500,7 @@ namespace TimerUIver0._3
                     }
                     sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
                     sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
+                    sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt","_time.txt"), false);
@@ -621,10 +688,6 @@ namespace TimerUIver0._3
 
         }
 
-        private void tbInputName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void cbRacerName_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -646,20 +709,105 @@ namespace TimerUIver0._3
 
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-               
-
-        private void btnAddName_Click(object sender, EventArgs e)
-        {
-
-        }
+        
         private void btnsetDone_Click(object sender, EventArgs e)
         {
-        }
+            Stopwatch stopWatch = Stopwatch.StartNew();
+            // Some Code
 
+            int N = M_array.Length;
+            M_array[0, 0] = (3*data_t[0])*data_t[0];
+            M_array[0, 1] = 2*data_t[0];
+            M_array[0, 2] = 1;
+            M_array[0, 3] = 0;
+            S_array[0] = 0;
+            M_array[1, 0] = data_t[0]* data_t[0] * data_t[0];
+            M_array[1, 1] = data_t[0] * data_t[0];
+            M_array[1, 2] = data_t[0];
+            M_array[1, 3] = 1;
+            S_array[1] = data_s[0];
+            
+            for (int j = 1; j < m; j++)
+            {
+                if (j < m-1) { 
+                    //% contnuation of speed
+                    M_array[j * 4 - 2, (j - 1) * 4] = 3 * data_t[j] * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4+1] = 2* data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4+2] = 1;
+                    M_array[j * 4 - 2, (j - 1) * 4+3] = 0;
+                    M_array[j * 4 - 2, (j - 1) * 4+4] = -3 * data_t[j] * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4+5] = -2 * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4+6] = -1;
+                    M_array[j * 4 - 2, (j - 1) * 4+7] = 0;
+                    S_array[j*4-3] =0 ;
+                    //% contnuation of acceleration
+                    M_array[j * 4 - 1, (j - 1) * 4  ] = 6 * data_t[j];
+                    M_array[j * 4 - 1, (j - 1) * 4+1] = 2;
+                    M_array[j * 4 - 1, (j - 1) * 4+2] = 0;
+                    M_array[j * 4 - 1, (j - 1) * 4+3] = 0;
+                    M_array[j * 4 - 1, (j - 1) * 4+4] = -6 * data_t[j];
+                    M_array[j * 4 - 1, (j - 1) * 4+5] = -2;
+                    M_array[j * 4 - 1, (j - 1) * 4+6] = 0;
+                    M_array[j * 4 - 1, (j - 1) * 4+7] = 0;
+                    S_array[j * 4 - 1] = 0;
+                    //% passing data points
+                    M_array[j * 4 , (j-1) * 4  ] =  data_t[j] * data_t[j] * data_t[j];
+                    M_array[j * 4 , (j-1) * 4+1] =  data_t[j] * data_t[j];
+                    M_array[j * 4 , (j-1) * 4+2] =  data_t[j] ;
+                    M_array[j * 4 , (j-1) * 4+3] =  1;
+                    S_array[j * 4] = data_s[j];
+                    M_array[j * 4 + 1, (j) * 4  ] = data_t[j] * data_t[j] * data_t[j];
+                    M_array[j * 4 + 1, (j) * 4+1] = data_t[j] * data_t[j];
+                    M_array[j * 4 + 1, (j) * 4+2] = data_t[j];
+                    M_array[j * 4 + 1, (j) * 4+3] = 1;
+                    S_array[j * 4 + 1] = data_s[j];
+                }
+                else
+                {
+                    //% contnuation of speed
+                    M_array[j * 4 - 2, (j - 1) * 4] = 3 * data_t[j] * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4 + 1] = 2 * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4 + 2] = 1;
+                    M_array[j * 4 - 2, (j - 1) * 4 + 3] = 0;
+                    M_array[j * 4 - 2, (j - 1) * 4 + 4] = -2 * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4 + 5] = -1;
+                    M_array[j * 4 - 2, (j - 1) * 4 + 6] = 0;
+                    S_array[j * 4 - 2] = 0;
+                    //% contnuation of acceleration
+                    M_array[j * 4 - 1, (j - 1) * 4] = 6 * data_t[j];
+                    M_array[j * 4 - 1, (j - 1) * 4 + 1] = 2;
+                    M_array[j * 4 - 1, (j - 1) * 4 + 2] = 0;
+                    M_array[j * 4 - 1, (j - 1) * 4 + 3] = 0;
+                    M_array[j * 4 - 1, (j - 1) * 4 + 4] = -2;
+                    M_array[j * 4 - 1, (j - 1) * 4 + 5] = 0;
+                    M_array[j * 4 - 1, (j - 1) * 4 + 6] = 0;
+                    S_array[j * 4 - 1] = 0;
+                    //% passing data points
+                    M_array[j * 4, (j - 1) * 4] = data_t[j] * data_t[j] * data_t[j];
+                    M_array[j * 4, (j - 1) * 4 + 1] = data_t[j] * data_t[j];
+                    M_array[j * 4, (j - 1) * 4 + 2] = data_t[j];
+                    M_array[j * 4, (j - 1) * 4 + 3] = 1;
+                    S_array[j * 4] = data_s[j];
+                    M_array[j * 4 + 1, (j) * 4] = data_t[j] * data_t[j];
+                    M_array[j * 4 + 1, (j) * 4 + 1] = data_t[j];
+                    M_array[j * 4 + 1, (j) * 4 + 2] = 1;
+                    S_array[j * 4 + 1] = data_s[j];
+                }
+            }
+            M_array[m * 4 - 2, (m - 1) * 4] = data_t[n-1] * data_t[n-1];
+            M_array[m * 4 - 2, (m - 1) * 4+1] = data_t[n-1];
+            M_array[m * 4 - 2, (m - 1) * 4+2] = 1;
+            S_array[m * 4 - 2]=data_s[n-1];
+            
+            
+            double [,] coeff= Matrix.Product(Matrix.Inverse(M_array),S_array);
+            stopWatch.Stop();
+            Console.WriteLine(stopWatch.ElapsedMilliseconds);
+            Console.WriteLine(Matrix.AsString(coeff));
+            
+
+
+        }
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -697,6 +845,165 @@ namespace TimerUIver0._3
         private void USER_ID_combobox_KeyDown(object sender, KeyEventArgs e)
         {
             NOW_user_lable.Text = USER_ID_combobox.Text;
+            
+        }
+    }
+
+    public class Matrix
+    {
+        
+        private static int MatDecompose(double[,] m, out double[,] lum, out int[] perm)
+        {
+            // Crout's LU decomposition for matrix determinant and inverse
+            // stores combined lower & upper in lum[][]
+            // stores row permuations into perm[]
+            // returns +1 or -1 according to even or odd number of row permutations
+            // lower gets dummy 1.0s on diagonal (0.0s above)
+            // upper gets lum values on diagonal (0.0s below)
+
+            int toggle = +1; // even (+1) or odd (-1) row permutatuions
+            int row = m.GetLength(0);
+            int col = m.GetLength(1);
+
+            // make a copy of m[][] into result lu[][]
+            lum = new double[row, col];
+            for (int i = 0; i < row; ++i)
+                for (int j = 0; j < col; ++j)
+                    lum[i, j] = m[i, j];
+
+            // make perm[]
+            perm = new int[col];
+            for (int i = 0; i < col; ++i)
+                perm[i] = i;
+
+            for (int j = 0; j < col - 1; ++j) // process by column. note n-1 
+            {
+                double max = Math.Abs(lum[j, j]);
+                int piv = j;
+
+                for (int i = j + 1; i < n; ++i) // find pivot index
+                {
+                    double xij = Math.Abs(lum[i, j]);
+                    if (xij > max)
+                    {
+                        max = xij;
+                        piv = i;
+                    }
+                } // i
+
+                if (piv != j)
+                {
+                    for(int i =0;i< row; i++)
+                    {
+                        double[] tmp2 = new double[row];
+                        tmp2[i] = m[,]
+                        
+                    }
+                    double[] tmp = lum[piv]; // swap rows j, piv
+                    lum[piv] = lum[j];
+                    lum[j] = tmp;
+
+                    int t = perm[piv]; // swap perm elements
+                    perm[piv] = perm[j];
+                    perm[j] = t;
+
+                    toggle = -toggle;
+                }
+
+                double xjj = lum[j][j];
+                if (xjj != 0.0)
+                {
+                    for (int i = j + 1; i < n; ++i)
+                    {
+                        double xij = lum[i][j] / xjj;
+                        lum[i][j] = xij;
+                        for (int k = j + 1; k < n; ++k)
+                            lum[i][k] -= xij * lum[j][k];
+                    }
+                }
+
+            } // j
+
+            return toggle;  // for determinant
+        } // MatDecompose
+        public static double[,] Inverse(double[,] matrix)
+        {
+            int row = matrix.GetLength(0);
+            int col = matrix.GetLength(1);
+            double[,] result = new double[row, col];
+            for (int i = 0; i < row; i++)
+                for (int j = 0; j < col; j++)
+                    result[i, j] = matrix[i, j];
+
+            double[,] lum; // combined lower & upper
+            int[] perm;  // out parameter
+            MatDecompose(m, out lum, out perm);  // ignore return
+
+            double[] b = new double[n];
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                    if (i == perm[j])
+                        b[j] = 1.0;
+                    else
+                        b[j] = 0.0;
+
+                double[] x = Reduce(lum, b); // 
+                for (int j = 0; j < n; ++j)
+                    result[j][i] = x[j];
+            }
+            return result;
+        }
+        public static double[,] Inverse(double[,] matrix)
+        {
+            int row = matrix.GetLength(0);
+            int col = matrix.GetLength(1);
+            double[,] result = new double[row, col];
+            for (int i = 0; i < row; i++)
+                for (int j = 0; j < col; j++)
+                    result[i, j] = matrix[j, i];
+            return result;
+        }
+        public static double[,] Product(double[,] matrixA, double[,] matrixB)
+        {
+            int aRows = matrixA.GetLength(0);
+            int aCols = matrixA.GetLength(1);
+            int bRows = matrixB.GetLength(0);
+            int bCols = matrixB.GetLength(1);
+            if (aCols != bRows)
+                throw new Exception("Non-conformable matrices");
+            double[,] result = new double[aRows, bCols];
+            for (int i = 0; i < aRows; ++i)
+                for (int j = 0; j < bCols; ++j)
+                    for (int k = 0; k < aCols; ++k)
+                        result[i,j] += matrixA[i,k] * matrixB[k,j];
+            return result;
+        }
+        public static double[,] Product(double[,] matrixA, double[] matrixB)
+        {
+            int aRows = matrixA.GetLength(0);
+            int aCols = matrixA.GetLength(1);
+            int bRows = matrixB.Length;
+            int bCols = 1;
+            if (aCols != bRows)
+                throw new Exception("Non-conformable matrices");
+            double[,] result = new double[aRows, bCols];
+            for (int i = 0; i < aRows; ++i)
+                for (int j = 0; j < bCols; ++j)
+                    for (int k = 0; k < aCols; ++k)
+                        result[i, j] += matrixA[i, k] * matrixB[k];
+            return result;
+        }
+        public static string AsString(double[,] matrix)
+        {
+            string s = "";
+            for (int i = 0; i < matrix.GetLength(0); ++i)
+            {
+                for (int j = 0; j < matrix.GetLength(1); ++j)
+                    s += matrix[i,j].ToString("F3").PadLeft(8) + " ";
+                s += Environment.NewLine;
+            }
+            return s;
         }
     }
 }
