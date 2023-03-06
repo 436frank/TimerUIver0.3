@@ -714,7 +714,7 @@ namespace TimerUIver0._3
         {
             Stopwatch stopWatch = Stopwatch.StartNew();
             // Some Code
-
+            
             int N = M_array.Length;
             M_array[0, 0] = (3*data_t[0])*data_t[0];
             M_array[0, 1] = 2*data_t[0];
@@ -729,82 +729,85 @@ namespace TimerUIver0._3
             
             for (int j = 1; j < m; j++)
             {
+                double t_cnt = data_t[j];
                 if (j < m-1) { 
                     //% contnuation of speed
-                    M_array[j * 4 - 2, (j - 1) * 4] = 3 * data_t[j] * data_t[j];
-                    M_array[j * 4 - 2, (j - 1) * 4+1] = 2* data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4] = 3 * t_cnt * t_cnt;
+                    M_array[j * 4 - 2, (j - 1) * 4+1] = 2* t_cnt;
                     M_array[j * 4 - 2, (j - 1) * 4+2] = 1;
                     M_array[j * 4 - 2, (j - 1) * 4+3] = 0;
-                    M_array[j * 4 - 2, (j - 1) * 4+4] = -3 * data_t[j] * data_t[j];
-                    M_array[j * 4 - 2, (j - 1) * 4+5] = -2 * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4+4] = -3 * t_cnt * t_cnt;
+                    M_array[j * 4 - 2, (j - 1) * 4+5] = -2 * t_cnt;
                     M_array[j * 4 - 2, (j - 1) * 4+6] = -1;
                     M_array[j * 4 - 2, (j - 1) * 4+7] = 0;
-                    S_array[j*4-3] =0 ;
                     //% contnuation of acceleration
-                    M_array[j * 4 - 1, (j - 1) * 4  ] = 6 * data_t[j];
+                    M_array[j * 4 - 1, (j - 1) * 4  ] = 6 * t_cnt;
                     M_array[j * 4 - 1, (j - 1) * 4+1] = 2;
                     M_array[j * 4 - 1, (j - 1) * 4+2] = 0;
                     M_array[j * 4 - 1, (j - 1) * 4+3] = 0;
-                    M_array[j * 4 - 1, (j - 1) * 4+4] = -6 * data_t[j];
+                    M_array[j * 4 - 1, (j - 1) * 4+4] = -6 * t_cnt;
                     M_array[j * 4 - 1, (j - 1) * 4+5] = -2;
                     M_array[j * 4 - 1, (j - 1) * 4+6] = 0;
                     M_array[j * 4 - 1, (j - 1) * 4+7] = 0;
-                    S_array[j * 4 - 1] = 0;
                     //% passing data points
-                    M_array[j * 4 , (j-1) * 4  ] =  data_t[j] * data_t[j] * data_t[j];
-                    M_array[j * 4 , (j-1) * 4+1] =  data_t[j] * data_t[j];
-                    M_array[j * 4 , (j-1) * 4+2] =  data_t[j] ;
+                    M_array[j * 4 , (j-1) * 4  ] = t_cnt * t_cnt * t_cnt;
+                    M_array[j * 4 , (j-1) * 4+1] = t_cnt * t_cnt;
+                    M_array[j * 4 , (j-1) * 4+2] = t_cnt;
                     M_array[j * 4 , (j-1) * 4+3] =  1;
-                    S_array[j * 4] = data_s[j];
-                    M_array[j * 4 + 1, (j) * 4  ] = data_t[j] * data_t[j] * data_t[j];
-                    M_array[j * 4 + 1, (j) * 4+1] = data_t[j] * data_t[j];
-                    M_array[j * 4 + 1, (j) * 4+2] = data_t[j];
+                    M_array[j * 4 + 1, (j) * 4  ] = t_cnt * t_cnt * t_cnt;
+                    M_array[j * 4 + 1, (j) * 4+1] = t_cnt * t_cnt;
+                    M_array[j * 4 + 1, (j) * 4+2] = t_cnt;
                     M_array[j * 4 + 1, (j) * 4+3] = 1;
-                    S_array[j * 4 + 1] = data_s[j];
                 }
                 else
                 {
                     //% contnuation of speed
-                    M_array[j * 4 - 2, (j - 1) * 4] = 3 * data_t[j] * data_t[j];
-                    M_array[j * 4 - 2, (j - 1) * 4 + 1] = 2 * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4] = 3 * t_cnt * t_cnt;
+                    M_array[j * 4 - 2, (j - 1) * 4 + 1] = 2 * t_cnt;
                     M_array[j * 4 - 2, (j - 1) * 4 + 2] = 1;
                     M_array[j * 4 - 2, (j - 1) * 4 + 3] = 0;
-                    M_array[j * 4 - 2, (j - 1) * 4 + 4] = -2 * data_t[j];
+                    M_array[j * 4 - 2, (j - 1) * 4 + 4] = -2 * t_cnt;
                     M_array[j * 4 - 2, (j - 1) * 4 + 5] = -1;
                     M_array[j * 4 - 2, (j - 1) * 4 + 6] = 0;
-                    S_array[j * 4 - 2] = 0;
+                    
                     //% contnuation of acceleration
-                    M_array[j * 4 - 1, (j - 1) * 4] = 6 * data_t[j];
+                    M_array[j * 4 - 1, (j - 1) * 4] = 6 * t_cnt;
                     M_array[j * 4 - 1, (j - 1) * 4 + 1] = 2;
                     M_array[j * 4 - 1, (j - 1) * 4 + 2] = 0;
                     M_array[j * 4 - 1, (j - 1) * 4 + 3] = 0;
                     M_array[j * 4 - 1, (j - 1) * 4 + 4] = -2;
                     M_array[j * 4 - 1, (j - 1) * 4 + 5] = 0;
                     M_array[j * 4 - 1, (j - 1) * 4 + 6] = 0;
-                    S_array[j * 4 - 1] = 0;
+                    
                     //% passing data points
-                    M_array[j * 4, (j - 1) * 4] = data_t[j] * data_t[j] * data_t[j];
-                    M_array[j * 4, (j - 1) * 4 + 1] = data_t[j] * data_t[j];
-                    M_array[j * 4, (j - 1) * 4 + 2] = data_t[j];
+                    M_array[j * 4, (j - 1) * 4] = t_cnt * t_cnt * t_cnt;
+                    M_array[j * 4, (j - 1) * 4 + 1] = t_cnt * t_cnt;
+                    M_array[j * 4, (j - 1) * 4 + 2] = t_cnt;
                     M_array[j * 4, (j - 1) * 4 + 3] = 1;
-                    S_array[j * 4] = data_s[j];
-                    M_array[j * 4 + 1, (j) * 4] = data_t[j] * data_t[j];
-                    M_array[j * 4 + 1, (j) * 4 + 1] = data_t[j];
-                    M_array[j * 4 + 1, (j) * 4 + 2] = 1;
-                    S_array[j * 4 + 1] = data_s[j];
+                    
+                    M_array[j * 4 + 1, (j) * 4] = t_cnt * t_cnt;
+                    M_array[j * 4 + 1, (j) * 4 + 1] = t_cnt;
+                    M_array[j * 4 + 1, (j) * 4 + 2] = 1;                    
                 }
+                S_array[j * 4 - 2] = 0;
+                S_array[j * 4 - 1] = 0;
+                S_array[j * 4] = data_s[j];
+                S_array[j * 4 + 1] = data_s[j];
             }
             M_array[m * 4 - 2, (m - 1) * 4] = data_t[n-1] * data_t[n-1];
             M_array[m * 4 - 2, (m - 1) * 4+1] = data_t[n-1];
             M_array[m * 4 - 2, (m - 1) * 4+2] = 1;
-            S_array[m * 4 - 2]=data_s[n-1];
-            
-            
-            double [,] coeff= Matrix.Product(Matrix.Inverse(M_array),S_array);
+            S_array[m * 4 - 2] = data_s[n - 1];
+
+            double[,] inv_M = Matrix.Gauss_jordan_elimination(M_array);
+            double[,] coeff = Matrix.Product(inv_M, S_array);
             stopWatch.Stop();
             Console.WriteLine(stopWatch.ElapsedMilliseconds);
+            Console.WriteLine(Matrix.AsString(inv_M));
             Console.WriteLine(Matrix.AsString(coeff));
-            
+            Console.WriteLine(Matrix.AsString(S_array));
+            Console.WriteLine(S_array);
+
 
 
         }
@@ -852,118 +855,108 @@ namespace TimerUIver0._3
     public class Matrix
     {
         
-        private static int MatDecompose(double[,] m, out double[,] lum, out int[] perm)
-        {
-            // Crout's LU decomposition for matrix determinant and inverse
-            // stores combined lower & upper in lum[][]
-            // stores row permuations into perm[]
-            // returns +1 or -1 according to even or odd number of row permutations
-            // lower gets dummy 1.0s on diagonal (0.0s above)
-            // upper gets lum values on diagonal (0.0s below)
+        //private static int MatDecompose(double[,] m, out double[,] lum, out int[] perm)
+        //{
+        //    // Crout's LU decomposition for matrix determinant and inverse
+        //    // stores combined lower & upper in lum[][]
+        //    // stores row permuations into perm[]
+        //    // returns +1 or -1 according to even or odd number of row permutations
+        //    // lower gets dummy 1.0s on diagonal (0.0s above)
+        //    // upper gets lum values on diagonal (0.0s below)
 
-            int toggle = +1; // even (+1) or odd (-1) row permutatuions
-            int row = m.GetLength(0);
-            int col = m.GetLength(1);
+        //    int toggle = +1; // even (+1) or odd (-1) row permutatuions
+        //    int row = m.GetLength(0);
+        //    int col = m.GetLength(1);
 
-            // make a copy of m[][] into result lu[][]
-            lum = new double[row, col];
-            for (int i = 0; i < row; ++i)
-                for (int j = 0; j < col; ++j)
-                    lum[i, j] = m[i, j];
+        //    // make a copy of m[][] into result lu[][]
+        //    lum = new double[row, col];
+        //    for (int i = 0; i < row; ++i)
+        //        for (int j = 0; j < col; ++j)
+        //            lum[i, j] = m[i, j];
 
-            // make perm[]
-            perm = new int[col];
-            for (int i = 0; i < col; ++i)
-                perm[i] = i;
+        //    // make perm[]
+        //    perm = new int[col];
+        //    for (int i = 0; i < col; ++i)
+        //        perm[i] = i;
 
-            for (int j = 0; j < col - 1; ++j) // process by column. note n-1 
-            {
-                double max = Math.Abs(lum[j, j]);
-                int piv = j;
+        //    for (int j = 0; j < col - 1; ++j) // process by column. note n-1 
+        //    {
+        //        double max = Math.Abs(lum[j, j]);
+        //        int piv = j;
 
-                for (int i = j + 1; i < n; ++i) // find pivot index
-                {
-                    double xij = Math.Abs(lum[i, j]);
-                    if (xij > max)
-                    {
-                        max = xij;
-                        piv = i;
-                    }
-                } // i
+        //        for (int i = j + 1; i < n; ++i) // find pivot index
+        //        {
+        //            double xij = Math.Abs(lum[i, j]);
+        //            if (xij > max)
+        //            {
+        //                max = xij;
+        //                piv = i;
+        //            }
+        //        } // i
 
-                if (piv != j)
-                {
-                    for(int i =0;i< row; i++)
-                    {
-                        double[] tmp2 = new double[row];
-                        tmp2[i] = m[,]
+        //        if (piv != j)
+        //        {
+        //            for(int i =0;i< row; i++)
+        //            {
+        //                double[] tmp2 = new double[row];
+        //                tmp2[i] = m[,]
                         
-                    }
-                    double[] tmp = lum[piv]; // swap rows j, piv
-                    lum[piv] = lum[j];
-                    lum[j] = tmp;
+        //            }
+        //            double[] tmp = lum[piv]; // swap rows j, piv
+        //            lum[piv] = lum[j];
+        //            lum[j] = tmp;
 
-                    int t = perm[piv]; // swap perm elements
-                    perm[piv] = perm[j];
-                    perm[j] = t;
+        //            int t = perm[piv]; // swap perm elements
+        //            perm[piv] = perm[j];
+        //            perm[j] = t;
 
-                    toggle = -toggle;
-                }
+        //            toggle = -toggle;
+        //        }
 
-                double xjj = lum[j][j];
-                if (xjj != 0.0)
-                {
-                    for (int i = j + 1; i < n; ++i)
-                    {
-                        double xij = lum[i][j] / xjj;
-                        lum[i][j] = xij;
-                        for (int k = j + 1; k < n; ++k)
-                            lum[i][k] -= xij * lum[j][k];
-                    }
-                }
+        //        double xjj = lum[j][j];
+        //        if (xjj != 0.0)
+        //        {
+        //            for (int i = j + 1; i < n; ++i)
+        //            {
+        //                double xij = lum[i][j] / xjj;
+        //                lum[i][j] = xij;
+        //                for (int k = j + 1; k < n; ++k)
+        //                    lum[i][k] -= xij * lum[j][k];
+        //            }
+        //        }
 
-            } // j
+        //    } // j
 
-            return toggle;  // for determinant
-        } // MatDecompose
-        public static double[,] Inverse(double[,] matrix)
-        {
-            int row = matrix.GetLength(0);
-            int col = matrix.GetLength(1);
-            double[,] result = new double[row, col];
-            for (int i = 0; i < row; i++)
-                for (int j = 0; j < col; j++)
-                    result[i, j] = matrix[i, j];
+        //    return toggle;  // for determinant
+        //} // MatDecompose
+        //public static double[,] Inverse(double[,] matrix)
+        //{
+        //    int row = matrix.GetLength(0);
+        //    int col = matrix.GetLength(1);
+        //    double[,] result = new double[row, col];
+        //    for (int i = 0; i < row; i++)
+        //        for (int j = 0; j < col; j++)
+        //            result[i, j] = matrix[i, j];
 
-            double[,] lum; // combined lower & upper
-            int[] perm;  // out parameter
-            MatDecompose(m, out lum, out perm);  // ignore return
+        //    double[,] lum; // combined lower & upper
+        //    int[] perm;  // out parameter
+        //    MatDecompose(m, out lum, out perm);  // ignore return
 
-            double[] b = new double[n];
-            for (int i = 0; i < n; ++i)
-            {
-                for (int j = 0; j < n; ++j)
-                    if (i == perm[j])
-                        b[j] = 1.0;
-                    else
-                        b[j] = 0.0;
+        //    double[] b = new double[n];
+        //    for (int i = 0; i < n; ++i)
+        //    {
+        //        for (int j = 0; j < n; ++j)
+        //            if (i == perm[j])
+        //                b[j] = 1.0;
+        //            else
+        //                b[j] = 0.0;
 
-                double[] x = Reduce(lum, b); // 
-                for (int j = 0; j < n; ++j)
-                    result[j][i] = x[j];
-            }
-            return result;
-        }
-        public static double[,] Inverse(double[,] matrix)
-        {
-            int row = matrix.GetLength(0);
-            int col = matrix.GetLength(1);
-            double[,] result = new double[row, col];
-            for (int i = 0; i < row; i++)
-                for (int j = 0; j < col; j++)
-                    result[i, j] = matrix[j, i];
-            return result;
-        }
+        //        double[] x = Reduce(lum, b); // 
+        //        for (int j = 0; j < n; ++j)
+        //            result[j][i] = x[j];
+        //    }
+        //    return result;
+        //}
         public static double[,] Product(double[,] matrixA, double[,] matrixB)
         {
             int aRows = matrixA.GetLength(0);
@@ -994,6 +987,35 @@ namespace TimerUIver0._3
                         result[i, j] += matrixA[i, k] * matrixB[k];
             return result;
         }
+        private static double[][] MatrixMult(double[][] matrix1, double[][] matrix2)
+        {
+
+            //矩陣中沒有元素的情況
+            if (matrix1.Length == 0 || matrix2.Length == 0)
+            {
+                return new double[][] { };
+            }
+            //matrix1是m*n矩陣，matrix2是n*p矩陣，則result是m*p矩陣
+            int m = matrix1.Length, n = matrix2.Length, p = matrix2[0].Length;
+            double[][] result = new double[m][];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new double[p];
+            }
+            //矩陣乘法：c[i,j]=Sigma(k=1→n,a[i,k]*b[k,j])
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < p; j++)
+                {
+                    //對乘加法則
+                    for (int k = 0; k < n; k++)
+                    {
+                        result[i][j] += (matrix1[i][k] * matrix2[k][j]);
+                    }
+                }
+            }
+            return result;
+        }
         public static string AsString(double[,] matrix)
         {
             string s = "";
@@ -1005,5 +1027,122 @@ namespace TimerUIver0._3
             }
             return s;
         }
+        public static string AsString(double[] matrix)
+        {
+            string s = "";
+            for (int i = 0; i < matrix.Length; ++i)
+            {
+                s += matrix[i].ToString("F3").PadLeft(8) + " ";
+                s += Environment.NewLine;
+            }
+            return s;
+        }
+        //public static double[,] Gauss_jordan_elimination(double[,] matrix)
+        //{
+        //    int rows = matrix.GetLength(0);
+        //    int cols = matrix.GetLength(1);
+        //    double[,] result = new double[rows, cols * 2];
+        //    // 填好參數化的部分
+        //    for (int i = 0; i < rows; ++i)
+        //        for (int j = 0; j < rows; ++j)
+        //            result[i, j] = matrix[i,j];
+
+        //    for (int i = 0; i < rows; ++i)
+        //        result[i, rows + i] = 1;
+
+        //    // 開始進行高斯喬登消去法
+        //    // 內容幾乎與高斯消去法相同
+        //    for (int i = 0; i < rows; ++i)
+        //    {
+        //        if (result[i, i] == 0)
+        //            for (int j = i + 1; j < rows; ++j)
+        //                if (result[j, i] != 0)
+        //                {
+        //                    for (int k = i; k < cols * 2; ++k)
+        //                        swap(ref result[i, k], ref result[j, k]);
+        //                    break;
+        //                }
+
+        //        // 反矩陣不存在。
+        //        //  if (matrix[i][i] == 0) return false;
+
+        //        double t = result[i, i];
+        //        for (int k = i; k < cols * 2; ++k)
+        //            result[i, k] /= t;
+
+        //        // 消去時，所有橫條通通消去。
+        //        for (int j = 0; j < rows; ++j)
+        //            if (i != j && result[j, i] != 0)
+        //            {
+        //                double tmp = result[j, i];
+        //                for (int k = i; k < cols * 2; ++k)
+        //                    result[j, k] -= result[i, k] * tmp;
+        //            }
+        //    }
+        //    double[,] mat_result=new double[rows, cols];
+        //    for (int i = 0;i < rows; ++i)
+        //    {
+        //        for(int j = 0; j < cols; ++j)
+        //        {
+        //            mat_result[i, j]=result[i, cols+j];
+        //        }
+        //    }
+        //    return mat_result;
+        //}
+        public static double[,] Gauss_jordan_elimination(double[,] matrix)
+        {
+            int size = matrix.GetLength(0);
+            double[,] new_matrix = new double[size, size * 2];
+
+            // 填好參數化的部分
+            for (int i = 0; i < size; ++i)
+            {
+                Array.Copy(matrix, i * matrix.GetLength(0), new_matrix, i * new_matrix.GetLength(1), size);
+                new_matrix[i, size + i] = 1;
+            }
+
+            // 開始進行高斯喬登消去法
+            // 內容幾乎與高斯消去法相同
+            for (int i = 0; i < size; ++i)
+            {
+                if (new_matrix[i, i] == 0)
+                    for (int j = i + 1; j < size; ++j)
+                        if (new_matrix[j, i] != 0)
+                        {
+                            for (int k = i; k < size * 2; ++k)
+                                swap(ref new_matrix[i, k], ref new_matrix[j, k]);
+                            break;
+                        }
+
+                // 反矩陣不存在。
+                //  if (matrix[i][i] == 0) return false;
+
+                double t = new_matrix[i, i];
+                for (int k = i; k < size * 2; ++k)
+                    new_matrix[i, k] /= t;
+
+                // 消去時，所有橫條通通消去。
+                for (int j = 0; j < size; ++j)
+                    if (i != j && new_matrix[j, i] != 0)
+                    {
+                        double tmp = new_matrix[j, i];
+                        for (int k = i; k < size * 2; ++k)
+                            new_matrix[j, k] -= new_matrix[i, k] * tmp;
+                    }
+            }
+            double[,] result = new double[size, size];
+
+            for (int i = 0; i < size; ++i)
+                Array.Copy(new_matrix, size + i * new_matrix.GetLength(1), result, i * result.GetLength(0), size);
+
+            return result;
+        }
+        private static void swap(ref double matrix_a, ref double matrix_b)
+        {
+            double c = matrix_a;
+            matrix_a = matrix_b;
+            matrix_b = c;
+        }
     }
+    
 }
