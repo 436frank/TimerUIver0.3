@@ -71,6 +71,9 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.NOW_user_lable = new System.Windows.Forms.Label();
             this.USER_ID_combobox = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -191,7 +194,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(261, 30);
             this.button1.TabIndex = 1;
-            this.button1.Text = "呼叫視窗";
+            this.button1.Text = "讀取歷史數據";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -630,6 +633,9 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.button3);
+            this.tabPage4.Controls.Add(this.button2);
+            this.tabPage4.Controls.Add(this.label3);
             this.tabPage4.Controls.Add(this.NOW_user_lable);
             this.tabPage4.Controls.Add(this.USER_ID_combobox);
             this.tabPage4.Controls.Add(this.label2);
@@ -641,6 +647,39 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "使用者設定";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.button3.Location = new System.Drawing.Point(8, 156);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(119, 32);
+            this.button3.TabIndex = 7;
+            this.button3.Text = "另存所有數據";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.button2.Location = new System.Drawing.Point(8, 120);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(119, 30);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "讀取歷史數據";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.label3.Location = new System.Drawing.Point(8, 87);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(105, 20);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "尚未加入檔案";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // NOW_user_lable
             // 
@@ -805,6 +844,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox USER_ID_combobox;
         private System.Windows.Forms.Label NOW_user_lable;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }
 

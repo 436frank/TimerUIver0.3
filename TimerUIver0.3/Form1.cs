@@ -323,6 +323,7 @@ namespace TimerUIver0._3
         int min_time_point;
         int leave_time_point;
         int time_i;
+        char charHintMark = '$';
         private void DoReceive()         //COMPORT接收資料
         {
             int all_point = 1200;
@@ -335,8 +336,6 @@ namespace TimerUIver0._3
 
             string temp_msg = "";
             string hintMark = "$";
-            char charHintMark ='$';
-            
             float time_ms_NEWDATA;
             bool judg;//判斷結果
             while (receiving)//receiving為真時進入迴圈
@@ -507,7 +506,7 @@ namespace TimerUIver0._3
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt","_time.txt"), false);
                     for (int i = 0; i < time_data.Length - 1; i++)
                     {
-                        sw_time.WriteLine(time_data[i]);
+                        sw_time.WriteLine(time_data[i].TrimStart(charHintMark));
                     }
                     sw_time.Close();
                     //////////////////////////////////截圖//////////////////////////
@@ -676,7 +675,15 @@ namespace TimerUIver0._3
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "請選擇檔案";
+            dialog.Filter = "所有檔案(*.*)|*.*";
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filename = dialog.FileName;
 
+                //label1.Text = "FileName = " + filename;
+            }
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -715,7 +722,7 @@ namespace TimerUIver0._3
         {
 
             CubicSplineInterpolation cc = new CubicSplineInterpolation(time_data_d,pos_data_d);
-            zedChartData.GraphPane.CurveList[0].Clear();
+            //zedChartData.GraphPane.CurveList[0].Clear();
             zedGraphControl1.GraphPane.CurveList.Clear();
             zedGraphControl2.GraphPane.CurveList.Clear();
             zedChartData.GraphPane.AddCurve("位置", cc.GetPositionPointList(), Color.Blue, SymbolType.None);            
@@ -758,7 +765,84 @@ namespace TimerUIver0._3
 
         }
 
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            PointPairList OldPointList = new PointPairList();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "請選擇檔案";
+            dialog.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filename = dialog.FileName;
+                using (StreamReader sr = new StreamReader(filename)) ;
+                {
+                    string line = "";
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line != "")
+                        {
+                            //OldPointList.Add();
+                        }
+                    }  
+                }
+                label3.Text = filename;
+
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveFileDialog saveFile = new SaveFileDialog();
+                saveFile.FileName = DateTime.Now.ToString("yyyy-MM-dd HH-mm") + USER_ID_combobox.Text;
+
+                saveFile.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
+                if (saveFile.ShowDialog() == DialogResult.OK)
+                {
+                    /////////////////////////////////存ADC值////////////////////////
+                    StreamWriter sw_adc = new StreamWriter(saveFile.FileName.Replace(".txt", "_ADC.txt"), false);
+                    foreach (string data in adc_data)
+                    {
+                        sw_adc.WriteLine(data);
+                    }
+                    sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
+                    sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
+                    sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
+                    sw_adc.Close();
+                    /////////////////////////////////存時間////////////////////////
+                    StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
+                    for (int i = 0; i < time_data.Length - 1; i++)
+                    {
+                        sw_time.WriteLine(time_data[i].TrimStart(charHintMark));
+                    }
+                    sw_time.Close();
+                    //////////////////////////////////截圖//////////////////////////
+                    Bitmap myImage = new Bitmap(this.Width, this.Height);
+                    Graphics g = Graphics.FromImage(myImage);
+                    g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
+                    IntPtr dc1 = g.GetHdc();
+                    g.ReleaseHdc(dc1);
+                    myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Exception: ");
+                MessageBox.Show("找不到路徑", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                Console.WriteLine("Executing finally block.");
+            }
+        }//輸出存檔
     }
+    
     public class CubicSplineInterpolation
     {
         private double[] data_t;
