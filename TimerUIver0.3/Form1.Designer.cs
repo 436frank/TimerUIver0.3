@@ -169,7 +169,7 @@
             this.btnsetDone.Name = "btnsetDone";
             this.btnsetDone.Size = new System.Drawing.Size(262, 32);
             this.btnsetDone.TabIndex = 5;
-            this.btnsetDone.Text = "設定完畢";
+            this.btnsetDone.Text = "數據分析";
             this.btnsetDone.UseVisualStyleBackColor = true;
             this.btnsetDone.Click += new System.EventHandler(this.btnsetDone_Click);
             // 

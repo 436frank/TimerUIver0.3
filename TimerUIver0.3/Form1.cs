@@ -34,17 +34,24 @@ namespace TimerUIver0._3
 
         private delegate void invokeDelegate();
         private Thread t;
-        PointPairList CheckPointList = new PointPairList();
+        PointPairList CheckPointList = new PointPairList();//壓力值的線
         double CheckPointListX = 0;
-
-        PointPairList PillarPointList = new PointPairList();
-        double PillarPointListY = 0;
-        PointPairList maxCheckPointList = new PointPairList();
+        PointPairList maxCheckPointList = new PointPairList();//壓力最大的點
         double maxCheckPointListX = 0;
-        PointPairList minCheckPointList = new PointPairList();
+        PointPairList minCheckPointList = new PointPairList();//壓力最小的點
         double minCheckPointListX = 0;
-        PointPairList leaveCheckPointList = new PointPairList();
+        PointPairList leaveCheckPointList = new PointPairList();//壓力離開的點
         double leaveCheckPointListX = 0;
+
+        PointPairList PillarPointList = new PointPairList();//計時點的線(原數據)
+        double PillarPointListY = 0;
+
+        PointPairList SpeedPillarPointList = new PointPairList();//計時點的線(速度數據)
+        double SpeedPillarPointListY = 0;
+        PointPairList AccPillarPointList = new PointPairList();//計時點的線(加速度數據)
+        double AccPillarPointListY = 0;
+
+
         /// <summary>
         /// /////////////////////////////////
 
@@ -53,7 +60,7 @@ namespace TimerUIver0._3
 
 
         /// </summary>
-        
+
 
         PointPairList speedPointList = new PointPairList();
         double speedPointListX = 0;
@@ -186,7 +193,7 @@ namespace TimerUIver0._3
             /*加入標題*/
             myPane.Title.Text = "原數據";
             myPane.XAxis.Title.Text = "時間(s)";
-            myPane.YAxis.Title.Text = "速樁";
+            myPane.YAxis.Title.Text = "位置(公尺)";
             /*繪製XY虛線*/
             myPane.XAxis.MajorGrid.IsVisible = true;
             myPane.YAxis.MajorGrid.IsVisible = true;
@@ -205,7 +212,7 @@ namespace TimerUIver0._3
             myPane = zgc.GraphPane;
 
             myPane.Title.Text = "數據1";
-            myPane.XAxis.Title.Text = "速樁";
+            myPane.XAxis.Title.Text = "時間";
             myPane.YAxis.Title.Text = "m/s";
             zgc.IsEnableZoom = true; //true  false
             zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
@@ -218,11 +225,7 @@ namespace TimerUIver0._3
             speedPointListX = 0;   //初始X座標
             /*繪製XY軸格點*/
             myPane.XAxis.MajorGrid.IsVisible = true;
-            myPane.XAxis.MajorGrid.DashOn = 1000;
             myPane.YAxis.MajorGrid.IsVisible = true;
-            myPane.YAxis.MajorGrid.DashOn = 1000;
-            myPane.XAxis.MajorGrid.Color = Color.Black;
-            myPane.YAxis.MajorGrid.Color = Color.Black;
             myPane.CurveList.Clear();
             speedPointList.Clear();
             myPane.AddCurve("速樁觸發", speedPointList, Color.Red, SymbolType.Circle);
@@ -244,7 +247,7 @@ namespace TimerUIver0._3
             myPane = zgc.GraphPane;
 
             myPane.Title.Text = "";
-            myPane.XAxis.Title.Text = "速樁";
+            myPane.XAxis.Title.Text = "時間";
             myPane.YAxis.Title.Text = "m/s^2";
             zgc.IsEnableZoom = true; //true  false
             zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
@@ -257,11 +260,7 @@ namespace TimerUIver0._3
             speedPointListX = 0;   //初始X座標
             /*繪製XY軸格點*/
             myPane.XAxis.MajorGrid.IsVisible = true;
-            myPane.XAxis.MajorGrid.DashOn = 1000;
             myPane.YAxis.MajorGrid.IsVisible = true;
-            myPane.YAxis.MajorGrid.DashOn = 1000;
-            myPane.XAxis.MajorGrid.Color = Color.Black;
-            myPane.YAxis.MajorGrid.Color = Color.Black;
             myPane.CurveList.Clear();
             speedPointList.Clear();
             myPane.AddCurve("test", speedPointList, Color.Red, SymbolType.Circle);
@@ -318,9 +317,12 @@ namespace TimerUIver0._3
 
         string[] time_data = { };
         string[] adc_data = { };
+        double[] time_data_d= { };
+        double[] pos_data_d= {};
         int max_time_point;
         int min_time_point;
         int leave_time_point;
+        int time_i;
         private void DoReceive()         //COMPORT接收資料
         {
             int all_point = 1200;
@@ -334,6 +336,7 @@ namespace TimerUIver0._3
             string temp_msg = "";
             string hintMark = "$";
             char charHintMark ='$';
+            
             float time_ms_NEWDATA;
             bool judg;//判斷結果
             while (receiving)//receiving為真時進入迴圈
@@ -355,7 +358,6 @@ namespace TimerUIver0._3
                         //
                         msg = temp_msg + msg;
                         string[] datas= msg.Trim().Split('\n');
-                        
                         if (msg.Substring(msg.Length - 1, 1) != "\n")
                         {
                             temp_msg = datas[datas.Length - 1];
@@ -392,16 +394,25 @@ namespace TimerUIver0._3
                                     min_time_point = 0;
                                     leave_time_point = 0;
 
-
+                                    time_i=0;
+                                    Array.Resize(ref time_data_d,0);
+                                    Array.Resize(ref pos_data_d, 1);
+                                    pos_data_d[pos_data_d.Length - 1] = time_i;
                                 }
                                 
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
-                                PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), PillarPointListY);
+                                PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA),pos_data_d[time_i]);
                                 PillarPointListY++;//
 
                                 Array.Resize(ref time_data, time_data.Length + 1);
+                                Array.Resize(ref time_data_d, time_data_d.Length + 1);
+                                Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
                                 time_data[time_data.Length - 1] = datas[i];
+                                time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark))/1000;
+                                time_i = time_i + 1;
+                                pos_data_d[pos_data_d.Length - 1] = time_i*10f;
+
 
                                 //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
                                 // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
@@ -703,11 +714,13 @@ namespace TimerUIver0._3
         private void btnsetDone_Click(object sender, EventArgs e)
         {
 
-            CubicSplineInterpolation cc = new CubicSplineInterpolation();
-            
-            zedChartData.GraphPane.AddCurve("壓力", cc.GetPositionPointList(), Color.Blue, SymbolType.None);            
-            zedGraphControl1.GraphPane.AddCurve("壓力", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);            
-            zedGraphControl2.GraphPane.AddCurve("時間點", cc.GetAccelerationPointList(), Color.Red, SymbolType.Star);
+            CubicSplineInterpolation cc = new CubicSplineInterpolation(time_data_d,pos_data_d);
+            zedChartData.GraphPane.CurveList[0].Clear();
+            zedGraphControl1.GraphPane.CurveList.Clear();
+            zedGraphControl2.GraphPane.CurveList.Clear();
+            zedChartData.GraphPane.AddCurve("位置", cc.GetPositionPointList(), Color.Blue, SymbolType.None);            
+            zedGraphControl1.GraphPane.AddCurve("壓力", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);       
+            zedGraphControl2.GraphPane.AddCurve("時間點", cc.GetAccelerationPointList(), Color.Red, SymbolType.None);
   
         }
 
@@ -763,8 +776,10 @@ namespace TimerUIver0._3
             //        %data_t = [0.5, 1.760, 3.571, 5.314, 6.975, 8.495, 9.604, 10.767 ,11.913, 12.709, 13.707, 14.701];   % 蘇景暉
             //        %data_t = [0.5, 1.608, 3.145, 4.523, 5.801, 6.950, 7.796, 8.689 ,9.584 ,10.193, 11.004 ,11.620];   % 楊以丞
             //        %data_t = [0.45, 1.859, 4.116, 6.487, 8.461, 10.139, 11.424 ,12.864 ,14.454, 15.547, 16.909 ,18.293];   % 黃祥璽
-            double[] dt_t = { 0.53f, 1.389f, 3.034f, 4.575f, 6.028f, 7.455f, 8.561f, 9.722f, 10.929f, 11.848f, 12.986f, 14.106f };//林立中
-            double[] dt_s = { 0f, 3.5f, 12.5f, 22f, 31f, 39f, 45f, 51f, 57f, 61f, 66f, 70f };
+            //double[] dt_t = { 0.53f, 1.389f, 3.034f, 4.575f, 6.028f, 7.455f, 8.561f, 9.722f, 10.929f, 11.848f, 12.986f, 14.106f };//林立中
+            //double[] dt_s = { 0f, 3.5f, 12.5f, 22f, 31f, 39f, 45f, 51f, 57f, 61f, 66f, 70f };            
+            double[] dt_t = { 0.2f, 1.34f, 1.961f, 2.581f,3.12f};//王謙
+            double[] dt_s = { 0f, 1.5f, 4.5f, 7.5f, 10f}; //王謙
             this.initialization(dt_t, dt_s);
         }
         public CubicSplineInterpolation(double[] data_t, double[] data_s)
@@ -774,8 +789,8 @@ namespace TimerUIver0._3
         private void initialization(double[] data_t, double[] data_s)
         {
             this.n = data_t.Length;
-            if (data_s.Length != n && n < 1)
-                throw new Exception("Data Length Error");
+            //if (data_s.Length != n && n < 1)
+            //    throw new Exception("Data Length Error");
             this.m = this.n - 1;
             this.nn = 4 * this.m - 1;
             this.size = 50;
@@ -958,12 +973,15 @@ namespace TimerUIver0._3
                     double[,] tmp2 = new double[3, 1];
                     Array.Copy(coeff, j * 4, tmp2, 0, 3);
                     sp = Matrix.Product(tmp, tmp2);
+                
                 }
+
                 for (int i = 0; i < size + 1; i++)
                 {
                     scat[(size + 1) * j + i] = sp[i, 0];
                     tcat[(size + 1) * j + i] = tp[i];
                 }
+
             }
             return new PointPairList(tcat, scat);
         }
