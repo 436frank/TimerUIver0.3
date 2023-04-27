@@ -328,6 +328,7 @@ namespace TimerUIver0._3
         int max_time_point;
         int min_time_point;
         int leave_time_point;
+        int leave_time_val;
         int time_i;
         char charHintMark = '$';
         private void DoReceive()         //COMPORT接收資料
@@ -385,7 +386,7 @@ namespace TimerUIver0._3
                             {
                                 if (datas[i] == "$0")
                                 {
-
+                                    testWin.Clear();
                                     PillarPointList.Clear();
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
@@ -398,7 +399,7 @@ namespace TimerUIver0._3
                                     leaveCheckPointListX = -200;
                                     max_time_point = 0;
                                     min_time_point = 0;
-                                   
+                                    leave_time_val=0;
                                     now_point = 0;
                                     max_data_val = 0;
                                     min_data_val = 0;
@@ -511,9 +512,9 @@ namespace TimerUIver0._3
                     {
                         sw_adc.WriteLine(data);
                     }
-                    sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
-                    sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
-                    sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
+                    //sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
+                    //sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
+                    //sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt","_time.txt"), false);
@@ -823,7 +824,34 @@ namespace TimerUIver0._3
 
             }
         }
+        private void button5_Click(object sender, EventArgs e)
+        {
+            PointPairList OldPointList = new PointPairList();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "請選擇檔案";
+            dialog.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
+            int tmp_cnt = 0;
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = dialog.FileName;
+                using (StreamReader sr = new StreamReader(filename))
+                {
+                    string line = "";
 
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line != "")
+                        {
+                            OldPointList.Add(2 * tmp_cnt-200, Convert.ToDouble(line));
+                            tmp_cnt++;
+                        }
+                    }
+                }
+                zedPressure.GraphPane.AddCurve("1", OldPointList, Color.Brown, SymbolType.None);
+                label3.Text = filename;
+
+            }
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             try
@@ -840,9 +868,9 @@ namespace TimerUIver0._3
                     {
                         sw_adc.WriteLine(data);
                     }
-                    sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
-                    sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
-                    sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
+                    //sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
+                    //sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
+                    //sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
@@ -891,6 +919,7 @@ namespace TimerUIver0._3
             listBox1.Items.Add("新增項目");
             comport.Write("confirm01");
         }
+
     }
 
     public class CubicSplineInterpolation
