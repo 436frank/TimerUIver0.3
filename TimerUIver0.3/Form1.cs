@@ -71,8 +71,14 @@ namespace TimerUIver0._3
         {
             InitializeComponent();
             //btnsetDone_Click(null, null);
-        }  
-        
+        }
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.F1)
+            {
+                
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             system_file_generation();
@@ -330,7 +336,7 @@ namespace TimerUIver0._3
             int now_point=0;
             int max_data_val = 0;
             int min_data_val = 0;
-            int leave_data_val = 0;
+            int[] intadc_data;
             Byte[] buffer = new Byte[1024];
             
 
@@ -379,6 +385,7 @@ namespace TimerUIver0._3
                             {
                                 if (datas[i] == "$0")
                                 {
+
                                     PillarPointList.Clear();
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
@@ -391,11 +398,18 @@ namespace TimerUIver0._3
                                     leaveCheckPointListX = -200;
                                     max_time_point = 0;
                                     min_time_point = 0;
-                                    leave_time_point = 0;
+                                   
+                                    now_point = 0;
+                                    max_data_val = 0;
+                                    min_data_val = 0;
+                                    
 
-                                    time_i=0;
+                                    leave_time_point = 0;
+                                    time_i =0;
                                     Array.Resize(ref time_data_d,0);
+                                    Array.Resize(ref adc_data,0);
                                     Array.Resize(ref pos_data_d, 1);
+                                    
                                     pos_data_d[pos_data_d.Length - 1] = time_i;
                                 }
                                 
@@ -428,7 +442,8 @@ namespace TimerUIver0._3
                                //Console.WriteLine(now_point);//確認1200筆數
                                 if (now_point == all_point)
                                 {
-                                    int[] intadc_data = Array.ConvertAll(adc_data, s => int.Parse(s));
+                                    
+                                    intadc_data = Array.ConvertAll(adc_data, s => int.Parse(s));
                                     max_data_val = intadc_data.Max();
                                     min_data_val = intadc_data.Min();
                                     for (int data_cnt=1199;data_cnt>=0;data_cnt--)
@@ -457,14 +472,12 @@ namespace TimerUIver0._3
                                         }
                                     }
                                     leave_time_point = (min_time_point - max_time_point)/2;
-                                    leaveCheckPointList.Add((leave_time_point+max_time_point)*2-200, 2042);
+                                    leaveCheckPointList.Add((leave_time_point+max_time_point)*2-200, Convert.ToDouble(adc_data[leave_time_point + max_time_point]));
                                     Console.WriteLine("離開踏板時間點 ={0}", (leave_time_point + max_time_point) * 2 - 200);
 
                                 }
                             }
-
                         }
-                           
                             //Console.Write($"msg = {msg}");
                         //this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
                         Array.Resize(ref buffer, 1024);
@@ -723,8 +736,8 @@ namespace TimerUIver0._3
 
             CubicSplineInterpolation cc = new CubicSplineInterpolation(time_data_d,pos_data_d);
             //zedChartData.GraphPane.CurveList[0].Clear();
-            zedGraphControl1.GraphPane.CurveList.Clear();
-            zedGraphControl2.GraphPane.CurveList.Clear();
+            //zedGraphControl1.GraphPane.CurveList.Clear();
+            //zedGraphControl2.GraphPane.CurveList.Clear();
             zedChartData.GraphPane.AddCurve("位置", cc.GetPositionPointList(), Color.Blue, SymbolType.None);            
             zedGraphControl1.GraphPane.AddCurve("壓力", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);       
             zedGraphControl2.GraphPane.AddCurve("時間點", cc.GetAccelerationPointList(), Color.Red, SymbolType.None);
@@ -776,20 +789,36 @@ namespace TimerUIver0._3
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "請選擇檔案";
             dialog.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            double[] tmpX = {  };
+            double[] tmpY = {  };
+            int tmp_cnt = 0;
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string filename = dialog.FileName;
-                using (StreamReader sr = new StreamReader(filename)) ;
+                using (StreamReader sr = new StreamReader(filename)) 
                 {
                     string line = "";
+
                     while ((line = sr.ReadLine()) != null)
                     {
                         if (line != "")
                         {
-                            //OldPointList.Add();
+                            
+                            Array.Resize(ref tmpX,tmpX.Length+1);
+                            Array.Resize(ref tmpY,tmpY.Length+1);
+                            tmpX[tmpX.Length - 1] = Convert.ToDouble(line)/1000;
+                            tmpY[tmpY.Length - 1] = 10f * tmp_cnt;
+                            OldPointList.Add(Convert.ToDouble(line)/1000, 10f * tmp_cnt);
+                            tmp_cnt++;
                         }
-                    }  
+                    }
                 }
+                CubicSplineInterpolation old_cc = new CubicSplineInterpolation(tmpX,tmpY);
+                zedChartData.GraphPane.AddCurve("位置old", old_cc.GetPositionPointList(), Color.Brown, SymbolType.None);
+                zedGraphControl1.GraphPane.AddCurve("壓力old", old_cc.GetSpeedPointList(), Color.Brown, SymbolType.None);
+                zedGraphControl2.GraphPane.AddCurve("acc_old", old_cc.GetAccelerationPointList(), Color.Brown, SymbolType.None);
+
+                //zedChartData.GraphPane.AddCurve("1", OldPointList, Color.Blue, SymbolType.Circle);
                 label3.Text = filename;
 
             }
@@ -841,8 +870,29 @@ namespace TimerUIver0._3
                 Console.WriteLine("Executing finally block.");
             }
         }//輸出存檔
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            listBox1.Items.Add("新增項目");
+            comport.Write("confirm01");
+        }
     }
-    
+
     public class CubicSplineInterpolation
     {
         private double[] data_t;
