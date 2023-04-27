@@ -99,8 +99,9 @@ namespace TimerUIver0._3
             CheckPointListX = -200; //-200;   //初始X座標
             
 
-            zedChartData.GraphPane.AddCurve("test", PillarPointList, Color.Red, SymbolType.Circle);
+            zedChartData.GraphPane.AddCurve("壓力", PillarPointList, Color.Red, SymbolType.Circle);
             PillarPointListY = 0;               //初始X座標
+
 
         }//應用程式開啟時//Form1_Load
         private void renew_time_user(string msg)
@@ -159,7 +160,7 @@ namespace TimerUIver0._3
             ///*poltting*/
             ZedGraphControl zgc = zedPressure;
             GraphPane myPane = zgc.GraphPane;
-            zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
+            //zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
             zgc.IsShowPointValues = true;       //滑鼠經過圖表上的點時是否氣泡顯示該點所對應的值
             zgc.IsEnableZoom = true;            //允許橫向縮放
             /*加入標題*/
@@ -196,8 +197,9 @@ namespace TimerUIver0._3
             zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
             zgc.IsShowPointValues = true;       //滑鼠經過圖表上的點時是否氣泡顯示該點所對應的值
             zgc.IsEnableZoom = true;            //允許橫向縮放
+
             /*加入標題*/
-            myPane.Title.Text = "原數據";
+            myPane.Title.Text = "位置與時間";
             myPane.XAxis.Title.Text = "時間(s)";
             myPane.YAxis.Title.Text = "位置(公尺)";
             /*繪製XY虛線*/
@@ -209,7 +211,7 @@ namespace TimerUIver0._3
             myPane.XAxis.Scale.MinorStep = 0.2;
             myPane.XAxis.Scale.MajorStep = 1;
             myPane.YAxis.Scale.Min = 0;
-            myPane.YAxis.Scale.Max = 30;
+            myPane.YAxis.Scale.Max = 100;
             /*更新參數*/
             zgc.AxisChange();
             zgc.Refresh();
@@ -217,8 +219,8 @@ namespace TimerUIver0._3
             zgc = zedGraphControl1;//////////
             myPane = zgc.GraphPane;
 
-            myPane.Title.Text = "數據1";
-            myPane.XAxis.Title.Text = "時間";
+            myPane.Title.Text = "速度與時間";
+            myPane.XAxis.Title.Text = "時間(s)";
             myPane.YAxis.Title.Text = "m/s";
             zgc.IsEnableZoom = true; //true  false
             zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
@@ -248,14 +250,16 @@ namespace TimerUIver0._3
             zgc.AxisChange();
             zgc.Refresh();
 
-            /*---------------------- 初始化 圖表2 ----------------------*/
+            /*---------------------- 初始化 圖表3 ----------------------*/
             zgc = zedGraphControl2;//////////
             myPane = zgc.GraphPane;
 
-            myPane.Title.Text = "";
-            myPane.XAxis.Title.Text = "時間";
+            myPane.Title.Text = "加速度與時間";
+            myPane.XAxis.Title.Text = "時間(s)";
             myPane.YAxis.Title.Text = "m/s^2";
             zgc.IsEnableZoom = true; //true  false
+            zgc.IsEnableVZoom = false;
+            zgc.IsEnableHPan = false;
             zgc.IsZoomOnMouseCenter = true; //使用滾輪時以滑鼠所在點進行縮放還是以圖形中心進行縮放 true為以滑鼠所在點進行縮放
             /*設置XY軸標籤 與 文字 大小*/
             myPane.Title.FontSpec.Size = 17;
@@ -269,7 +273,7 @@ namespace TimerUIver0._3
             myPane.YAxis.MajorGrid.IsVisible = true;
             myPane.CurveList.Clear();
             speedPointList.Clear();
-            myPane.AddCurve("test", speedPointList, Color.Red, SymbolType.Circle);
+            myPane.AddCurve("加速度", speedPointList, Color.Red, SymbolType.Circle);
 
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = 0;
@@ -380,7 +384,7 @@ namespace TimerUIver0._3
                         {
                             judg = datas[i].Contains(hintMark);
 
-                            
+
                             //Console.Write($"judg= {judg}  ");//預覽輸出
                             if (judg)
                             {
@@ -428,13 +432,13 @@ namespace TimerUIver0._3
                                 pos_data_d[pos_data_d.Length - 1] = time_i*10f;
 
 
-                                //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
-                                // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
+                            //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
+                            // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
 
-                            }
+                        }
                             else
-                            {
-                                CheckPointList.Add(CheckPointListX, Convert.ToDouble(datas[i]));
+                        {
+                            CheckPointList.Add(CheckPointListX, Convert.ToDouble(datas[i]));
                                 CheckPointListX += 2;//
                                 now_point++;
                                 Array.Resize(ref adc_data, adc_data.Length + 1);
@@ -475,10 +479,10 @@ namespace TimerUIver0._3
                                     leave_time_point = (min_time_point - max_time_point)/2;
                                     leaveCheckPointList.Add((leave_time_point+max_time_point)*2-200, Convert.ToDouble(adc_data[leave_time_point + max_time_point]));
                                     Console.WriteLine("離開踏板時間點 ={0}", (leave_time_point + max_time_point) * 2 - 200);
-
-                                }
+                                    PillarPointList[0].X = ((leave_time_point + max_time_point) * 2 - 200) /1000f; ;
                             }
                         }
+                    }
                             //Console.Write($"msg = {msg}");
                         //this.Invoke(new EventHandler(GetPlottingData));//壓力曲線數據處理
                         Array.Resize(ref buffer, 1024);
@@ -498,50 +502,7 @@ namespace TimerUIver0._3
         }
         private void to_txt_Click(object sender, EventArgs e)
         {
-            try
-            {
-                SaveFileDialog saveFile = new SaveFileDialog();
-                saveFile.FileName =DateTime.Now.ToString("yyyy-MM-dd HH-mm") + USER_ID_combobox.Text;   
-
-                saveFile.Filter = "文字檔案(*.txt)|*.txt";//設定檔案型別
-                if (saveFile.ShowDialog() == DialogResult.OK)
-                {
-                    /////////////////////////////////存ADC值////////////////////////
-                    StreamWriter sw_adc = new StreamWriter(saveFile.FileName.Replace(".txt", "_ADC.txt"), false);
-                    foreach (string data in adc_data)
-                    {
-                        sw_adc.WriteLine(data);
-                    }
-                    //sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
-                    //sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
-                    //sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
-                    sw_adc.Close();
-                    /////////////////////////////////存時間////////////////////////
-                    StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt","_time.txt"), false);
-                    for (int i = 0; i < time_data.Length - 1; i++)
-                    {
-                        sw_time.WriteLine(time_data[i].TrimStart(charHintMark));
-                    }
-                    sw_time.Close();
-                    //////////////////////////////////截圖//////////////////////////
-                    Bitmap myImage = new Bitmap(this.Width, this.Height);
-                    Graphics g = Graphics.FromImage(myImage);
-                    g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
-                    IntPtr dc1 = g.GetHdc();
-                    g.ReleaseHdc(dc1);
-                    myImage.Save(saveFile.FileName.Replace(".txt","_picture.jpg"));
-                }
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Exception: ");
-                MessageBox.Show("找不到路徑", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            finally
-            {
-                Console.WriteLine("Executing finally block.");
-            }
-        }//輸出存檔
+        }
         private void system_file_generation()  //產生系統文件
         {
             var CurrentDirectory = Directory.GetCurrentDirectory();
@@ -689,60 +650,34 @@ namespace TimerUIver0._3
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Title = "請選擇檔案";
-            dialog.Filter = "所有檔案(*.*)|*.*";
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string filename = dialog.FileName;
-
-                //label1.Text = "FileName = " + filename;
-            }
         }
-
         private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }
-
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
-
-
         private void cbRacerName_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
-
         private void groupBox3_Enter(object sender, EventArgs e)
         {
 
         }
-
         private void tabPage1_Click(object sender, EventArgs e)
         {
 
         }
-
         private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
         {
 
-        }
-
-        
+        }        
         private void btnsetDone_Click(object sender, EventArgs e)
         {
 
-            CubicSplineInterpolation cc = new CubicSplineInterpolation(time_data_d,pos_data_d);
-            //zedChartData.GraphPane.CurveList[0].Clear();
-            //zedGraphControl1.GraphPane.CurveList.Clear();
-            //zedGraphControl2.GraphPane.CurveList.Clear();
-            zedChartData.GraphPane.AddCurve("位置", cc.GetPositionPointList(), Color.Blue, SymbolType.None);            
-            zedGraphControl1.GraphPane.AddCurve("壓力", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);       
-            zedGraphControl2.GraphPane.AddCurve("時間點", cc.GetAccelerationPointList(), Color.Red, SymbolType.None);
-  
         }
 
         
@@ -773,7 +708,7 @@ namespace TimerUIver0._3
 
         }
 
-        private void USER_ID_combobox_KeyDown(object sender, KeyEventArgs e)
+        private void USER_ID_combobox_Format(object sender, KeyEventArgs e)
         {
             NOW_user_lable.Text = USER_ID_combobox.Text;
 
@@ -880,12 +815,20 @@ namespace TimerUIver0._3
                     }
                     sw_time.Close();
                     //////////////////////////////////截圖//////////////////////////
-                    Bitmap myImage = new Bitmap(this.Width, this.Height);
-                    Graphics g = Graphics.FromImage(myImage);
-                    g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
-                    IntPtr dc1 = g.GetHdc();
-                    g.ReleaseHdc(dc1);
-                    myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
+                    Bitmap bmp = new Bitmap(zedPressure.ClientSize.Width, zedPressure.ClientSize.Height);
+                    Bitmap bmp2 = new Bitmap(zedChartData.ClientSize.Width, zedChartData.ClientSize.Height);
+                    Graphics g = Graphics.FromImage(bmp);
+                    Graphics g2 = Graphics.FromImage(bmp2);
+                    zedPressure.DrawToBitmap(bmp, zedPressure.ClientRectangle);
+                    zedChartData.DrawToBitmap(bmp2, zedChartData.ClientRectangle);
+                    bmp.Save(saveFile.FileName.Replace(".txt", "_picture1.jpg"));                
+                    bmp2.Save(saveFile.FileName.Replace(".txt", "_picture2.jpg"));
+                    //Bitmap myImage = new Bitmap(this.Width, this.Height);
+                    //Graphics g = Graphics.FromImage(myImage);
+                    //g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
+                    //IntPtr dc1 = g.GetHdc();
+                    //g.ReleaseHdc(dc1);
+                    //myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
                 }
             }
             catch (Exception)
@@ -920,6 +863,24 @@ namespace TimerUIver0._3
             comport.Write("confirm01");
         }
 
+        private void btnHistoryData_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+            CubicSplineInterpolation cc = new CubicSplineInterpolation(time_data_d, pos_data_d);
+            //zedChartData.GraphPane.CurveList[0].Clear();
+            //zedGraphControl1.GraphPane.CurveList.Clear();
+            //zedGraphControl2.GraphPane.CurveList.Clear();
+            zedChartData.GraphPane.AddCurve("位置", cc.GetPositionPointList(), Color.Blue, SymbolType.None);
+            zedGraphControl1.GraphPane.AddCurve("壓力", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);
+            zedGraphControl2.GraphPane.AddCurve("時間點", cc.GetAccelerationPointList(), Color.Red, SymbolType.None);
+
+
+        }
     }
 
     public class CubicSplineInterpolation

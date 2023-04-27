@@ -32,13 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.to_txt = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnsetDone = new System.Windows.Forms.Button();
-            this.btnReset = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.testWin = new System.Windows.Forms.RichTextBox();
-            this.btnStartTiming = new System.Windows.Forms.Button();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.cbCOMport = new System.Windows.Forms.ComboBox();
             this.btnComPort = new System.Windows.Forms.Button();
@@ -53,8 +48,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.zedPressure = new ZedGraph.ZedGraphControl();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
             this.btnPressureCurveClear = new System.Windows.Forms.Button();
-            this.btnPressureSave = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -64,9 +59,8 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.zedGraphControl2 = new ZedGraph.ZedGraphControl();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnDataSave = new System.Windows.Forms.Button();
             this.btnChartDataClear = new System.Windows.Forms.Button();
-            this.btnHistoryData = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.timerUsingTime = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -75,7 +69,6 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.NOW_user_lable = new System.Windows.Forms.Label();
             this.USER_ID_combobox = new System.Windows.Forms.ComboBox();
@@ -83,7 +76,7 @@
             this.button_add_distance = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.button5 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -123,40 +116,19 @@
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.to_txt, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnsetDone, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.btnReset, 0, 5);
-            this.tableLayoutPanel2.Controls.Add(this.button1, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.testWin, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.btnStartTiming, 0, 7);
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(2, 27);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 8;
+            this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(262, 639);
             this.tableLayoutPanel2.TabIndex = 0;
             this.tableLayoutPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
-            // 
-            // to_txt
-            // 
-            this.to_txt.ForeColor = System.Drawing.Color.Black;
-            this.to_txt.Location = new System.Drawing.Point(3, 420);
-            this.to_txt.Name = "to_txt";
-            this.to_txt.Size = new System.Drawing.Size(261, 30);
-            this.to_txt.TabIndex = 0;
-            this.to_txt.Text = "另存所有數據";
-            this.to_txt.UseVisualStyleBackColor = true;
-            this.to_txt.Click += new System.EventHandler(this.to_txt_Click);
             // 
             // label1
             // 
@@ -169,62 +141,16 @@
             this.label1.Text = "序列埠";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // btnsetDone
-            // 
-            this.btnsetDone.ForeColor = System.Drawing.Color.Black;
-            this.btnsetDone.Location = new System.Drawing.Point(2, 527);
-            this.btnsetDone.Margin = new System.Windows.Forms.Padding(2);
-            this.btnsetDone.Name = "btnsetDone";
-            this.btnsetDone.Size = new System.Drawing.Size(262, 32);
-            this.btnsetDone.TabIndex = 5;
-            this.btnsetDone.Text = "數據分析";
-            this.btnsetDone.UseVisualStyleBackColor = true;
-            this.btnsetDone.Click += new System.EventHandler(this.btnsetDone_Click);
-            // 
-            // btnReset
-            // 
-            this.btnReset.ForeColor = System.Drawing.Color.Black;
-            this.btnReset.Location = new System.Drawing.Point(2, 491);
-            this.btnReset.Margin = new System.Windows.Forms.Padding(2);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(263, 31);
-            this.btnReset.TabIndex = 5;
-            this.btnReset.Text = "清空數據";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(3, 456);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(261, 30);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "讀取歷史數據";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // testWin
             // 
             this.testWin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testWin.Location = new System.Drawing.Point(3, 83);
             this.testWin.Name = "testWin";
             this.testWin.ReadOnly = true;
-            this.testWin.Size = new System.Drawing.Size(261, 331);
+            this.testWin.Size = new System.Drawing.Size(261, 553);
             this.testWin.TabIndex = 13;
             this.testWin.Text = "";
             this.testWin.TextChanged += new System.EventHandler(this.testWin_TextChanged);
-            // 
-            // btnStartTiming
-            // 
-            this.btnStartTiming.ForeColor = System.Drawing.Color.Black;
-            this.btnStartTiming.Location = new System.Drawing.Point(2, 563);
-            this.btnStartTiming.Margin = new System.Windows.Forms.Padding(2);
-            this.btnStartTiming.Name = "btnStartTiming";
-            this.btnStartTiming.Size = new System.Drawing.Size(263, 74);
-            this.btnStartTiming.TabIndex = 5;
-            this.btnStartTiming.Text = "準備計時";
-            this.btnStartTiming.UseVisualStyleBackColor = true;
-            this.btnStartTiming.Click += new System.EventHandler(this.btnStartTiming_Click);
             // 
             // tableLayoutPanel3
             // 
@@ -400,8 +326,8 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.Controls.Add(this.button5);
             this.panel3.Controls.Add(this.btnPressureCurveClear);
-            this.panel3.Controls.Add(this.btnPressureSave);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel3.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.panel3.Location = new System.Drawing.Point(2, 286);
@@ -410,35 +336,32 @@
             this.panel3.Size = new System.Drawing.Size(1187, 32);
             this.panel3.TabIndex = 1;
             // 
+            // button5
+            // 
+            this.button5.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.button5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button5.Location = new System.Drawing.Point(929, 2);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(154, 28);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "讀取歷史起跑數據";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // btnPressureCurveClear
             // 
             this.btnPressureCurveClear.BackColor = System.Drawing.Color.Transparent;
             this.btnPressureCurveClear.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnPressureCurveClear.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.btnPressureCurveClear.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnPressureCurveClear.Location = new System.Drawing.Point(987, 0);
+            this.btnPressureCurveClear.Location = new System.Drawing.Point(1085, 0);
             this.btnPressureCurveClear.Margin = new System.Windows.Forms.Padding(2);
             this.btnPressureCurveClear.Name = "btnPressureCurveClear";
             this.btnPressureCurveClear.Size = new System.Drawing.Size(102, 32);
             this.btnPressureCurveClear.TabIndex = 0;
-            this.btnPressureCurveClear.Text = "清除";
+            this.btnPressureCurveClear.Text = "復原位置";
             this.btnPressureCurveClear.UseVisualStyleBackColor = false;
             this.btnPressureCurveClear.Click += new System.EventHandler(this.btnPressureCurveClear_Click);
-            // 
-            // btnPressureSave
-            // 
-            this.btnPressureSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnPressureSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnPressureSave.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Bold);
-            this.btnPressureSave.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnPressureSave.Location = new System.Drawing.Point(1089, 0);
-            this.btnPressureSave.Margin = new System.Windows.Forms.Padding(2);
-            this.btnPressureSave.Name = "btnPressureSave";
-            this.btnPressureSave.Size = new System.Drawing.Size(98, 32);
-            this.btnPressureSave.TabIndex = 1;
-            this.btnPressureSave.Text = "儲存";
-            this.btnPressureSave.UseVisualStyleBackColor = false;
-            this.btnPressureSave.Click += new System.EventHandler(this.btnPressureSave_Click);
             // 
             // groupBox3
             // 
@@ -558,9 +481,8 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Controls.Add(this.btnDataSave);
             this.panel2.Controls.Add(this.btnChartDataClear);
-            this.panel2.Controls.Add(this.btnHistoryData);
+            this.panel2.Controls.Add(this.button2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.panel2.Location = new System.Drawing.Point(2, 306);
@@ -570,49 +492,32 @@
             this.panel2.TabIndex = 1;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // btnDataSave
-            // 
-            this.btnDataSave.BackColor = System.Drawing.Color.Transparent;
-            this.btnDataSave.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnDataSave.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Bold);
-            this.btnDataSave.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnDataSave.Location = new System.Drawing.Point(823, 0);
-            this.btnDataSave.Margin = new System.Windows.Forms.Padding(2);
-            this.btnDataSave.Name = "btnDataSave";
-            this.btnDataSave.Size = new System.Drawing.Size(120, 31);
-            this.btnDataSave.TabIndex = 3;
-            this.btnDataSave.Text = "數據儲存";
-            this.btnDataSave.UseVisualStyleBackColor = false;
-            this.btnDataSave.Click += new System.EventHandler(this.btnDataSave_Click);
-            // 
             // btnChartDataClear
             // 
             this.btnChartDataClear.BackColor = System.Drawing.Color.Transparent;
             this.btnChartDataClear.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnChartDataClear.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Bold);
             this.btnChartDataClear.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnChartDataClear.Location = new System.Drawing.Point(943, 0);
+            this.btnChartDataClear.Location = new System.Drawing.Point(1065, 0);
             this.btnChartDataClear.Margin = new System.Windows.Forms.Padding(2);
             this.btnChartDataClear.Name = "btnChartDataClear";
             this.btnChartDataClear.Size = new System.Drawing.Size(122, 31);
             this.btnChartDataClear.TabIndex = 2;
-            this.btnChartDataClear.Text = "清除";
+            this.btnChartDataClear.Text = "復原位置";
             this.btnChartDataClear.UseVisualStyleBackColor = false;
             this.btnChartDataClear.Click += new System.EventHandler(this.btnChartDataClear_Click);
             // 
-            // btnHistoryData
+            // button2
             // 
-            this.btnHistoryData.BackColor = System.Drawing.Color.Transparent;
-            this.btnHistoryData.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnHistoryData.Font = new System.Drawing.Font("微軟正黑體", 13.8F, System.Drawing.FontStyle.Bold);
-            this.btnHistoryData.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnHistoryData.Location = new System.Drawing.Point(1065, 0);
-            this.btnHistoryData.Margin = new System.Windows.Forms.Padding(2);
-            this.btnHistoryData.Name = "btnHistoryData";
-            this.btnHistoryData.Size = new System.Drawing.Size(122, 31);
-            this.btnHistoryData.TabIndex = 1;
-            this.btnHistoryData.Text = "歷史資料";
-            this.btnHistoryData.UseVisualStyleBackColor = false;
+            this.button2.Font = new System.Drawing.Font("微軟正黑體", 12F);
+            this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button2.Location = new System.Drawing.Point(910, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(154, 30);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "讀取歷史速樁數據";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // timerUsingTime
             // 
@@ -653,7 +558,7 @@
             // 
             this.button4.Location = new System.Drawing.Point(8, 149);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.Size = new System.Drawing.Size(258, 34);
             this.button4.TabIndex = 1;
             this.button4.Text = "確認";
             this.button4.UseVisualStyleBackColor = true;
@@ -670,9 +575,8 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.button5);
+            this.tabPage4.Controls.Add(this.button1);
             this.tabPage4.Controls.Add(this.button3);
-            this.tabPage4.Controls.Add(this.button2);
             this.tabPage4.Controls.Add(this.label3);
             this.tabPage4.Controls.Add(this.NOW_user_lable);
             this.tabPage4.Controls.Add(this.USER_ID_combobox);
@@ -688,25 +592,14 @@
             // 
             // button3
             // 
-            this.button3.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.button3.Location = new System.Drawing.Point(8, 212);
+            this.button3.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold);
+            this.button3.Location = new System.Drawing.Point(6, 119);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(119, 32);
+            this.button3.Size = new System.Drawing.Size(260, 32);
             this.button3.TabIndex = 7;
             this.button3.Text = "另存所有數據";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.button2.Location = new System.Drawing.Point(8, 154);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(154, 30);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "讀取歷史速樁數據";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label3
             // 
@@ -740,7 +633,7 @@
             this.USER_ID_combobox.DropDown += new System.EventHandler(this.USER_ID_combobox_DropDown);
             this.USER_ID_combobox.SelectedIndexChanged += new System.EventHandler(this.USER_ID_combobox_SelectedIndexChanged);
             this.USER_ID_combobox.SelectedValueChanged += new System.EventHandler(this.USER_ID_combobox_SelectedValueChanged);
-            this.USER_ID_combobox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.USER_ID_combobox_KeyDown);
+            this.USER_ID_combobox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.USER_ID_combobox_Format);
             // 
             // label2
             // 
@@ -793,16 +686,18 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1195, 667);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
-            // button5
+            // button1
             // 
-            this.button5.Font = new System.Drawing.Font("微軟正黑體", 12F);
-            this.button5.Location = new System.Drawing.Point(8, 110);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(154, 28);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "讀取歷史起跑數據";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button1.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold);
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(6, 156);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(262, 32);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "數據分析";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // Form1
             // 
@@ -850,9 +745,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.Button btnsetDone;
-        private System.Windows.Forms.Button btnStartTiming;
         private System.Windows.Forms.Label lbFilePath;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel panel1;
@@ -865,16 +757,11 @@
         private System.Windows.Forms.Timer timerUsingTime;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button btnPressureCurveClear;
-        private System.Windows.Forms.Button btnPressureSave;
         private System.Windows.Forms.Button btnChartDataClear;
-        private System.Windows.Forms.Button btnHistoryData;
-        private System.Windows.Forms.Button btnDataSave;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.RichTextBox testWin;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Button to_txt;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
@@ -901,6 +788,7 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button1;
     }
 }
 
