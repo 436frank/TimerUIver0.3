@@ -31,7 +31,6 @@ namespace TimerUIver0._3
         private int rxByteCount = 0;
         private delegate void DisplayStr(string str);
         private delegate void renew_user_time(string str);
-
         private delegate void invokeDelegate();
         private Thread t;
         PointPairList CheckPointList = new PointPairList();//壓力值的線
@@ -42,30 +41,12 @@ namespace TimerUIver0._3
         double minCheckPointListX = 0;
         PointPairList leaveCheckPointList = new PointPairList();//壓力離開的點
         double leaveCheckPointListX = 0;
-
         PointPairList PillarPointList = new PointPairList();//計時點的線(原數據)
         double PillarPointListY = 0;
-
         PointPairList SpeedPillarPointList = new PointPairList();//計時點的線(速度數據)
         double SpeedPillarPointListY = 0;
         PointPairList AccPillarPointList = new PointPairList();//計時點的線(加速度數據)
         double AccPillarPointListY = 0;
-
-
-        /// <summary>
-        /// /////////////////////////////////
-
-
-
-
-
-        /// </summary>
-
-
-        PointPairList speedPointList = new PointPairList();
-        double speedPointListX = 0;
-        PointPairList accelerationList = new PointPairList();
-        double accelerationListX = 0;
         string user_ID_file_path = Directory.GetCurrentDirectory() + "\\User_ID.txt"; //使用者id的txt路徑
         public Form1()//初始化物件
         {
@@ -99,8 +80,7 @@ namespace TimerUIver0._3
             CheckPointListX = -200; //-200;   //初始X座標
             
 
-            zedChartData.GraphPane.AddCurve("壓力", PillarPointList, Color.Red, SymbolType.Circle);
-            PillarPointListY = 0;               //初始X座標
+
 
 
         }//應用程式開啟時//Form1_Load
@@ -213,6 +193,11 @@ namespace TimerUIver0._3
             myPane.YAxis.Scale.Min = 0;
             myPane.YAxis.Scale.Max = 100;
             /*更新參數*/
+            LineItem pointCurve = zedChartData.GraphPane.AddCurve("原數據", PillarPointList, Color.Red, SymbolType.Circle);
+            pointCurve.IsVisible = true;
+            pointCurve.Symbol.Type = SymbolType.Circle;
+
+            PillarPointListY = 0;               //初始X座標
             zgc.AxisChange();
             zgc.Refresh();
             /*---------------------- 初始化 圖表2 ----------------------*/
@@ -230,14 +215,11 @@ namespace TimerUIver0._3
             myPane.YAxis.Title.FontSpec.Size = 17;
             myPane.XAxis.Scale.FontSpec.Size = 17;
             myPane.YAxis.Scale.FontSpec.Size = 17;
-            speedPointListX = 0;   //初始X座標
+
             /*繪製XY軸格點*/
             myPane.XAxis.MajorGrid.IsVisible = true;
             myPane.YAxis.MajorGrid.IsVisible = true;
             myPane.CurveList.Clear();
-            speedPointList.Clear();
-            myPane.AddCurve("速樁觸發", speedPointList, Color.Red, SymbolType.Circle);
-
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = 0;
             myPane.XAxis.Scale.Max = 12;
@@ -267,14 +249,11 @@ namespace TimerUIver0._3
             myPane.YAxis.Title.FontSpec.Size = 17;
             myPane.XAxis.Scale.FontSpec.Size = 17;
             myPane.YAxis.Scale.FontSpec.Size = 17;
-            speedPointListX = 0;   //初始X座標
+
             /*繪製XY軸格點*/
             myPane.XAxis.MajorGrid.IsVisible = true;
             myPane.YAxis.MajorGrid.IsVisible = true;
             myPane.CurveList.Clear();
-            speedPointList.Clear();
-            myPane.AddCurve("加速度", speedPointList, Color.Red, SymbolType.Circle);
-
             /*設置XY軸刻度的範圍*/
             myPane.XAxis.Scale.Min = 0;
             myPane.XAxis.Scale.Max = 12;
@@ -286,6 +265,30 @@ namespace TimerUIver0._3
             zgc.PanModifierKeys = Keys.None;    //滑鼠可以拖曳圖表
             zgc.AxisChange();
             zgc.Refresh();
+        }
+        private void Set_Data_S()
+        {
+            try
+            {
+                int num = int.Parse(textBox1.Text);
+                int num2 = int.Parse(textBox2.Text);
+                btnComPort.Text = "鎖定";
+                textBox1.Enabled = false;
+                textBox2.Enabled = false;
+                // TextBox中的文本轉換為int變量成功，執行相應的操作
+            }
+            catch (Exception ex)
+            {
+                // 轉換失敗，顯示錯誤消息
+                MessageBox.Show("請輸入有效的數字！");
+            }
+
+        }
+        private void Set_not_Data_S()
+        {
+            btnComPort.Text = "確認";
+            textBox1.Enabled = true;
+            textBox2.Enabled = true;
         }
         private void Open_Comport()
         {
@@ -390,7 +393,7 @@ namespace TimerUIver0._3
                             {
                                 if (datas[i] == "$0")
                                 {
-                                    testWin.Clear();
+                                    
                                     PillarPointList.Clear();
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
@@ -859,8 +862,14 @@ namespace TimerUIver0._3
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            listBox1.Items.Add("新增項目");
-            comport.Write("confirm01");
+            if (btnComPort.Text == "確認")
+            {
+                Set_Data_S();
+            }
+            else
+            {
+                Set_not_Data_S();
+            }
         }
 
         private void btnHistoryData_Click(object sender, EventArgs e)
@@ -876,9 +885,24 @@ namespace TimerUIver0._3
             //zedGraphControl1.GraphPane.CurveList.Clear();
             //zedGraphControl2.GraphPane.CurveList.Clear();
             zedChartData.GraphPane.AddCurve("位置", cc.GetPositionPointList(), Color.Blue, SymbolType.None);
-            zedGraphControl1.GraphPane.AddCurve("壓力", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);
-            zedGraphControl2.GraphPane.AddCurve("時間點", cc.GetAccelerationPointList(), Color.Red, SymbolType.None);
+            zedGraphControl1.GraphPane.AddCurve("速度", cc.GetSpeedPointList(), Color.Blue, SymbolType.None);
+            zedGraphControl2.GraphPane.AddCurve("加速度", cc.GetAccelerationPointList(), Color.Red, SymbolType.None);
 
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            testWin.Clear();
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
 
         }
     }
