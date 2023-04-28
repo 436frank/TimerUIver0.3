@@ -266,27 +266,30 @@ namespace TimerUIver0._3
             zgc.AxisChange();
             zgc.Refresh();
         }
+        double first_distance = 0;
+        double spacing = 0;
+
         private void Set_Data_S()
         {
             try
             {
-                int num = int.Parse(textBox1.Text);
-                int num2 = int.Parse(textBox2.Text);
-                btnComPort.Text = "鎖定";
+                double num = Convert.ToDouble(textBox1.Text);
+                double num2 = Convert.ToDouble(textBox2.Text);
+                first_distance = num;
+                spacing = num2;
+                button4.Text = "鎖定";
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
-                // TextBox中的文本轉換為int變量成功，執行相應的操作
             }
             catch (Exception ex)
             {
-                // 轉換失敗，顯示錯誤消息
                 MessageBox.Show("請輸入有效的數字！");
             }
 
         }
         private void Set_not_Data_S()
         {
-            btnComPort.Text = "確認";
+            button4.Text = "確認";
             textBox1.Enabled = true;
             textBox2.Enabled = true;
         }
@@ -424,7 +427,7 @@ namespace TimerUIver0._3
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
                                 PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA),pos_data_d[time_i]);
-                                PillarPointListY++;//
+                                
 
                                 Array.Resize(ref time_data, time_data.Length + 1);
                                 Array.Resize(ref time_data_d, time_data_d.Length + 1);
@@ -432,13 +435,26 @@ namespace TimerUIver0._3
                                 time_data[time_data.Length - 1] = datas[i];
                                 time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark))/1000;
                                 time_i = time_i + 1;
-                                pos_data_d[pos_data_d.Length - 1] = time_i*10f;
+                                if (time_i == 1)
+                                {
+                                    pos_data_d[pos_data_d.Length - 1] = first_distance;
+
+                                }
+                                else if (time_i == 2)
+                                {
+                                    pos_data_d[pos_data_d.Length - 1] = first_distance + (1 * spacing);
+                                }
+                                else
+                                {
+                                    pos_data_d[pos_data_d.Length - 1] = first_distance + ((time_i-1 )* spacing);
+                                }
+                                
 
 
-                            //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
-                            // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
+                                //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
+                                // Console.Write($"PillarPointListY/1000= {time_ms_NEWDATA}  ");//預覽輸出
 
-                        }
+                            }
                             else
                         {
                             CheckPointList.Add(CheckPointListX, Convert.ToDouble(datas[i]));
@@ -483,7 +499,8 @@ namespace TimerUIver0._3
                                     leaveCheckPointList.Add((leave_time_point+max_time_point)*2-200, Convert.ToDouble(adc_data[leave_time_point + max_time_point]));
                                     Console.WriteLine("離開踏板時間點 ={0}", (leave_time_point + max_time_point) * 2 - 200);
                                     PillarPointList[0].X = ((leave_time_point + max_time_point) * 2 - 200) /1000f; ;
-                            }
+                                    time_data_d[0] = ((leave_time_point + max_time_point) * 2 - 200) / 1000f;
+                                }
                         }
                     }
                             //Console.Write($"msg = {msg}");
@@ -862,7 +879,7 @@ namespace TimerUIver0._3
 
         private void button4_Click_1(object sender, EventArgs e)
         {
-            if (btnComPort.Text == "確認")
+            if (button4.Text == "確認")
             {
                 Set_Data_S();
             }
