@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerUIver0.3", "TimerUIver
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{57FD7145-A51A-4F9B-B906-F122469BA21C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "timer_Setup", "timer_Setup\timer_Setup.vdproj", "{E4BF86D6-AEDF-4E8E-9FDF-82871F901C56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,8 @@ Global
 		{B2CE41A7-512B-444A-88EE-63DF22EA97F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2CE41A7-512B-444A-88EE-63DF22EA97F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2CE41A7-512B-444A-88EE-63DF22EA97F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4BF86D6-AEDF-4E8E-9FDF-82871F901C56}.Debug|Any CPU.ActiveCfg = Debug
+		{E4BF86D6-AEDF-4E8E-9FDF-82871F901C56}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
