@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\timer1.0"
+    "\\TimerUIver0.3",
+    "\\TimerUIver0.3\\bin",
+    "\\timer_Setup\\Debug"
   ],
-  "PreviewInSolutionExplorer": false
+  "SelectedNode": "\\TimerUIver0.3.sln",
+  "PreviewInSolutionExplorer": true
 }
