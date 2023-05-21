@@ -37,6 +37,7 @@
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.cbCOMport = new System.Windows.Forms.ComboBox();
             this.btnComPort = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.lbFilePath = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -65,8 +66,15 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.NOW_user_lable = new System.Windows.Forms.Label();
@@ -75,14 +83,6 @@
             this.button_add_distance = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -201,6 +201,16 @@
             this.btnComPort.Text = "連線";
             this.btnComPort.UseVisualStyleBackColor = true;
             this.btnComPort.Click += new System.EventHandler(this.btnComPort_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(3, 583);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(258, 33);
+            this.button6.TabIndex = 14;
+            this.button6.Text = "清空";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // label5
             // 
@@ -568,6 +578,58 @@
             this.tabPage6.Text = "安裝設定";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(116, 91);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(29, 12);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "公尺";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(10, 85);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 22);
+            this.textBox2.TabIndex = 6;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(8, 69);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(65, 12);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "計時點間距";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(114, 35);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(29, 12);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "公尺";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(125, 12);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "起跑架到第一柱的距離";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(8, 30);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 22);
+            this.textBox1.TabIndex = 2;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
+            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(6, 126);
@@ -594,6 +656,19 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "使用者設定";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold);
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(6, 156);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(262, 32);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "數據分析";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button3
             // 
@@ -636,9 +711,8 @@
             this.USER_ID_combobox.Size = new System.Drawing.Size(121, 20);
             this.USER_ID_combobox.TabIndex = 3;
             this.USER_ID_combobox.DropDown += new System.EventHandler(this.USER_ID_combobox_DropDown);
-            this.USER_ID_combobox.SelectedIndexChanged += new System.EventHandler(this.USER_ID_combobox_SelectedIndexChanged);
-            this.USER_ID_combobox.SelectedValueChanged += new System.EventHandler(this.USER_ID_combobox_SelectedValueChanged);
-            this.USER_ID_combobox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.USER_ID_combobox_Format);
+            this.USER_ID_combobox.TextChanged += new System.EventHandler(this.USER_ID_combobox_TextChanged);
+
             // 
             // label2
             // 
@@ -690,81 +764,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1195, 667);
             this.tableLayoutPanel1.TabIndex = 5;
-            // 
-            // button1
-            // 
-            this.button1.Font = new System.Drawing.Font("微軟正黑體", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(6, 156);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(262, 32);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "數據分析";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(3, 583);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(258, 33);
-            this.button6.TabIndex = 14;
-            this.button6.Text = "清空";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(8, 30);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 22);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 15);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(113, 12);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "起跑道第一柱的距離";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(114, 35);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(29, 12);
-            this.label10.TabIndex = 4;
-            this.label10.Text = "公尺";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 69);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(65, 12);
-            this.label11.TabIndex = 5;
-            this.label11.Text = "計時點間距";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(10, 85);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 22);
-            this.textBox2.TabIndex = 6;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(116, 91);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(29, 12);
-            this.label12.TabIndex = 7;
-            this.label12.Text = "公尺";
             // 
             // Form1
             // 

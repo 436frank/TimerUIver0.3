@@ -732,7 +732,7 @@ namespace TimerUIver0._3
         {
             NOW_user_lable.Text = USER_ID_combobox.Text;
 
-        }
+        }        
 
         private void label3_Click(object sender, EventArgs e)
         {
@@ -774,7 +774,7 @@ namespace TimerUIver0._3
                 zedGraphControl1.GraphPane.AddCurve("壓力old", old_cc.GetSpeedPointList(), Color.Brown, SymbolType.None);
                 zedGraphControl2.GraphPane.AddCurve("acc_old", old_cc.GetAccelerationPointList(), Color.Brown, SymbolType.None);
 
-                //zedChartData.GraphPane.AddCurve("1", OldPointList, Color.Blue, SymbolType.Circle);
+                zedChartData.GraphPane.AddCurve("1", OldPointList, Color.Blue, SymbolType.Circle);
                 label3.Text = filename;
 
             }
@@ -922,6 +922,11 @@ namespace TimerUIver0._3
         {
 
         }
+
+        private void USER_ID_combobox_TextChanged(object sender, EventArgs e)
+        {
+            NOW_user_lable.Text = USER_ID_combobox.Text;
+        }
     }
 
     public class CubicSplineInterpolation
@@ -935,7 +940,6 @@ namespace TimerUIver0._3
         private double[,] M_array;
         private double[] S_array;
         private double[,] coeff;
-
         public CubicSplineInterpolation()
         {
             //        %data_t = [0.5, 1.760, 3.571, 5.314, 6.975, 8.495, 9.604, 10.767 ,11.913, 12.709, 13.707, 14.701];   % 蘇景暉
