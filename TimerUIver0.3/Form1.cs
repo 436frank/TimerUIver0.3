@@ -68,6 +68,7 @@ namespace TimerUIver0._3
             Init_Graph_ADC();//踏板壓力曲線圖表初始化
             Init_Graph();//速樁時間、速樁速度、速樁加速度圖表初始化
             SetTimer();
+            label12.Visible = false;
             //加入壓力數值
             zedPressure.GraphPane.AddCurve("壓力", CheckPointList, Color.Blue, SymbolType.None);
             zedPressure.GraphPane.AddCurve("最高點", maxCheckPointList, Color.Red, SymbolType.Star);
@@ -266,24 +267,40 @@ namespace TimerUIver0._3
             zgc.AxisChange();
             zgc.Refresh();
         }
-        double first_distance = 0;
-        double spacing = 0;
+        private double[] spacing = {0};
+        private double[] cumulative_distance = {0};
 
         private void Set_Data_S()
         {
+            spacing = new double[0];
+            cumulative_distance = new double[0];
+            double sum = 0;
             try
             {
-                double num = Convert.ToDouble(textBox1.Text);
-                double num2 = Convert.ToDouble(textBox2.Text);
-                first_distance = num;
-                spacing = num2;
-                button4.Text = "鎖定";
+                TextBox[] textBoxes = flowLayoutPanel1.Controls.OfType<TextBox>().ToArray();
+                double[] values = new double[textBoxes.Length];
+                for (int i = 0; i < textBoxes.Length; i++)
+                {
+                    values[i] = Convert.ToDouble(textBoxes[i].Text);
+                }
+                spacing= new double[textBoxes.Length];
+                cumulative_distance = new double[textBoxes.Length];
+                Array.Copy(values, spacing, values.Length);
+                for (int i = 0; i < cumulative_distance.Length; i++)
+                {
+                    sum += spacing[i];
+                    cumulative_distance[i] =sum;
+                }
+                button4.Text = "解除鎖定";
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
+                button7.Enabled = false;
+                flowLayoutPanel1.Enabled = false;
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show("請輸入有效的數字！");
+                MessageBox.Show("請輸入有效的數字並且確認都有填入！");
             }
 
         }
@@ -292,6 +309,9 @@ namespace TimerUIver0._3
             button4.Text = "確認";
             textBox1.Enabled = true;
             textBox2.Enabled = true;
+            button7.Enabled = true;
+            flowLayoutPanel1.Enabled = true;
+            //label12.Visible = false;
         }
         private void Open_Comport()
         {
@@ -395,8 +415,7 @@ namespace TimerUIver0._3
                             if (judg)
                             {
                                 if (datas[i] == "$0")
-                                {
-                                    
+                                {                                    
                                     PillarPointList.Clear();
                                     PillarPointListY = 0;
                                     CheckPointList.Clear();
@@ -413,19 +432,16 @@ namespace TimerUIver0._3
                                     now_point = 0;
                                     max_data_val = 0;
                                     min_data_val = 0;
-                                    
-
                                     leave_time_point = 0;
                                     time_i =0;
                                     Array.Resize(ref time_data_d,0);
                                     Array.Resize(ref adc_data,0);
-                                    Array.Resize(ref pos_data_d, 1);
-                                    
-                                    pos_data_d[pos_data_d.Length - 1] = time_i;
-                                }
-                                
+                                    Array.Resize(ref pos_data_d, 1);                                    
+                                    pos_data_d[0] = time_i;
+                                }                                
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
+                                pos_data_d[time_i] = cumulative_distance[time_i];
                                 PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA),pos_data_d[time_i]);
                                 
 
@@ -434,21 +450,11 @@ namespace TimerUIver0._3
                                 Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
                                 time_data[time_data.Length - 1] = datas[i];
                                 time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark))/1000;
-                                time_i = time_i + 1;
-                                if (time_i == 1)
-                                {
-                                    pos_data_d[pos_data_d.Length - 1] = first_distance;
-
-                                }
-                                else if (time_i == 2)
-                                {
-                                    pos_data_d[pos_data_d.Length - 1] = first_distance + (1 * spacing);
-                                }
-                                else
-                                {
-                                    pos_data_d[pos_data_d.Length - 1] = first_distance + ((time_i-1 )* spacing);
-                                }
                                 
+
+
+                                
+                                time_i = time_i + 1;
 
 
                                 //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
@@ -563,14 +569,7 @@ namespace TimerUIver0._3
             }
             //Console.WriteLine("File");
         }
-        private void USER_ID_combobox_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
-        private void USER_ID_combobox_SelectedValueChanged(object sender, EventArgs e)
-        {
-            Console.WriteLine("re_text");
-        }
         
         private void DisplayRx()
         {
@@ -763,24 +762,24 @@ namespace TimerUIver0._3
                             Array.Resize(ref tmpX, tmpX.Length + 1);
                             Array.Resize(ref tmpY, tmpY.Length + 1);
                             tmpX[tmpX.Length - 1] = Convert.ToDouble(line) / 1000;
-                            if (tmp_cnt == 0)
-                            {
-                                tmpY[tmpY.Length - 1] = 0;//改反應時間
-                            }
-                            else if (tmp_cnt == 1)
-                            {
-                                tmpY[tmpY.Length - 1] = first_distance;
-                            }
-                            else if (tmp_cnt == 2)
-                            {
-                                tmpY[tmpY.Length - 1] = first_distance + (1 * spacing); ;
-                            }
-                            else
-                            {
-                                tmpY[tmpY.Length - 1] = first_distance + ((tmp_cnt - 1) * spacing);
-                            }
+                            //if (tmp_cnt == 0)
+                            //{
+                            //    tmpY[tmpY.Length - 1] = 0;//改反應時間
+                            //}
+                            //else if (tmp_cnt == 1)
+                            //{
+                            //    tmpY[tmpY.Length - 1] = first_distance;
+                            //}
+                            //else if (tmp_cnt == 2)
+                            //{
+                            //    tmpY[tmpY.Length - 1] = first_distance + (1 * spacing); ;
+                            //}
+                            //else
+                            //{
+                            //    tmpY[tmpY.Length - 1] = first_distance + ((tmp_cnt - 1) * spacing);
+                            //}
 
-                            tmp_cnt++;
+                            //tmp_cnt++;
                         }
                         
                     }
@@ -853,12 +852,20 @@ namespace TimerUIver0._3
                     //////////////////////////////////截圖//////////////////////////
                     Bitmap bmp = new Bitmap(zedPressure.ClientSize.Width, zedPressure.ClientSize.Height);
                     Bitmap bmp2 = new Bitmap(zedChartData.ClientSize.Width, zedChartData.ClientSize.Height);
+                    Bitmap bmp3 = new Bitmap(tabControl1.ClientSize.Width, tabControl1.ClientSize.Height);
+                    Bitmap bmp4 = new Bitmap(tabControl2.ClientSize.Width, tabControl2.ClientSize.Height);
                     Graphics g = Graphics.FromImage(bmp);
                     Graphics g2 = Graphics.FromImage(bmp2);
+                    Graphics g3 = Graphics.FromImage(bmp3);
+                    Graphics g4 = Graphics.FromImage(bmp4);
                     zedPressure.DrawToBitmap(bmp, zedPressure.ClientRectangle);
                     zedChartData.DrawToBitmap(bmp2, zedChartData.ClientRectangle);
-                    bmp.Save(saveFile.FileName.Replace(".txt", "_picture1.jpg"));                
-                    bmp2.Save(saveFile.FileName.Replace(".txt", "_picture2.jpg"));
+                    tabControl1.DrawToBitmap(bmp2, tabControl1.ClientRectangle);
+                    tabControl2.DrawToBitmap(bmp2, tabControl2.ClientRectangle);
+                    bmp.Save(saveFile.FileName.Replace(".txt", "_picture1.jpg"));        //壓力數據        
+                    bmp2.Save(saveFile.FileName.Replace(".txt", "_picture2.jpg"));       //位置數據     
+                    bmp3.Save(saveFile.FileName.Replace(".txt", "_picture3.jpg"));       //速度數據 
+                    bmp4.Save(saveFile.FileName.Replace(".txt", "_picture4.jpg"));       //加速度數據 
                     //Bitmap myImage = new Bitmap(this.Width, this.Height);
                     //Graphics g = Graphics.FromImage(myImage);
                     //g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
@@ -935,6 +942,53 @@ namespace TimerUIver0._3
         }
 
         private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            label12.Visible = true;
+            try
+            {
+                flowLayoutPanel1.Controls.Clear();
+                int num = Convert.ToInt32(textBox1.Text) ; //n-1個間距
+                for (int i = 0; i < num; i++)
+                {
+                    string i_st=i.ToString();
+                    int i_next=i+1;
+                    string i_st_next=i_next.ToString();
+                    TextBox textBox = new TextBox();
+                    System.Windows.Forms.Label label = new System.Windows.Forms.Label();
+                    label.Font = new Font("微軟正黑體", 12f, label.Font.Style);//error 15f 14f
+                    if (i == 0)
+                    {
+                        label.Text = i_st + "到速樁" + i_st_next;
+                        flowLayoutPanel1.Controls.Add(label);
+                        flowLayoutPanel1.Controls.Add(textBox);
+                    }
+                    else 
+                    {
+                        label.Text = "速樁" + i_st + "到" + i_st_next;
+                        flowLayoutPanel1.Controls.Add(label);
+                        flowLayoutPanel1.Controls.Add(textBox);
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("請輸入有效的數字！");
+            }
+        }
+
+        private void label12_Click(object sender, EventArgs e)
         {
 
         }

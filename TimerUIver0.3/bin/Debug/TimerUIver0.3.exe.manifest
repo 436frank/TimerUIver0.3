@@ -67,14 +67,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TimerUIver0.3.exe" size="184280">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TimerUIver0.3.exe" size="185816">
       <assemblyIdentity name="TimerUIver0.3" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>aiwXmp+0ZWK01agucsM4lT7dvYive5Y2Frbi4bYtxL8=</dsig:DigestValue>
+        <dsig:DigestValue>Y0WN0U7SLcuRlRp1WfJbTH3XLgA8nYqQaYV6qdsoanM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -87,18 +87,6 @@
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
         <dsig:DigestValue>2x9DvR3yQEwsgo4bSUkIgpgHFqdZ2RocW+QcKDSBPvk=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="zh-TW\ZedGraph.resources.dll" size="4608">
-      <assemblyIdentity name="ZedGraph.resources" version="5.1.5.28844" publicKeyToken="02A83CBD123FCD60" language="zh-tw" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>KUALiZkgO66B2bdDm9IcSfkxjqu94IgTD8M3xbSXsUs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -120,13 +108,13 @@
       <dsig:DigestValue>rfqsl5bcIhdY8fUARB3FIUc/9JeSQJ82SelO2Bo44Ro=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="TimerUIver0.3.exe.config" size="931">
+  <file name="TimerUIver0.3.exe.config" size="923">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>K5fvCRFZpfiBc+CEF75mkXQS/YCPBNrqxegWx75KmxA=</dsig:DigestValue>
+      <dsig:DigestValue>vmcIeT9/6h35bD21aRA5CC/RTjktVWu/AJNZ+r4/3Ls=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

@@ -60,7 +60,6 @@ C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\bin\Debug\ExcelDataReader.xml
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\bin\Debug\ExcelDataReader.DataSet.pdb
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\bin\Debug\ExcelDataReader.DataSet.xml
-C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\bin\Debug\zh-tw\ZedGraph.resources.dll
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.AssemblyReference.cache
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.SuggestedBindingRedirects.cache
 C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.ResolveComReference.cache
@@ -112,3 +111,7 @@ C:\Users\XIANGXI\Source\Repos\436frank\TimerUIver0.3\TimerUIver0.3\obj\Debug\Tim
 C:\Users\XIANGXI\Source\Repos\436frank\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.csproj.CopyComplete
 C:\Users\XIANGXI\Source\Repos\436frank\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.exe
 C:\Users\XIANGXI\Source\Repos\436frank\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.pdb
+C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\bin\Debug\TimerUIver0.3.exe.manifest
+C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\bin\Debug\TimerUIver0.3.application
+C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.exe.manifest
+C:\Users\XIANGXI\Desktop\TimerUIver0.3\TimerUIver2ms\TimerUIver0.3\TimerUIver0.3\obj\Debug\TimerUIver0.3.application
