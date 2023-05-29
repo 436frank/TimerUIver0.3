@@ -361,6 +361,7 @@ namespace TimerUIver0._3
         int leave_time_val;
         int time_i;
         char charHintMark = '$';
+        float time_ms_oldDATA=0;
         private void DoReceive()         //COMPORT接收資料
         {
             int all_point = 1200;
@@ -373,7 +374,7 @@ namespace TimerUIver0._3
 
             string temp_msg = "";
             string hintMark = "$";
-            float time_ms_NEWDATA;
+            float time_ms_NEWDATA=0;
             bool judg;//判斷結果
             while (receiving)//receiving為真時進入迴圈
             {
@@ -438,23 +439,40 @@ namespace TimerUIver0._3
                                     Array.Resize(ref adc_data,0);
                                     Array.Resize(ref pos_data_d, 1);                                    
                                     pos_data_d[0] = time_i;
-                                }                                
+                                    time_ms_oldDATA = 0;
+
+                                    pos_data_d[time_i] = cumulative_distance[time_i];
+                                    PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), pos_data_d[time_i]);
+                                    Array.Resize(ref time_data, time_data.Length + 1);
+                                    Array.Resize(ref time_data_d, time_data_d.Length + 1);
+                                    Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
+                                    time_data[time_data.Length - 1] = datas[i];
+                                    time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark)) / 1000;
+                                    time_i = time_i + 1;
+                                    time_ms_oldDATA = time_ms_NEWDATA;
+                                }
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
-                                pos_data_d[time_i] = cumulative_distance[time_i];
-                                PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA),pos_data_d[time_i]);
+
+                                if ((time_ms_NEWDATA - time_ms_oldDATA) >= 1)
+                                {
+
+                                    pos_data_d[time_i] = cumulative_distance[time_i];
+                                    PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), pos_data_d[time_i]);
+                                    Array.Resize(ref time_data, time_data.Length + 1);
+                                    Array.Resize(ref time_data_d, time_data_d.Length + 1);
+                                    Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
+                                    time_data[time_data.Length - 1] = datas[i];
+                                    time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark)) / 1000;
+                                    time_i = time_i + 1;
+                                    time_ms_oldDATA = time_ms_NEWDATA;
+                                }
+
                                 
 
-                                Array.Resize(ref time_data, time_data.Length + 1);
-                                Array.Resize(ref time_data_d, time_data_d.Length + 1);
-                                Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
-                                time_data[time_data.Length - 1] = datas[i];
-                                time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark))/1000;
-                                
-
 
                                 
-                                time_i = time_i + 1;
+
 
 
                                 //Console.Write($"PillarPointListY= {Convert.ToDouble(datas[i].TrimStart(charHintMark))}  ");//預覽輸出
@@ -505,6 +523,7 @@ namespace TimerUIver0._3
                                     leaveCheckPointList.Add((leave_time_point+max_time_point)*2-200, Convert.ToDouble(adc_data[leave_time_point + max_time_point]));
                                     Console.WriteLine("離開踏板時間點 ={0}", (leave_time_point + max_time_point) * 2 - 200);
                                     PillarPointList[0].X = ((leave_time_point + max_time_point) * 2 - 200) /1000f; ;
+                                    time_ms_oldDATA = ((leave_time_point + max_time_point) * 2 - 200) /1000f; ;
                                     //time_data[0] = ToString(((leave_time_point + max_time_point) * 2 - 200) / 1000f);//字串資料
                                     time_data_d[0] = ((leave_time_point + max_time_point) * 2 - 200) / 1000f;
                                 }
@@ -840,7 +859,7 @@ namespace TimerUIver0._3
                     }
                     //sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
                     //sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
-                    //sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
+                    sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
@@ -862,16 +881,23 @@ namespace TimerUIver0._3
                     zedChartData.DrawToBitmap(bmp2, zedChartData.ClientRectangle);
                     tabControl1.DrawToBitmap(bmp2, tabControl1.ClientRectangle);
                     tabControl2.DrawToBitmap(bmp2, tabControl2.ClientRectangle);
-                    bmp.Save(saveFile.FileName.Replace(".txt", "_picture1.jpg"));        //壓力數據        
-                    bmp2.Save(saveFile.FileName.Replace(".txt", "_picture2.jpg"));       //位置數據     
-                    bmp3.Save(saveFile.FileName.Replace(".txt", "_picture3.jpg"));       //速度數據 
-                    bmp4.Save(saveFile.FileName.Replace(".txt", "_picture4.jpg"));       //加速度數據 
+                    bmp.Save(saveFile.FileName.Replace(".txt", "_ADC_picture1.jpg"));        //壓力數據        
+                    bmp2.Save(saveFile.FileName.Replace(".txt", "_Pos_picture2.jpg"));       //位置數據     
+                    bmp3.Save(saveFile.FileName.Replace(".txt", "_Speed_picture3.jpg"));       //速度數據 
+                    bmp4.Save(saveFile.FileName.Replace(".txt", "_Acc_picture4.jpg"));       //加速度數據 
                     //Bitmap myImage = new Bitmap(this.Width, this.Height);
                     //Graphics g = Graphics.FromImage(myImage);
                     //g.CopyFromScreen(new Point(this.Location.X, this.Location.Y), new Point(0, 0), new Size(this.Width, this.Height));
                     //IntPtr dc1 = g.GetHdc();
                     //g.ReleaseHdc(dc1);
                     //myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
+                    //////////////////////////////////存間距//////////////////////////
+                    StreamWriter sw_pos = new StreamWriter(saveFile.FileName.Replace(".txt", "_pos.txt"), false);
+                    for (int i = 0; i <= cumulative_distance.Length - 1; i++)
+                    {
+                        sw_pos.WriteLine(cumulative_distance[i]);
+                    }
+                    sw_pos.Close();
                 }
             }
             catch (Exception)
@@ -964,11 +990,12 @@ namespace TimerUIver0._3
                     int i_next=i+1;
                     string i_st_next=i_next.ToString();
                     TextBox textBox = new TextBox();
+                    textBox.Width = 50;
                     System.Windows.Forms.Label label = new System.Windows.Forms.Label();
                     label.Font = new Font("微軟正黑體", 12f, label.Font.Style);//error 15f 14f
                     if (i == 0)
                     {
-                        label.Text = i_st + "到速樁" + i_st_next;
+                        label.Text = "起跑" + "到速樁" + i_st_next;
                         flowLayoutPanel1.Controls.Add(label);
                         flowLayoutPanel1.Controls.Add(textBox);
                     }
