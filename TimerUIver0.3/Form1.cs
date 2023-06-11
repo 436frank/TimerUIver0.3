@@ -370,8 +370,6 @@ namespace TimerUIver0._3
             int min_data_val = 0;
             int[] intadc_data;
             Byte[] buffer = new Byte[1024];
-            
-
             string temp_msg = "";
             string hintMark = "$";
             float time_ms_NEWDATA=0;
@@ -467,7 +465,7 @@ namespace TimerUIver0._3
                                     time_i = time_i + 1;
                                     time_ms_oldDATA = time_ms_NEWDATA;
                                 }
-
+                                
                                 
 
 
@@ -859,15 +857,22 @@ namespace TimerUIver0._3
                     }
                     //sw_adc.WriteLine("離開踏板前最高的時間點" + max_time_point);
                     //sw_adc.WriteLine("離開踏板前最低的時間點" + min_time_point);
-                    sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
+                    //sw_adc.WriteLine("離開踏板的時間點" + leave_time_point);
                     sw_adc.Close();
                     /////////////////////////////////存時間////////////////////////
                     StreamWriter sw_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
-                    for (int i = 0; i <= time_data.Length - 1; i++)
+                    for (int i = 0; i <= time_data_d.Length - 1; i++)
                     {
-                        sw_time.WriteLine(time_data[i].TrimStart(charHintMark));
+                        sw_time.WriteLine(time_data_d[i]);
                     }
                     sw_time.Close();
+                    /////////////////////////////////存原計時////////////////////////
+                    StreamWriter sw_cause_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_cause_time.txt"), false);
+                    for (int i = 0; i <= testWin.Text.Length - 1; i++)
+                    {
+                        sw_cause_time.WriteLine(testWin.Text[i]);
+                    }
+                    sw_cause_time.Close();
                     //////////////////////////////////截圖//////////////////////////
                     Bitmap bmp = new Bitmap(zedPressure.ClientSize.Width, zedPressure.ClientSize.Height);
                     Bitmap bmp2 = new Bitmap(zedChartData.ClientSize.Width, zedChartData.ClientSize.Height);
@@ -984,6 +989,13 @@ namespace TimerUIver0._3
             {
                 flowLayoutPanel1.Controls.Clear();
                 int num = Convert.ToInt32(textBox1.Text) ; //n-1個間距
+                tableLayoutPanel4.ColumnCount = 2;
+                tableLayoutPanel4.RowCount = num;
+
+                //tableLayoutPanel4.Dock = DockStyle.Fill;
+                tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize)); // 第一排自動調整大小
+                tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); // 第二排填滿剩餘空間
+                tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.AutoSize));
                 for (int i = 0; i < num; i++)
                 {
                     string i_st=i.ToString();
@@ -998,12 +1010,16 @@ namespace TimerUIver0._3
                         label.Text = "起跑" + "到速樁" + i_st_next;
                         flowLayoutPanel1.Controls.Add(label);
                         flowLayoutPanel1.Controls.Add(textBox);
+                        //tableLayoutPanel4.Controls.Add(label, 0, i); // 將 Label 放置在第一排
+                        //tableLayoutPanel4.Controls.Add(textBox, 1, i);
                     }
                     else 
                     {
                         label.Text = "速樁" + i_st + "到" + i_st_next;
                         flowLayoutPanel1.Controls.Add(label);
                         flowLayoutPanel1.Controls.Add(textBox);
+                        //tableLayoutPanel4.Controls.Add(label, 0, i); // 將 Label 放置在第一列
+                        //tableLayoutPanel4.Controls.Add(textBox, 1, i);
                     }
 
                 }
@@ -1016,6 +1032,11 @@ namespace TimerUIver0._3
         }
 
         private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
         }
