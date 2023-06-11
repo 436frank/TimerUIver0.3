@@ -451,7 +451,8 @@ namespace TimerUIver0._3
                                 }
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
-
+                                if(cumulative_distance.Length-1>=time_i)
+                                { 
                                 if ((time_ms_NEWDATA - time_ms_oldDATA) >= 1)
                                 {
 
@@ -465,11 +466,11 @@ namespace TimerUIver0._3
                                     time_i = time_i + 1;
                                     time_ms_oldDATA = time_ms_NEWDATA;
                                 }
-                                
-                                
+                                }
 
 
-                                
+
+
 
 
 
@@ -866,7 +867,14 @@ namespace TimerUIver0._3
                         sw_time.WriteLine(time_data_d[i]);
                     }
                     sw_time.Close();
-                    /////////////////////////////////存原計時////////////////////////
+                    /////////////////////////////////存計時點距離////////////////////////
+                    StreamWriter sw_cumulative_distance = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
+                    for (int i = 0; i <= cumulative_distance.Length - 1; i++)
+                    {
+                        sw_cumulative_distance.WriteLine(cumulative_distance[i]);
+                    }
+                    sw_cumulative_distance.Close();
+                    /////////////////////////////////存原計時全數據////////////////////////
                     StreamWriter sw_cause_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_cause_time.txt"), false);
                     for (int i = 0; i <= testWin.Text.Length - 1; i++)
                     {
@@ -1021,8 +1029,9 @@ namespace TimerUIver0._3
                         //tableLayoutPanel4.Controls.Add(label, 0, i); // 將 Label 放置在第一列
                         //tableLayoutPanel4.Controls.Add(textBox, 1, i);
                     }
-
+                    
                 }
+                TextBox[] textBoxes = flowLayoutPanel1.Controls.OfType<TextBox>().ToArray();
 
             }
             catch (Exception ex)
