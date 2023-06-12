@@ -291,6 +291,9 @@ namespace TimerUIver0._3
                     sum += spacing[i];
                     cumulative_distance[i] =sum;
                 }
+                Array.Resize(ref cumulative_distance, cumulative_distance.Length + 1);
+                Array.Copy(cumulative_distance, 0, cumulative_distance, 1, cumulative_distance.Length - 1);
+                cumulative_distance[0] = 0;
                 button4.Text = "解除鎖定";
                 textBox1.Enabled = false;
                 textBox2.Enabled = false;
@@ -451,21 +454,24 @@ namespace TimerUIver0._3
                                 }
                                 time_ms_NEWDATA = Int32.Parse(datas[i].TrimStart(charHintMark));
                                 time_ms_NEWDATA = time_ms_NEWDATA / 1000;
-                                if(cumulative_distance.Length-1>=time_i)
-                                { 
-                                if ((time_ms_NEWDATA - time_ms_oldDATA) >= 1)
+                                if (pos_data_d.Length==0)
                                 {
-
-                                    pos_data_d[time_i] = cumulative_distance[time_i];
-                                    PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), pos_data_d[time_i]);
-                                    Array.Resize(ref time_data, time_data.Length + 1);
-                                    Array.Resize(ref time_data_d, time_data_d.Length + 1);
-                                    Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
-                                    time_data[time_data.Length - 1] = datas[i];
-                                    time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark)) / 1000;
-                                    time_i = time_i + 1;
-                                    time_ms_oldDATA = time_ms_NEWDATA;
+                                    ////////
                                 }
+                                else if (cumulative_distance.Length-1  >= time_i)
+                                {
+                                    if ((time_ms_NEWDATA - time_ms_oldDATA) >= 1)
+                                    {
+                                        pos_data_d[time_i] = cumulative_distance[time_i];
+                                        PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), pos_data_d[time_i]);
+                                        Array.Resize(ref time_data, time_data.Length + 1);
+                                        Array.Resize(ref time_data_d, time_data_d.Length + 1);
+                                        Array.Resize(ref pos_data_d, pos_data_d.Length + 1);
+                                        time_data[time_data.Length - 1] = datas[i];
+                                        time_data_d[time_data_d.Length - 1] = Convert.ToDouble(datas[i].TrimStart(charHintMark)) / 1000;
+                                        time_i = time_i + 1;
+                                        time_ms_oldDATA = time_ms_NEWDATA;
+                                    }
                                 }
 
 
