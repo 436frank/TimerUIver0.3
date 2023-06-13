@@ -460,7 +460,7 @@ namespace TimerUIver0._3
                                 }
                                 else if (cumulative_distance.Length-1  >= time_i)
                                 {
-                                    if ((time_ms_NEWDATA - time_ms_oldDATA) >= 1)
+                                    if ((time_ms_NEWDATA - time_ms_oldDATA) >= 0.5)
                                     {
                                         pos_data_d[time_i] = cumulative_distance[time_i];
                                         PillarPointList.Add(Convert.ToDouble(time_ms_NEWDATA), pos_data_d[time_i]);
@@ -874,18 +874,22 @@ namespace TimerUIver0._3
                     }
                     sw_time.Close();
                     /////////////////////////////////存計時點距離////////////////////////
-                    StreamWriter sw_cumulative_distance = new StreamWriter(saveFile.FileName.Replace(".txt", "_time.txt"), false);
+                    StreamWriter sw_cumulative_distance = new StreamWriter(saveFile.FileName.Replace(".txt", "_distance.txt"), false);
                     for (int i = 0; i <= cumulative_distance.Length - 1; i++)
                     {
                         sw_cumulative_distance.WriteLine(cumulative_distance[i]);
                     }
                     sw_cumulative_distance.Close();
+                    //////////////////////////////////存間距//////////////////////////
+                    //StreamWriter sw_pos = new StreamWriter(saveFile.FileName.Replace(".txt", "_pos.txt"), false);
+                    //for (int i = 0; i <= cumulative_distance.Length - 1; i++)
+                    //{
+                    //    sw_pos.WriteLine(cumulative_distance[i]);
+                    //}
+                    //sw_pos.Close();
                     /////////////////////////////////存原計時全數據////////////////////////
                     StreamWriter sw_cause_time = new StreamWriter(saveFile.FileName.Replace(".txt", "_cause_time.txt"), false);
-                    for (int i = 0; i <= testWin.Text.Length - 1; i++)
-                    {
-                        sw_cause_time.WriteLine(testWin.Text[i]);
-                    }
+                    sw_cause_time.WriteLine(testWin.Text);
                     sw_cause_time.Close();
                     //////////////////////////////////截圖//////////////////////////
                     Bitmap bmp = new Bitmap(zedPressure.ClientSize.Width, zedPressure.ClientSize.Height);
@@ -910,13 +914,7 @@ namespace TimerUIver0._3
                     //IntPtr dc1 = g.GetHdc();
                     //g.ReleaseHdc(dc1);
                     //myImage.Save(saveFile.FileName.Replace(".txt", "_picture.jpg"));
-                    //////////////////////////////////存間距//////////////////////////
-                    StreamWriter sw_pos = new StreamWriter(saveFile.FileName.Replace(".txt", "_pos.txt"), false);
-                    for (int i = 0; i <= cumulative_distance.Length - 1; i++)
-                    {
-                        sw_pos.WriteLine(cumulative_distance[i]);
-                    }
-                    sw_pos.Close();
+
                 }
             }
             catch (Exception)
@@ -1054,6 +1052,11 @@ namespace TimerUIver0._3
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void NOW_user_lable_TextChanged(object sender, EventArgs e)
+        {
+            //NOW_user_lable.
         }
     }
 

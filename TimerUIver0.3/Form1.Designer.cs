@@ -739,6 +739,7 @@
             this.NOW_user_lable.Size = new System.Drawing.Size(78, 18);
             this.NOW_user_lable.TabIndex = 4;
             this.NOW_user_lable.Text = "現在使用者";
+            this.NOW_user_lable.TextChanged += new System.EventHandler(this.NOW_user_lable_TextChanged);
             this.NOW_user_lable.Click += new System.EventHandler(this.NOW_timer_lable_Click);
             // 
             // USER_ID_combobox
